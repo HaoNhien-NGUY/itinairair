@@ -18,3 +18,11 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+/node_modules
+/package-lock.json
+
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###

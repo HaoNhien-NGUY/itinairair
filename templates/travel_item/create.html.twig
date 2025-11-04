@@ -1,0 +1,20 @@
+{% block form_modal %}
+    <twig:Modal>
+        <turbo-frame id="travel-item-form">
+            {% include 'travel_item/Component/_type_selector.html.twig' %}
+            {% if form is defined %}
+                <div class="border-black rounded-2xl border-2 mt-6 p-5">
+                    {{ type.value }}
+                    {{ form(form) }}
+                </div>
+            {% endif %}
+        </turbo-frame>
+    </twig:Modal>
+{% endblock %}
+
+{% block success_stream %}
+    <twig:Modal:Close />
+    <twig:Turbo:Stream:After target="#{{ target }}">
+        <twig:TravelItem:List_item item="{{ item }}" trip="{{ trip }}" day="{{ item.startDay }}" new />
+    </twig:Turbo:Stream:After>
+{% endblock %}

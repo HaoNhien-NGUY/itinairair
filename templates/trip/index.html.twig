@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TripController!{% endblock %}
+
+{% block body %}
+    <header class="my-4 text-center">
+        <a href="{{ path('app_home') }}">home</a>
+        MES VOYAGES
+    </header>
+    <div class="container mx-auto">
+        <div class="flex space-x-4 p-5 border-2 border-blue-300 rounded-2xl">
+            {% for membership in memberships %}
+                {% set trip = membership.trip %}
+                <div class="flex items-center bg-lime-200 px-2 hover:bg-lime-300">
+                    <a href="{{ path('app_trip_show', {id: trip.id}) }}">{{ trip.name }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

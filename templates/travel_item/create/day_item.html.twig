@@ -1,0 +1,14 @@
+{% block form_modal %}
+    <twig:Modal>
+        <turbo-frame id="travel-item-form">
+            <twig:TravelItemForm form="{{ form }}" initialFormData="{{ item }}" formAction="{{ formAction }}" />
+        </turbo-frame>
+    </twig:Modal>
+{% endblock %}
+
+{% block success_stream %}
+    <twig:Modal:Close />
+    <twig:Turbo:Stream:After target="#{{ target }}">
+        <twig:TravelItem:List_item item="{{ item }}" trip="{{ trip }}" day="{{ item.startDay }}" place="{{ place }}" new />
+    </twig:Turbo:Stream:After>
+{% endblock %}

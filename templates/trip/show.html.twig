@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ trip.name }}{% endblock %}
+
+{% block additional_javascript %}
+    <script>
+        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+            key: "{{ get_env('GOOGLE_API_KEY') }}",
+            v: "weekly",
+        });
+        google.maps.importLibrary("places");
+    </script>
+{% endblock %}
+
+{% block body %}
+    {% set startDate = trip.startDate %}
+    {% set statusPlanned = enum('App\\Enum\\ItemStatus').PLANNED.value %}
+
+    <div class="container py-8 mx-auto">
+        <header class="mb-12">
+            <div class="relative flex items-center justify-center gap-4">
+                <a href="{{ path('app_trip') }}" class="absolute left-0">
+                    ← retour
+                </a>
+                <div>
+                    Page du voyage : {{ trip.name }}
+                </div>
+                <form action="{{ path('app_trip_delete', {'id': trip.id}) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this trip?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trip.id) }}">
+                    <button type="submit" class="cursor-crosshair text-red-600 hover:text-red-400 underline transition-colors">Delete</button>
+                </form>
+            </div>
+
+            {# TODO: use voter or delete this #}
+
+            <div class="mt-5 text-center">
+                {{ startDate|date }} - {{ trip.endDate|date }}
+            </div>
+        </header>
+
+        <main class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
+
+            <div class="flex flex-col space-y-3 items-center lg:col-span-2">
+
+                {% for day in trip.days %}
+                    <div class="flex flex-col items-center justify-center py-7 px-4 w-full bg-white  rounded-4xl">
+                        <div>
+                            ID: {{ day.id }} {{ day.title }} - {{ startDate|date_modify("+" ~  (day.position - 1) ~ " day")|date('l j F') }}
+                        </div>
+                            <div class="w-full">
+                                <div id="item-day-{{ day.id }}">
+                                    <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id, target: 'item-day-' ~ day.id}) }}"
+                                       data-turbo-frame="modal"
+                                    >
+                                        +
+                                    </a>
+                                </div>
+                                {% if items[day.id] is defined %}
+                                    {% for item in items[day.id] %}
+{#                                       TODO: query all places at the same time #}
+                                        <twig:TravelItem:List_item item="{{ item }}" trip="{{ trip }}" prevItem="{{ prevItem ?? null }}" day="{{ day }}" place="{{ item.place }}" />
+{#                                        TODO: wrong logic, fix this #}
+                                        {% set prevItem = item %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="border-2 border-gray-200 rounded-2xl p-3">
+                <h1 id="TEST">ICI LES IDEAS</h1>
+                <div>
+                    <a href="{{ path('app_travelitem_create', {trip: trip.id, target: 'last-idea-id'}) }}" data-turbo-frame="modal">create</a>
+                </div>
+
+                <div id="last-idea-id">
+
+                </div>
+
+                <div id="place-search">
+
+                </div>
+                <div id="place-search-result"></div>
+
+                <div class="timeline-container">
+                    <div class="timeline-card rounded-2xl p-4">
+                        <h3>Step 1: Project Kick-off</h3>
+                        <p>This is the initial phase where we define the project goals and scope.</p>
+                    </div>
+                    <div class="timeline-card rounded-2xl p-4">
+                        <h3>Step 2: Design Mockups</h3>
+                        <p>Our design team will create mockups and wireframes for review.</p>
+                    </div>
+                    <div class="timeline-card rounded-2xl p-4">
+                        <h3>Step 3: Development</h3>
+                        <p>The development team begins building the core features of the application.</p>
+                    </div>
+                    <div class="timeline-card rounded-2xl p-4">
+                        <h3>Step 4: Deployment</h3>
+                        <p>The project is deployed to the production server after thorough testing.</p>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+    </div>
+
+    <script>
+
+        async function initMap() {
+
+            // Request needed libraries.
+            // await google.maps.importLibrary("places");
+            // Create the input HTML element, and append it.
+            //@ts-ignore
+            // const placeAutocomplete = new google.maps.places.PlaceAutocompleteElement();
+            // //@ts-ignore
+            // document.getElementById('place-search').appendChild(placeAutocomplete);
+            //
+            // const selectedPlaceInfo = document.createElement('pre');
+            // selectedPlaceInfo.textContent = '';
+            // document.getElementById('place-search-result').appendChild(selectedPlaceInfo);
+            //
+            // // Add the gmp-placeselect listener, and display the results.
+            // //@ts-ignore
+            // placeAutocomplete.addEventListener('gmp-select', async ({ placePrediction }) => {
+            //     const place = placePrediction.toPlace();
+            //     await place.fetchFields({ fields: ['displayName', 'formattedAddress', 'location'] });
+            //     console.log(place);
+            //     selectedPlaceInfo.textContent = JSON.stringify(place.toJSON(), /* replacer */ null, /* space */ 2);
+            // });
+
+        }
+        initMap();
+    </script>
+{% endblock %}

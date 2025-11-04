@@ -1,0 +1,71 @@
+<div {{ attributes.defaults(stimulus_controller('google-place-widget')) }}>
+    <gmp-place-autocomplete
+        id="place-autocomplete"
+        class="bg-gray-100 rounded-2xl focus:outline-none focus:ring-0 focus:border-none"
+        placeholder="Enter a location"
+    {{ stimulus_target('google-place-widget', 'placeInput') }}>
+    </gmp-place-autocomplete>
+
+{#    <div class="flex justify-center">#}
+{#        <button class="bg-blue-300 px-2 py-1 rounded-2xl" {{ stimulus_action('google-place-widget', 'testaction') }}>#}
+{#            SIMULATE PLACE API#}
+{#        </button>#}
+{#    </div>#}
+
+    {% if placeData %}
+        <div class="my-4 flex space-x-3">
+                <img class="h-28 w-28 rounded-lg shrink-0 object-cover" src="{{ placeData.photoURI }}" alt="{{ placeData.name }}-photo" />
+
+            <div>
+                <p class="text-sm text-purple-900 font-medium mb-1.5">{{ placeData.type }}</p>
+                <div class="font-medium text-base/5 line-clamp-2">{{ placeData.name }}</div>
+                <a href="{{ placeData.googleMapsURI }}" target="_blank" rel="noopener noreferrer" class="text-xs/snug hover:text-blue-400 text-gray-600 line-clamp-2">{{ placeData.address }}</a>
+
+{# TODO: redo link styling #}
+{#                <div class="flex justify-end mt-2">#}
+{#                    <div class="flex justify-end">#}
+{#                        <a href="{{ placeData.googleMapsURI }}" target="_blank" rel="noopener noreferrer" class="px-2 pt-0.5 pb-1 inline-flex items-center gap-1 font-normal text-sm bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300">#}
+{#                            Maps#}
+{#                            <twig:ux:icon name="bx:link-external" class="size-4" />#}
+{#                        </a>#}
+{#                    </div>#}
+{#                </div>#}
+            </div>
+        </div>
+    {% else %}
+        <div class="min-h-[112px] my-4 flex justify-center items-center">
+            Chercher un lieu
+        </div>
+    {% endif %}
+
+    <div>
+        {{ form_start(form) }}
+        <div class="space-y-2">
+            <div class="w-full">
+                {{ form_widget(form.notes, {'attr': {'rows' : 2, 'class': 'focus:outline-none resize-none p-2 border-2 w-full border-dashed border-gray-300 rounded-2xl'}}) }}
+            </div>
+
+            <div class="flex justify-end mt-6">
+                <div>
+                    <button type="submit" class="bg-blue-100 px-4 py-1 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:hover:bg-blue-200 not-disabled:cursor-pointer rounded-l-2xl mr-0.5" {{ placeData ? '' : 'disabled' }}>
+                        Ajouter
+                    </button>
+                </div>
+
+                <label>
+                    <select name="{{ field_name(form.status) }}" class="bg-blue-100 rounded-r-2xl pl-2 py-1 custom-select focus:outline-none">
+                        {% for label, value in field_choices(form.status) %}
+                            <option value="{{ value }}" {{ formValues.status == value ? 'selected' }}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+            </div>
+        </div>
+
+
+
+        {{ form_widget(form.place) }}
+        {{ form_end(form) }}
+    </div>
+
+</div>

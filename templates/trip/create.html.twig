@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TripController!{% endblock %}
+
+{% block body %}
+
+    <div class="border-2 border-b-pink-300 rounded-2xl">
+        <turbo-frame id="trip-data" target="_top">
+            {{ form(form) }}
+        </turbo-frame>
+
+    </div>
+{% endblock %}

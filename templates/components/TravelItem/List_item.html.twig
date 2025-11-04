@@ -1,0 +1,45 @@
+{% set new = new ?? false %}
+{% set prevItem = prevItem ?? false %}
+
+<div id="item-{{ item.id }}">
+    {% if day and prevItem %}
+        <div class="px-1.5 my-2">
+
+            <span class="flex items-center">
+                <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id, target: 'item-' ~ prevItem.id, prevItemId: prevItem.id }) }}"
+                   class="mr-4 text-gray-600 text-sm hover:underline"
+                   data-turbo-frame="modal">Ajouter</a>
+                <span class="text-gray-600">•</span>
+
+              <span class="shrink-0 pe-4 ps-4 text-blue-500 text-sm flex items-center">
+                  <twig:ux:icon name="ic:baseline-directions-walk" class="size-4" fill="currentColor" />
+                  {% set mapsDirection = prevItem ? "https://www.google.com/maps/dir/?api=1&origin=" ~ prevItem.place.address|url_encode ~ "&destination=" ~ item.place.address|url_encode : "" %}
+                  <span class="ps-1 hover:underline cursor-pointer"><a href="{{ mapsDirection }}" target="_blank">Itineraire</a></span>
+              </span>
+              <span class="h-px flex-1 border-b-1 border-b-gray-300 bordezr-dashed"></span>
+
+            </span>
+
+
+        </div>
+    {% endif %}
+    <div class="bg-indigo-50z rounded-3xl {{ new ? 'new-item' }}">
+        <div class="flex space-x-3 zp-3">
+            <img class="h-28 w-28 rounded-2xl shrink-0 object-cover" src="{{ place.photoURI }}" alt="{{ item.name }}-photo" />
+            <div class="">
+{#                <p class="text-sm text-purple-900 font-medium mb-1.5">{{ place.type }}</p>#}
+                <div class="font-medium text-base/6 text- line-clamp-2">{{ place.name }}</div>
+                <a href="{{ place.googleMapsURI }}" target="_blank" rel="noopener noreferrer" class="text-sm/snug hover:text-blue-400 text-gray-600 line-clamp-1">{{ place.address }}</a>
+
+                {% if item.notes is not empty %}
+                    <div class="mt-3 border-1 border-gray-300 rounded-2xl text-sm border-dashed p-3">
+                        <span class="text-gray-600">
+                            {{ item.notes }}
+                        </span>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>

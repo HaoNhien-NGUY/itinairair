@@ -12,6 +12,7 @@
         {% endblock %}
     </head>
     <body class="{% block body_style %}min-h-screen{% endblock %}">
+        {% block navbar %}{% endblock %}
         {% block body %}{% endblock %}
         <turbo-frame id="modal" data-controller="modal"></turbo-frame>
     </body>

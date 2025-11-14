@@ -1,0 +1,57 @@
+<div class="">
+    {{ form_start(form, {'attr': {'data-turbo-frame': '_top'}}) }}
+    {% set dayMapping = trip.dayMapping %}
+
+    <div class="mb-4">
+        <div class="mb-3">
+            {{ form_label(form.flightNumber) }}
+            {{ form_widget(form.flightNumber, {'attr': {'class': 'w-full bg-gray-100 pl-1 rounded-lg h-8 flex items-center'}}) }}
+        </div>
+        <h3>Depart</h3>
+        <div class="grid grid-cols-2  space-y-1">
+            <div class="grid grid-cols-3 space-x-1">
+                <div {{  stimulus_controller('calendar', {dayMapping: dayMapping, isRange: false, autoHide: true, inputMode: true}) }}
+                    {{ stimulus_target('calendar', 'calendar') }}
+                    class="col-span-1"
+                >
+                    {{ form_widget(form.startDay) }}
+                    <div class="bg-gray-100 pl-2 rounded-lg h-8 flex items-center cursor-pointer">
+                        <div {{ stimulus_target('calendar', 'startDayDisplay') }}><span class="italic text-gray-500 text-sm">Date</span></div>
+                    </div>
+                </div>
+                <div class="col-span-2">
+                    {{ form_widget(form.startTime, {'attr': {'class': 'bg-gray-100 px-3 py-2 rounded-lg h-8'}}) }}
+                </div>
+            </div>
+            {{ form_widget(form.departureAirportCode, {'attr': {'class': 'col-span-1 bg-gray-100 pl-1 rounded-lg h-8 flex items-center'}}) }}
+        </div>
+        <h3>Arriver</h3>
+        <div class="grid grid-cols-2 space-y-1">
+            <div class="grid grid-cols-3 space-x-1">
+                <div {{  stimulus_controller('calendar', {dayMapping: dayMapping, isRange: false, autoHide: true, inputMode: true}) }}
+                    {{ stimulus_target('calendar', 'calendar') }}
+                    class="col-span-1"
+                >
+                    {{ form_widget(form.endDay) }}
+                    <div class="bg-gray-100 pl-2 rounded-lg h-8 flex items-center cursor-pointer">
+                        <div {{ stimulus_target('calendar', 'startDayDisplay') }}><span class="italic text-gray-500 text-sm">Date</span></div>
+                    </div>
+                </div>
+                <div class="col-span-2">
+                    {{ form_widget(form.endTime, {'attr': {'class': 'bg-gray-100 px-3 py-2 rounded-lg h-8'}}) }}
+                </div>
+            </div>
+            {{ form_widget(form.arrivalAirportCode, {'attr': {'class': 'col-span-1 bg-gray-100 pl-1 rounded-lg h-8 flex items-center'}}) }}
+        </div>
+        <div class="mt-4">
+            {{ form_widget(form.notes) }}
+        </div>
+    </div>
+
+
+    <button type="submit" class="px-5 py-1 bg-amber-100 rounded-lg cursor-pointer">Ajouter</button>
+    {{ form_end(form) }}
+
+    </div>
+
+

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Day;
 use App\Entity\TravelItem;
 use App\Entity\Trip;
+use App\Enum\TravelItemType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -45,6 +46,8 @@ class TravelItemRepository extends ServiceEntityRepository
 
         $ids = array_values(array_unique(array_map(static fn(array $r) => (int) $r['itemId'], $scalarRows)));
         $itemsById = $this->createQueryBuilder('it', 'it.id')
+            ->addSelect('p')
+            ->leftJoin('it.place', 'p')
             ->where('it.id IN (:ids)')
             ->setParameter('ids', $ids)
             ->getQuery()
@@ -52,13 +55,60 @@ class TravelItemRepository extends ServiceEntityRepository
 
         $out = [];
         foreach ($scalarRows as $row) {
-            $out[$row['dayId']][] = $itemsById[$row['itemId']];;
+            $dayId = $row['dayId'];
+            /** @var TravelItem $item */
+            $item = $itemsById[$row['itemId']];
+
+            $itemType = $item->getItemType();
+            $out[$dayId][$itemType->isPositionable() ? 'itinerary' : $itemType->value][] = $item;
         }
 
         return $out;
     }
 
-    public function insertAtPosition(TravelItem $item, int $position): void
+    /**
+     * Retourne les TravelItems pour un jour spécifique, groupés par type.
+     * Format: [ 'itinerary' => [...], 'accommodation' => [...], 'flight' => [...] ]
+     */
+    public function findItemsForDay(Day $day): array
+    {
+        // On récupère directement les entités TravelItem qui correspondent à notre critère
+        $items = $this->createQueryBuilder('i')
+            ->addSelect('sd', 'ed', 'p')
+            ->join('i.startDay', 'sd')
+            ->leftJoin('i.endDay', 'ed')
+            ->leftJoin('i.place', 'p')
+            ->where(':day_position BETWEEN sd.position AND COALESCE(ed.position, sd.position)')
+            ->andWhere('sd.trip = :trip')
+            ->setParameter('day_position', $day->getPosition())
+            ->setParameter('trip', $day->getTrip())
+//            ->addOrderBy(
+//                'CASE ' .
+//                'WHEN sd.position < :day_position AND COALESCE(ed.position, sd.position) > :day_position THEN 0 ' . // All-day
+//                'WHEN COALESCE(ed.position, sd.position) = :day_position AND sd.position < :day_position THEN 1 ' . // Ending
+//                'WHEN sd.position = :day_position AND COALESCE(ed.position, sd.position) > :day_position THEN 3 ' . // Starting
+//                'ELSE 2 ' . // one-day
+//                'END'
+//            )
+            ->addOrderBy('i.position', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        if (empty($items)) {
+            return [];
+        }
+
+        $groupedItems = [];
+        foreach ($items as $item) {
+            /** @var TravelItemType $itemType */
+            $itemType = $item->getItemType();
+            $groupedItems[$itemType->isPositionable() ? 'itinerary' : $itemType->value][] = $item;
+        }
+
+        return $groupedItems;
+    }
+
+    public function makeSpaceAtPosition(Day $day, int $position): void
     {
         $this->getEntityManager()
             ->createQueryBuilder()
@@ -66,8 +116,9 @@ class TravelItemRepository extends ServiceEntityRepository
             ->set('i.position', 'i.position + 1')
             ->where('i.position >= :position')
             ->andWhere('i.startDay = :day')
+            ->andWhere('i.position is not null')
             ->setParameter('position', $position)
-            ->setParameter('day', $item->getStartDay())
+            ->setParameter('day', $day)
             ->getQuery()
             ->execute();
     }

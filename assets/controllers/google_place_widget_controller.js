@@ -4,12 +4,28 @@ import { Controller } from "@hotwired/stimulus";
 import { getComponent } from "@symfony/ux-live-component";
 
 export default class extends Controller {
-    static targets = ["placeInput"];
+    static targets = [
+        'placeInput',
+        'name',
+        'address',
+        'location',
+        'googleMapsURI',
+        'photoURI',
+        'placeId',
+        'type',
+    ];
     placeAutocomplete = null;
 
-    async initialize() {
-        this.component = await getComponent(this.element);
-    }
+    // async connect() {
+    //     try {
+    //         this.component = await getComponent(this.element);
+    //     } catch (error) {
+    //         console.log('FUCK');
+    //         console.error('Error initializing live component:', error);
+    //     }
+    //     this.initializeGooglePlaces();
+    //
+    // }
 
     connect() {
         this.initializeGooglePlaces();
@@ -17,10 +33,6 @@ export default class extends Controller {
 
     disconnect() {
         this.placeAutocomplete.removeEventListener('gmp-select', this.handleSelection);
-    }
-
-    testaction() {
-        this.component.action('placeSelected', { placeData: {} });
     }
 
     initializeGooglePlaces() {
@@ -55,30 +67,37 @@ export default class extends Controller {
                 ]
             });
 
-            console.log(place.googleMapsLinks, place.googleMapsLinks.directionsURI);
             const placeData = this.formatPlaceData(place);
+            this.setPlaceComponents(placeData);
 
-            this.component.action('placeSelected', { placeData });
+            // this.component.action('placeSelected', { placeData });
 
         } catch (error) {
             console.error('Error handling place selection:', error);
         }
     }
 
+    setPlaceComponents(placeData) {
+        if (this.hasNameTarget) this.nameTarget.value = placeData.name || ""
+        if (this.hasAddressTarget) this.addressTarget.value = placeData.address || ""
+        if (this.hasCityTarget) this.cityTarget.value = placeData.locality || ""
+        if (this.hasGoogleMapsURITarget) this.googleMapsURITarget.value = placeData.googleMapsURI || ""
+        if (this.hasCountryTarget) this.countryTarget.value = placeData.country || ""
+        if (this.hasPostalCodeTarget) this.postalCodeTarget.value = placeData.postal_code || ""
+        if (this.hasPlaceIdTarget) this.placeIdTarget.value = placeData.placeId || ""
+        if (this.hasTypeTarget) this.typeTarget.value = placeData.type || ""
+        if (this.hasLocationTarget) this.locationTarget.value = placeData.location || ""
+        if (this.hasPhotoURITarget) this.photoURITarget.value = placeData.photoURI || ""
+    }
+
     formatPlaceData = place => {
-        const photoURI = place.photos[0]?.getURI({maxHeight: 400}) || '';
-
-        place.photos.forEach((photo, i) => {
-            console.log('photo'+ i + photo.getURI({maxHeight: 400}));
-        })
-
         return {
             name: place.displayName,
-            photoURI: photoURI,
+            photoURI: place.photos[0]?.getURI({maxHeight: 600, maxWidth: 600}) ?? null,
             address: place.formattedAddress,
             googleMapsURI: place.googleMapsURI,
             directionsURI: place.googleMapsLinks.directionsURI,
-            location: place.location.toJSON(),
+            location: JSON.stringify(place.location),
             placeId: place.id,
             type: place.primaryTypeDisplayName || '',
         };

@@ -1,0 +1,175 @@
+{% set accommodationEnum = enum("App\\Enum\\TravelItemType").ACCOMMODATION.value %}
+{% set flightEnum = enum("App\\Enum\\TravelItemType").FLIGHT.value %}
+
+
+<div id="day_{{ day.id }}" class="py-7 px-4 lg:px-7 w-full bg-white rounded-3xl">
+    <div>
+        {{ day.title }} ({{ day.id }}) - {{ day.date|date('l j F') }}
+    </div>
+
+    <div class="space-y-6">
+        <div class="space-y-2">
+            {% if items and items[flightEnum] is defined %}
+                {% for flight in items[flightEnum] %}
+                    {% set sameDayFlight = flight.endDay is null %}
+                    <div class="bg-light-blue rounded-xl p-4 flex">
+                        <div class="w-full">
+                            <div class="grid grid-cols-3 max-w-[600px]">
+                                <div class="col-span-1 text-lg">
+                                    {{ flight.startTime ? flight.startTime|date("H:i") : 'TBD' }}
+                                </div>
+                                <div class="col-span-1 col-start-3">
+                                    {{ flight.endTime ? flight.endTime|date("H:i") : 'TBD' }}
+                                </div>
+                                <div class="col-span-1 font-bold row-start-2">
+                                    {{ flight.departureAirport.code ?: 'TBD' }}
+                                </div>
+                                <div class="col-span-1 row-start-2">
+                                    <twig:ux:icon name="bi:arrow-right" class="size-4 mr-5"/>
+                                </div>
+                                <div class="col-span-1 font-bold row-start-2">
+                                    {{ flight.arrivalAirport.code ?: 'TBD' }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ml-6">
+                            Vol {{ flight.name }}
+                        </div>
+
+                        {% if sameDayFlight %}
+                            {# Same day departure arrival #}
+                        {% elseif flight.startDay is same as(day) %}
+
+                            {#                        <ol class="relative space-y-8 before:absolute before:-ml-px before:h-full before:w-0.5 before:rounded-full before:bg-gray-200"> #}
+                            {#                            <li class="relative -ms-1.5 flex items-start gap-4"> #}
+                            {#                                <span class="size-3 shrink-0 rounded-full bg-gray-300"></span> #}
+
+                            {#                                <div class="-mt-2"> #}
+                            {#                                    <time class="text-xs/none font-medium text-gray-700">12/02/2025</time> #}
+
+                            {#                                    <h3 class="text-lg font-bold text-gray-900">Kickoff</h3> #}
+
+                            {#                                    <p class="mt-0.5 text-sm text-gray-700"> #}
+                            {#                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga officiis tempora ipsum #}
+                            {#                                        adipisci tenetur sunt quae exercitationem sed pariatur porro! #}
+                            {#                                    </p> #}
+                            {#                                </div> #}
+                            {#                            </li> #}
+
+                            {#                            <li class="relative -ms-1.5 flex items-start gap-4"> #}
+                            {#                                <span class="size-3 shrink-0 rounded-full bg-gray-300"></span> #}
+
+                            {#                                <div class="-mt-2"> #}
+                            {#                                    <time class="text-xs/none font-medium text-gray-700">15/03/2025</time> #}
+
+                            {#                                    <h3 class="text-lg font-bold text-gray-900">First Milestone</h3> #}
+
+                            {#                                    <p class="mt-0.5 text-sm text-gray-700"> #}
+                            {#                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga officiis tempora ipsum #}
+                            {#                                        adipisci tenetur sunt quae exercitationem sed pariatur porro! #}
+                            {#                                    </p> #}
+                            {#                                </div> #}
+                            {#                            </li> #}
+
+                            {#                            <li class="relative -ms-1.5 flex items-start gap-4"> #}
+                            {#                                <span class="size-3 shrink-0 rounded-full bg-gray-300"></span> #}
+
+                            {#                                <div class="-mt-2"> #}
+                            {#                                    <time class="text-xs/none font-medium text-gray-700">24/04/2025</time> #}
+
+                            {#                                    <h3 class="text-lg font-bold text-gray-900">Launch</h3> #}
+
+                            {#                                    <p class="mt-0.5 text-sm text-gray-700"> #}
+                            {#                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga officiis tempora ipsum #}
+                            {#                                        adipisci tenetur sunt quae exercitationem sed pariatur porro! #}
+                            {#                                    </p> #}
+                            {#                                </div> #}
+                            {#                            </li> #}
+                            {#                        </ol> #}
+                            {#                        FLIGHT START DAY #}
+                        {% else %}
+                            {#                        FLIGHT END DAY #}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="space-y-2">
+            {% if items and items[accommodationEnum] is defined %}
+                {% for item in items[accommodationEnum] %}
+                    <div class="bg-gray-100 rounded-xl py-2 px-4">
+                        <div class="flex items-center gap-2">
+                            <twig:ux:icon name="material-symbols:hotel" class="size-6 mr-2"/>
+                            {{ item.name }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div>
+                    <div class="text-purple-700">
+                        Vous n'avez pas encore de logement sur ces dates, 30 nov. - 12 janv.
+                    </div>
+                    <a href="{{ path('app_travelitem_create', {trip: trip.id, type: accommodationEnum }) }}"
+                       data-turbo-frame="modal"
+                    >
+                        Ajouter un hebergement
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="mt-10">
+        <div class="px-1.5 my-2">
+            <span class="flex items-center">
+                <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id }) }}"
+                   class="mr-4 text-gray-600 text-sm hover:underline"
+                   data-turbo-frame="modal">Ajouter</a>
+                <span class="h-px flex-1 border-b-1 border-b-gray-300"></span>
+            </span>
+
+
+        </div>
+
+
+        {% if items and items['itinerary'] is defined %}
+            {% set prevItem = null %}
+            {% for item in items['itinerary'] %}
+                {% if day and not loop.first %}
+                    {% set prevItem = items['itinerary'][loop.index0 - 1] %}
+                    <div class="px-1.5 my-2">
+                        <span class="flex items-center">
+                            <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id, position: item.position }) }}"
+                               class="mr-4 text-gray-600 text-sm hover:underline"
+                               data-turbo-frame="modal">Ajouter</a>
+                            <span class="text-gray-600">•</span>
+
+                            <span class="shrink-0 pe-4 ps-4 text-blue-500 text-sm flex items-center">
+                                <twig:ux:icon name="ic:baseline-directions-walk" class="size-4" fill="currentColor" />
+                                {% set mapsDirection = prevItem ? "https://www.google.com/maps/dir/?api=1&origin=" ~ prevItem.place.name|url_encode ~ "&destination=" ~ item.place.name|url_encode : "" %}
+                                <span class="ps-1 hover:underline cursor-pointer"><a href="{{ mapsDirection }}" target="_blank">Itineraire</a></span>
+                            </span>
+                          <span class="h-px flex-1 border-b-1 border-b-gray-300"></span>
+                        </span>
+                    </div>
+                {% endif %}
+
+                <twig:TravelItem:List_item item="{{ item }}" newItem="{{ newItem ?? null }}"/>
+
+                {% if loop.last %}
+                    <div class="px-1.5 my-2">
+                        <span class="flex items-center">
+                            <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id, position: item.position + 1 }) }}"
+                               class="mr-4 text-gray-600 text-sm hover:underline"
+                               data-turbo-frame="modal">Ajouter</a>
+                            <span class="h-px flex-1 border-b-1 border-b-gray-300 bordezr-dashed"></span>
+                        </span>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>

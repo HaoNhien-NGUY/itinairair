@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\DayRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -66,4 +67,13 @@ class Day
 
         return $this;
     }
+
+    public function getDate(): ?DateTimeInterface
+    {
+        if (!$this->trip?->getStartDate()) {
+            return null;
+        }
+        return (clone $this->trip->getStartDate())->modify(sprintf('+%d days', $this->position - 1));
+    }
+
 }

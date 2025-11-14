@@ -18,11 +18,6 @@ class Flight extends TravelItem
     #[ORM\Column(type: 'json')]
     private array $arrivalAirport = [];
 
-    public function getItemType(): string
-    {
-        return static::class;
-    }
-
     public function getFlightNumber(): ?string
     {
         return $this->flightNumber;

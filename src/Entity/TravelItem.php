@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Enum\ItemStatus;
+use App\Enum\TravelItemType;
 use App\Repository\TravelItemRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,8 +28,8 @@ abstract class TravelItem
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column]
-    private int $position = 0;
+    #[ORM\Column(nullable: true)]
+    private ?int $position = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $notes = null;
@@ -41,6 +42,8 @@ abstract class TravelItem
     #[ORM\ManyToOne]
     #[Assert\GreaterThan(propertyPath: 'startDay')]
     private ?Day $endDay = null;
+
+    //TODO: add a duration field to the entity
 
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTime $startTime = null;
@@ -66,7 +69,10 @@ abstract class TravelItem
         return $this;
     }
 
-    abstract public function getItemType(): string;
+    public function getItemType(): TravelItemType
+    {
+        return TravelItemType::fromClass(static::class);
+    }
 
     #[Assert\Callback]
     public function validateTimes(ExecutionContextInterface $context): void
@@ -98,21 +104,21 @@ abstract class TravelItem
         return $this;
     }
 
-    public function getPosition(): int
+    public function getNotes(): ?string
+    {
+        return $this->notes;
+    }
+
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
-    public function setPosition(int $position): static
+    public function setPosition(?int $position): static
     {
         $this->position = $position;
 
         return $this;
-    }
-
-    public function getNotes(): ?string
-    {
-        return $this->notes;
     }
 
     public function setNotes(?string $notes): static

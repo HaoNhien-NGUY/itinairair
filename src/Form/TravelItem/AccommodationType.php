@@ -5,7 +5,10 @@ namespace App\Form\TravelItem;
 
 use App\Entity\Accommodation;
 use App\Entity\Day;
+use App\Entity\Trip;
 use App\Enum\ItemStatus;
+use App\Repository\DayRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -20,6 +23,43 @@ class AccommodationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var Trip $trip */
+        $trip = $options['trip'];
+
+        $builder
+            ->add('name', TextType::class)
+            //TODO: will be a datepicker, if user want it to be before the first day of the trip, allow it but then create a new day
+            ->add('startDay', EntityType::class, [
+                'class' => Day::class,
+                'query_builder' => function (DayRepository $dayRepository) use ($trip) {
+                    return $dayRepository->createQueryBuilder('d')
+                        ->where('d.trip = :trip')
+                        ->setParameter('trip', $trip)
+                        ->orderBy('d.position', 'ASC');
+                },
+//                'row_attr' => ['class' => 'hidden'],
+
+                'attr' => [
+                    'data-calendar-target' => 'startDaySelect',
+                ],
+                'choice_label' => fn(Day $day) => $day->getTitle(),
+            ])
+            ->add('endDay', EntityType::class, [
+                'class' => Day::class,
+                'query_builder' => function (DayRepository $dayRepository) use ($trip) {
+                    return $dayRepository->createQueryBuilder('d')
+                        ->where('d.trip = :trip')
+                        ->setParameter('trip', $trip)
+                        ->orderBy('d.position', 'ASC');
+                },
+//                'row_attr' => ['class' => 'hidden'],
+                'attr' => [
+                    'data-calendar-target' => 'endDaySelect',
+                ],
+                'choice_label' => fn(Day $day) => $day->getTitle(),
+                'required' => false,
+            ]);
+
     }
 
     public function getParent(): string

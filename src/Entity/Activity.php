@@ -11,11 +11,6 @@ class Activity extends TravelItem
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $address = null;
 
-    public function getItemType(): string
-    {
-        return static::class;
-    }
-
     public function getAddress(): ?string
     {
         return $this->address;

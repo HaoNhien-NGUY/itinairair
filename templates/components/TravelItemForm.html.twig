@@ -14,10 +14,11 @@
 
     {% if placeData %}
         <div class="my-4 flex space-x-3">
-                <img class="h-28 w-28 rounded-lg shrink-0 object-cover" src="{{ placeData.photoURI }}" alt="{{ placeData.name }}-photo" />
+                <img class="h-28 w-28 rounded-lg shrink-0 object-cover" src="https://placehold.co/400?text=Hello+World" alt="{{ placeData.name }}-photo" />
 
             <div>
                 <p class="text-sm text-purple-900 font-medium mb-1.5">{{ placeData.type }}</p>
+{# TODO: remove image placeholder #}
                 <div class="font-medium text-base/5 line-clamp-2">{{ placeData.name }}</div>
                 <a href="{{ placeData.googleMapsURI }}" target="_blank" rel="noopener noreferrer" class="text-xs/snug hover:text-blue-400 text-gray-600 line-clamp-2">{{ placeData.address }}</a>
 
@@ -46,19 +47,19 @@
             </div>
 
             <div class="flex justify-end mt-6">
-                <div>
-                    <button type="submit" class="bg-blue-100 px-4 py-1 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:hover:bg-blue-200 not-disabled:cursor-pointer rounded-l-2xl mr-0.5" {{ placeData ? '' : 'disabled' }}>
-                        Ajouter
-                    </button>
-                </div>
 
                 <label>
-                    <select name="{{ field_name(form.status) }}" class="bg-blue-100 rounded-r-2xl pl-2 py-1 custom-select focus:outline-none">
+                    <select name="{{ field_name(form.status) }}" class="bg-blue-100 rounded-l-2xl pl-2 py-1 custom-select focus:outline-none">
                         {% for label, value in field_choices(form.status) %}
                             <option value="{{ value }}" {{ formValues.status == value ? 'selected' }}>{{ label }}</option>
                         {% endfor %}
                     </select>
                 </label>
+                <div>
+                    <button type="submit" class="bg-blue-100 px-4 py-1 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:hover:bg-blue-200 not-disabled:cursor-pointer rounded-r-2xl ml-0.5" {{ placeData ? '' : 'disabled' }}>
+                        Ajouter
+                    </button>
+                </div>
             </div>
         </div>
 

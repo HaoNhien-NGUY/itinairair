@@ -39,4 +39,22 @@ enum TravelItemType: string
     {
         return new ($this->getClass())($params);
     }
+
+    public function isPositionable(): bool
+    {
+        return match ($this) {
+            self::ACTIVITY => true,
+            default => false,
+        };
+    }
+
+    public static function fromClass(string $className): self
+    {
+        return match ($className) {
+            Accommodation::class => self::ACCOMMODATION,
+            Flight::class => self::FLIGHT,
+            Activity::class => self::ACTIVITY,
+            default => throw new \InvalidArgumentException("Unknown TravelItem class: $className"),
+        };
+    }
 }

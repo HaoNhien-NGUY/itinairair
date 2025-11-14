@@ -45,12 +45,34 @@ This is a Symfony application for managing travel plans, including trips, accomm
     symfony serve
     ```
 
-    Or, if using Docker Compose:
-
-    ```bash
-    docker compose up -d
-    ```
-
 ## Usage
 
 (Add instructions on how to use the application here)
+
+**Turbo convention**:
+
+```├── base.html.twig
+├── components/           # Reusable UI components
+│   ├── _card.html.twig
+│   ├── _modal.html.twig
+│   └── _notification.html.twig
+│
+├── [entity]/            # e.g., product/, user/, post/
+│   ├── index.html.twig       # Full page
+│   ├── show.html.twig        # Full page
+│   ├── _form.html.twig       # Partial (reusable form)
+│   ├── _list.html.twig       # Partial (list of items)
+│   ├── _item.html.twig       # Partial (single item)
+│   │
+│   └── turbo/               # Turbo-specific templates
+│       ├── _form_frame.html.twig
+│       ├── _list_frame.html.twig
+│       ├── create_stream.html.twig
+│       ├── update_stream.html.twig
+│       └── delete_stream.html.twig
+│
+└── layout/
+├── _header.html.twig
+├── _footer.html.twig
+└── _sidebar.html.twig
+```

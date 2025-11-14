@@ -54,7 +54,7 @@ class TripType extends AbstractType
             ])
 
             ->add('startDate', DateType::class, [
-                'label' => 'Date de début (optionnelle)',
+                'label' => 'Date de depart',
                 'required' => false,
                 'widget' => 'single_text',
                 'attr' => [

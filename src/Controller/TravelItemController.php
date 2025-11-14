@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Day;
+use App\Entity\TravelItem;
 use App\Entity\Trip;
 use App\Entity\TripMembership;
 use App\Enum\ItemStatus;
@@ -11,6 +12,7 @@ use App\Enum\TripRole;
 use App\Form\TripType;
 use App\Repository\DayRepository;
 use App\Repository\TravelItemRepository;
+use App\Service\ItineraryService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,46 +31,49 @@ final class TravelItemController extends AbstractController
         ]);
     }
 
+
+    #[Route('/travel-item/{item}/delete', name: 'app_travelitem_delete', methods: ['POST'])]
+    public function delete(Request $request, TravelItem $item, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$item->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($item);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Item deleted successfully.');
+        }
+
+        return $this->redirectToRoute('app_travel_item');
+    }
+
     #[Route('/travel-item/trip/{trip}/day/{day}', name: 'app_travelitem_create_day_item', methods: ['POST', 'GET'])]
     public function createDayItem(
         Request $request,
-        EntityManagerInterface $entityManager,
         TravelItemRepository $travelItemRepository,
+        ItineraryService $itineraryService,
         Trip $trip,
         Day $day,
         #[MapQueryParameter] TravelItemType $type = TravelItemType::ACTIVITY,
         #[MapQueryParameter] ItemStatus $status = ItemStatus::PLANNED,
-        #[MapQueryParameter] ?int $prevItemId = null,
-        #[MapQueryParameter] ?string $target = null,
+        #[MapQueryParameter] ?int $position = 0,
     ): Response
     {
         if ($day->getTrip() !== $trip) throw $this->createAccessDeniedException();
 
         $item = $type->createInstance()->setStatus($status);
-        $form = $this->createForm($type->getFormType(), $item, ['action' => $request->getUri()]);
+        $form = $this->createForm($type->getFormType(), $item, ['action' => $request->getUri(), 'trip' => $trip]);;
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($prevItemId !== null) {
-                $prevItem = $travelItemRepository->findOneBy(['id' => $prevItemId]);
-                $position = $prevItem?->getPosition() + 1 ?: 0;
-            }
-
-            $position = $position ?? 0;
-            $item->setPosition($position)
-                ->setStartDay($day);
-
-            $entityManager->persist($item);
-            $entityManager->flush();
-            $travelItemRepository->insertAtPosition($item, $position);
+            $itineraryService->insertItineraryItem($item, $position, $day);
 
             $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
 
             return $this->renderBlock('travel_item/create/day_item.html.twig', 'success_stream', [
-                'item'       => $item,
+                'items'      => $travelItemRepository->findItemsForDay($day),
                 'trip'       => $trip,
-                'prevItemId' => $prevItemId,
-                'target'     => $target,
+                'day'        => $day,
+                'newItem'    => $item,
+                'target'     => 'day_'.$day->getId(),
                 'place'      => $item->getPlace(),
             ]);
         }
@@ -77,11 +82,6 @@ final class TravelItemController extends AbstractController
             'form'       => $form,
             'item'       => $item,
             'formAction' => $request->getUri(),
-//            'trip'       => $trip,
-//            'type'       => $type,
-//            'status'     => $status,
-//            'prevItemId' => $prevItemId,
-//            'target'     => $target,
         ]);
     }
 
@@ -92,62 +92,83 @@ final class TravelItemController extends AbstractController
         Trip $trip,
         DayRepository $dayRepository,
         TravelItemRepository $travelItemRepository,
-        #[MapQueryParameter] ItemStatus $status = ItemStatus::IDEA,
+        #[MapQueryParameter] ItemStatus $status = ItemStatus::PLANNED,
         #[MapQueryParameter] ?int $prevItemId = null,
-        ?TravelItemType $type = null,
-        #[MapQueryParameter] ?int $dayId = null,
+        ?TravelItemType $type = TravelItemType::ACTIVITY,
         #[MapQueryParameter] ?string $target = null,
     ): Response
     {
-        if (!$type) {
-            return $this->renderBlock('travel_item/create.html.twig', 'form_modal', [
-                'trip'       => $trip,
-                'type'       => $type,
-                'dayId'      => $dayId,
-                'status'     => $status,
-                'prevItemId' => $prevItemId,
-                'target'     => $target,
-            ]);
-        }
-
         $item = $type->createInstance()->setStatus($status);
-        $form = $this->createForm($type->getFormType(), $item, ['action' => $request->getUri()]);
+        $form = $this->createForm($type->getFormType(), $item, ['action' => $request->getUri(), 'trip' => $trip]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $day = $dayRepository->findOneBy(['id' => $dayId, 'trip' => $trip]);
-
-            if ($prevItemId !== null) {
-                $prevItem = $travelItemRepository->findOneBy(['id' => $prevItemId]);
-                $position = $prevItem?->getPosition() + 1 ?: 0;
-            }
-
-            $position = $position ?? 0;
-
-            $item->setPosition($position)
-                ->setStartDay($day);
-            $travelItemRepository->insertAtPosition($item, $position);
+//            $position = $position ?? 0;
+//
+//            $item->setPosition($position);
+//            $travelItemRepository->insertItineraryItem($item, $position);
             $entityManager->persist($item);
             $entityManager->flush();
 
-            $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+//            $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
 
-            return $this->renderBlock('travel_item/create.html.twig', 'success_stream', [
-                'item'       => $item,
-                'trip'       => $trip,
-                'prevItemId' => $prevItemId,
-                'target'     => $target,
-            ]);
+            return $this->redirectToRoute('app_trip_show', ['id' => $trip->getId()], Response::HTTP_SEE_OTHER);
+
+//            return $this->renderBlock('travel_item/_create_widget.frame.html.twig', 'success_stream', [
+//                'item'       => $item,
+//                'trip'       => $trip,
+//                'prevItemId' => $prevItemId,
+//                'target'     => $target,
+//            ]);
         }
 
         return $this->renderBlock('travel_item/create.html.twig', 'form_modal', [
             'form'       => $form,
             'trip'       => $trip,
             'type'       => $type,
-            'dayId'      => $dayId,
             'status'     => $status,
             'prevItemId' => $prevItemId,
             'target'     => $target,
+        ]);
+    }
+
+    #[Route('_frame/travel-item/trip/{trip}/flight/create/', name: 'app_travelitem_create_flight', methods: ['POST', 'GET'])]
+    public function createFlight(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        Trip $trip,
+        DayRepository $dayRepository,
+        TravelItemRepository $travelItemRepository,
+        #[MapQueryParameter] ItemStatus $status = ItemStatus::IDEA,
+    ): Response
+    {
+        $type = TravelItemType::FLIGHT;
+        $item = $type->createInstance()->setStatus($status);
+        $form = $this->createForm($type->getFormType(), $item, ['action' => $request->getUri(), 'trip' => $trip]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($item);
+            $entityManager->flush();
+
+//            $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+
+            return $this->redirectToRoute('app_trip_show', ['id' => $trip->getId()], Response::HTTP_SEE_OTHER);
+
+//            return $this->renderBlock('travel_item/_create_widget.frame.html.twig', 'success_stream', [
+//                'item'       => $item,
+//                'trip'       => $trip,
+//                'prevItemId' => $prevItemId,
+//                'target'     => $target,
+//            ]);
+        }
+
+        return $this->render('travel_item/flight/turbo/_create_widget.frame.html.twig', [
+            'form'       => $form,
+            'trip'       => $trip,
+            'type'       => $type,
+            'status'     => $status,
+            'frameId'    => $request->headers->get('Turbo-Frame'),
         ]);
     }
 }

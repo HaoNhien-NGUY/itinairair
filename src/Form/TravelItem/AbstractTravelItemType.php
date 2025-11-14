@@ -5,6 +5,7 @@ namespace App\Form\TravelItem;
 
 use App\Entity\Day;
 use App\Entity\TravelItem;
+use App\Entity\Trip;
 use App\Enum\ItemStatus;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -29,8 +30,8 @@ class AbstractTravelItemType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Ajouter une note, un lien, etc...',
-                    'class' => 'form-control',
-                    'rows' => 4
+                    'class' => 'focus:outline-none resize-none p-2 border-2 w-full border-dashed border-gray-300 rounded-2xl',
+                    'rows' => 1,
                 ],
                 'constraints' => [
                     new Assert\Length([
@@ -61,5 +62,8 @@ class AbstractTravelItemType extends AbstractType
     {
         $resolver->setDefaults([
         ]);
+        $resolver->setRequired('trip');
+        $resolver->setAllowedTypes('trip', Trip::class);
+
     }
 }

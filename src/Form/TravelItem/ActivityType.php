@@ -16,6 +16,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -25,10 +27,18 @@ class ActivityType extends AbstractType
     {
         $builder
             ->add('name', HiddenType::class)
+            ->add('position', HiddenType::class, [
+                'empty_data' => 0,
+            ])
             ->add('place', PlaceType::class, [
-//                'mapped' => false,
                 'required' => false,
             ]);
+
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            /** @var Activity $activity */
+            $activity = $event->getData();
+            $activity->setName($activity->getPlace()->getName());
+        });
     }
 
     public function getParent(): string

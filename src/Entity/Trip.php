@@ -162,4 +162,15 @@ class Trip
 
         return $this;
     }
+
+    public function getDayMapping(): array
+    {
+        $mapping = [];
+
+        foreach ($this->days as $day) {
+            $mapping[$day->getDate()->format('Y-m-d')] = $day->getId();
+        }
+
+        return $mapping;
+    }
 }

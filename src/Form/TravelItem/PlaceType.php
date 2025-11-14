@@ -3,38 +3,64 @@
 
 namespace App\Form\TravelItem;
 
-use App\Entity\Accommodation;
-use App\Entity\Activity;
-use App\Entity\Day;
-use App\Entity\Flight;
 use App\Entity\Place;
-use App\Enum\ItemStatus;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\EnumType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class PlaceType extends AbstractType
 {
+    public function __construct(private readonly HttpClientInterface $httpClient)
+    {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('name',HiddenType::class)
-            ->add('address', HiddenType::class)
-            ->add('location', HiddenType::class)
-            ->add('googleMapsURI', HiddenType::class)
-            ->add('photoURI', HiddenType::class)
-            ->add('placeId', HiddenType::class)
-            ->add('type', HiddenType::class);
+        $fields = [
+            'name',
+            'address',
+            'location',
+            'googleMapsURI',
+            'photoURI',
+            'placeId',
+            'type',
+        ];
+
+        foreach ($fields as $field) {
+            $builder->add($field, TextType::class, [ //TODO: make it a hidden field
+                'attr' => [
+                    'data-google-place-widget-target' => $field,
+                ],
+            ]);
+        }
+
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $data = $event->getData();
+
+            if (empty($data['photoURI'])) {
+                return;
+            }
+
+            try {
+                $response = $this->httpClient->request('GET', $data['photoURI'], [
+                    'max_redirects' => 0,
+                ]);
+                $headers = $response->getHeaders(false);
+
+                if (isset($headers['location'][0])) {
+                    $data['photoURI'] = $headers['location'][0];
+                    $event->setData($data);
+                }
+            } catch (TransformationFailedException $e) {
+                return;
+            };
+        });
 
         $builder->get('location')
             ->addModelTransformer(new CallbackTransformer(
@@ -45,7 +71,6 @@ class PlaceType extends AbstractType
                     return !empty($value) ? json_decode($value, true) : [];
                 }
             ));
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void

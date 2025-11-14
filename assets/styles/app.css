@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 body {
-    background: #d6e3ff;
+    background: #dfefff;
 }
 
 html {
@@ -27,6 +27,18 @@ gmp-place-autocomplete {
     outline: none !important;
 }
 
+.bg-light-blue {
+    background-color: #F0F8FF;
+}
+
+/* Custom styles for the date picker */
+[data-vc-theme=light] .vc-date[data-vc-date-month=next]:not(.vc-date[data-vc-date-disabled]) .vc-date__btn,
+[data-vc-theme=light] .vc-date[data-vc-date-month=prev]:not(.vc-date[data-vc-date-disabled]) .vc-date__btn {
+    color: #59637b !important;
+}
+
+
+
 .custom-select {
     /* Remove default appearance */
     -webkit-appearance: none;
@@ -45,50 +57,3 @@ gmp-place-autocomplete {
     padding-right: 30px; /* Make space for the arrow */
 }
 
-.timeline-container {
-    position: relative; /* Establishes a positioning context for the pseudo-elements */
-    max-width: 500px;
-    margin: 20px auto;
-}
-
-/* The main vertical line */
-.timeline-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 30px; /* Position the line on the left */
-    height: 100%;
-    width: 1px;
-    background-color: #d1d5db;
-}
-
-.timeline-card {
-    position: relative; /* Required for positioning the pseudo-elements */
-    background-color: #ffffff;
-    margin-bottom: 30px; /* Space between cards */
-}
-
-/* The '+' icon on the line between cards */
-.timeline-card:not(:last-child)::after {
-    content: '+';
-    position: absolute;
-    top: 100%; /* Position it right at the bottom of the card */
-    left: 31.5px; /* Align with the main vertical line */
-    transform: translateX(-50%);
-    margin-top: 5px; /* Space between card bottom and the '+' icon */
-
-    /* Styling for the '+' icon */
-    background-color: #007bff;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: bold;
-    width: 19px;
-    height: 19px;
-    border-radius: 50%;
-
-    /* Centering the '+' text */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1; /* Ensures the icon is above the main line */
-}

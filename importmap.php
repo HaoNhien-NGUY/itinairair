@@ -17,7 +17,7 @@ return [
         'entrypoint' => true,
     ],
     '@hotwired/stimulus' => [
-        'version' => '3.2.2',
+        'version' => '3.0.1',
     ],
     '@symfony/stimulus-bundle' => [
         'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
@@ -27,5 +27,12 @@ return [
     ],
     '@symfony/ux-live-component' => [
         'path' => './vendor/symfony/ux-live-component/assets/dist/live_controller.js',
+    ],
+    'vanilla-calendar-pro' => [
+        'version' => '3.0.5',
+    ],
+    'vanilla-calendar-pro/styles/index.min.css' => [
+        'version' => '3.0.5',
+        'type' => 'css',
     ],
 ];

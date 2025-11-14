@@ -21,11 +21,6 @@ class Accommodation extends TravelItem
     #[ORM\Column(enumType: AccommodationType::class)]
     private AccommodationType $type = AccommodationType::HOTEL;
 
-    public function getItemType(): string
-    {
-        return static::class;
-    }
-
     public function getAddress(): ?string
     {
         return $this->address;

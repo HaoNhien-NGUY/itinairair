@@ -3,7 +3,6 @@
         <turbo-frame id="travel_item_form">
 {#            {% include 'travel_item/component/_type_selector.html.twig' %}#}
             {{ form_start(form) }}
-
                 <div class="space-y-2">
 
                     <div {{ stimulus_controller('calendar', {dayMapping: trip.dayMapping, isRange: true, startDate: day ? day.date|date('Y-m-d')}) }}>

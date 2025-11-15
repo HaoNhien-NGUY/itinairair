@@ -90,8 +90,6 @@ final class TravelItemController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         Trip $trip,
-        DayRepository $dayRepository,
-        TravelItemRepository $travelItemRepository,
         #[MapQueryParameter] ItemStatus $status = ItemStatus::PLANNED,
         ?TravelItemType $type = TravelItemType::ACTIVITY,
         ?Day $day = null,
@@ -108,21 +106,10 @@ final class TravelItemController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-//            $position = $position ?? 0;
-//
-//            $item->setPosition($position);
-//            $travelItemRepository->insertItineraryItem($item, $position);
             $entityManager->persist($item);
             $entityManager->flush();
 
             $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
-
-//            $response = $this->redirectToRoute('app_trip_show', ['id' => $trip->getId()], Response::HTTP_SEE_OTHER);
-//            $response->headers->set('Turbo-Frame', '_top');
-
-//            return $response;
-
-
             return $this->renderBlock('travel_item/create.html.twig', 'success_stream');
         }
 

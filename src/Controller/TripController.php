@@ -60,14 +60,10 @@ final class TripController extends AbstractController
     public function show(Request $request, Trip $trip, TravelItemRepository $travelItemRepository): Response
     {
 
-        $response = $this->render('trip/show.html.twig', [
+        return $this->render('trip/show.html.twig', [
             'trip'  => $trip,
             'items' => $travelItemRepository->findItemDayPairsForTrip($trip),
         ]);
-
-        $response->headers->set('Turbo-Frame', '_top');
-
-        return $response;
     }
 
     #[Route('/trip/{id}/delete', name: 'app_trip_delete', methods: ['POST'])]

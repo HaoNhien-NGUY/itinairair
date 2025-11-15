@@ -1,0 +1,11 @@
+<turbo-frame id="day_{{ day.id ?? '' }}_accommodation_{{ item.id}}">
+    <div class="bg-gray-50 rounded-2xl py-2 px-4">
+        {{ form(form) }}
+
+        <form action="{{ path('app_travelitem_delete', {'item': item.id}) }}" method="post" class="inline" data-turbo-frame="_top">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">
+            <button type="submit" class="cursor-pointer text-red-600 hover:text-red-400 underline transition-colors">Delete</button>
+        </form>
+        <a href="{{ path('app_travelitem_accommodation_show', {'trip': trip.id, 'item': item.id, 'day': day.id}) }}" class="bg-light-blue p-2 rounded">CANCEL</a>
+    </div>
+</turbo-frame>

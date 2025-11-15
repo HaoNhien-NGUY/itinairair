@@ -6,7 +6,7 @@ import 'vanilla-calendar-pro/styles/index.min.css';
 export default class extends Controller {
     static targets = ['calendar', 'startDaySelect', 'endDaySelect', 'startDayDisplay', 'endDayDisplay'];
     static values = {
-        startDate: String,
+        startDate: {type: String, default: ''},
         dayMapping: Object,
         isRange: {type: Boolean, default: false},
         inputMode: {type: Boolean, default: false},
@@ -16,6 +16,7 @@ export default class extends Controller {
     calendar;
 
     initialize() {
+        const startDate =  this.startDateValue ? new Date(this.startDateValue) : null;
         const options = {
             type: 'default',
             locale: 'fr-FR',
@@ -30,6 +31,8 @@ export default class extends Controller {
             onClickDate: (self) => this.handleDateSelection(self, self.context.selectedDates),
             selectionDatesMode: this.isRangeValue ? 'multiple-ranged' : 'single',
             disableAllDates: true,
+            dateToday: startDate ?? 'today',
+            selectedDates: [startDate],
             selectedWeekends: [],
             styles: {
                 calendar: 'vc',

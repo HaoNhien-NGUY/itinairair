@@ -28,7 +28,6 @@ class AccommodationType extends AbstractType
 
         $builder
             ->add('name', TextType::class)
-            //TODO: will be a datepicker, if user want it to be before the first day of the trip, allow it but then create a new day
             ->add('startDay', EntityType::class, [
                 'class' => Day::class,
                 'query_builder' => function (DayRepository $dayRepository) use ($trip) {
@@ -37,10 +36,9 @@ class AccommodationType extends AbstractType
                         ->setParameter('trip', $trip)
                         ->orderBy('d.position', 'ASC');
                 },
-//                'row_attr' => ['class' => 'hidden'],
-
                 'attr' => [
                     'data-calendar-target' => 'startDaySelect',
+                    'class' => 'hidden',
                 ],
                 'choice_label' => fn(Day $day) => $day->getTitle(),
             ])
@@ -52,9 +50,9 @@ class AccommodationType extends AbstractType
                         ->setParameter('trip', $trip)
                         ->orderBy('d.position', 'ASC');
                 },
-//                'row_attr' => ['class' => 'hidden'],
                 'attr' => [
                     'data-calendar-target' => 'endDaySelect',
+                    'class' => 'hidden',
                 ],
                 'choice_label' => fn(Day $day) => $day->getTitle(),
                 'required' => false,

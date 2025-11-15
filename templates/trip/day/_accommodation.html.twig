@@ -36,7 +36,7 @@
             <div class="text-purple-700">
                 Vous n'avez pas encore de logement sur ces dates, 30 nov. - 12 janv.
             </div>
-            <a href="{{ path('app_travelitem_create', {trip: trip.id, type: accommodationEnum }) }}"
+            <a href="{{ path('app_travelitem_create', {trip: trip.id, type: accommodationEnum, day: day.id }) }}"
                data-turbo-frame="modal"
             >
                 Ajouter un hebergement

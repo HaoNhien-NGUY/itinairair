@@ -10,6 +10,12 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
             {% block additional_javascript %}{% endblock %}
         {% endblock %}
+        {% block head %}
+            {% if enableMorph is defined and enableMorph %}
+{#                <meta name="turbo-refresh-method" content="morph">#}
+                <meta name="turbo-refresh-scroll" content="preserve">
+            {% endif %}
+        {% endblock %}
     </head>
     <body class="{% block body_style %}min-h-screen{% endblock %}">
         {% block navbar %}{% endblock %}

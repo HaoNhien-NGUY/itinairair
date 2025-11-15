@@ -85,7 +85,7 @@ final class TravelItemController extends AbstractController
         ]);
     }
 
-    #[Route('_frame/travel-item/trip/{trip}/create/{type}', name: 'app_travelitem_create', methods: ['POST', 'GET'])]
+    #[Route('_frame/travel-item/trip/{trip}/create/{type}/{day}', name: 'app_travelitem_create', methods: ['POST', 'GET'])]
     public function create(
         Request $request,
         EntityManagerInterface $entityManager,
@@ -93,12 +93,17 @@ final class TravelItemController extends AbstractController
         DayRepository $dayRepository,
         TravelItemRepository $travelItemRepository,
         #[MapQueryParameter] ItemStatus $status = ItemStatus::PLANNED,
-        #[MapQueryParameter] ?int $prevItemId = null,
         ?TravelItemType $type = TravelItemType::ACTIVITY,
+        ?Day $day = null,
         #[MapQueryParameter] ?string $target = null,
     ): Response
     {
+        if ($day && $day->getTrip() !== $trip) throw $this->createAccessDeniedException();
+
         $item = $type->createInstance()->setStatus($status);
+
+        if ($day) $item->setStartDay($day);
+
         $form = $this->createForm($type->getFormType(), $item, ['action' => $request->getUri(), 'trip' => $trip]);
         $form->handleRequest($request);
 
@@ -110,16 +115,15 @@ final class TravelItemController extends AbstractController
             $entityManager->persist($item);
             $entityManager->flush();
 
-//            $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+            $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
 
-            return $this->redirectToRoute('app_trip_show', ['id' => $trip->getId()], Response::HTTP_SEE_OTHER);
+//            $response = $this->redirectToRoute('app_trip_show', ['id' => $trip->getId()], Response::HTTP_SEE_OTHER);
+//            $response->headers->set('Turbo-Frame', '_top');
 
-//            return $this->renderBlock('travel_item/_create_widget.frame.html.twig', 'success_stream', [
-//                'item'       => $item,
-//                'trip'       => $trip,
-//                'prevItemId' => $prevItemId,
-//                'target'     => $target,
-//            ]);
+//            return $response;
+
+
+            return $this->renderBlock('travel_item/create.html.twig', 'success_stream');
         }
 
         return $this->renderBlock('travel_item/create.html.twig', 'form_modal', [
@@ -127,7 +131,7 @@ final class TravelItemController extends AbstractController
             'trip'       => $trip,
             'type'       => $type,
             'status'     => $status,
-            'prevItemId' => $prevItemId,
+            'day'        => $day,
             'target'     => $target,
         ]);
     }

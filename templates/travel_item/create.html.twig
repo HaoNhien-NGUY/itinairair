@@ -1,55 +1,52 @@
 {% block form_modal %}
     <twig:Modal>
-        <turbo-frame id="travel-item-form">
+        <turbo-frame id="travel_item_form">
 {#            {% include 'travel_item/component/_type_selector.html.twig' %}#}
-            {% if form is defined %}
-                <div class="">
-                    {{ form_start(form) }}
+            {{ form_start(form) }}
 
-                    <div {{ stimulus_controller('calendar', {dayMapping: trip.dayMapping, isRange: true}) }}>
+                <div class="space-y-2">
+
+                    <div {{ stimulus_controller('calendar', {dayMapping: trip.dayMapping, isRange: true, startDate: day ? day.date|date('Y-m-d')}) }}>
                         <div {{ stimulus_target('calendar', 'calendar') }}></div>
                         {{ form_widget(form.startDay) }}
                         {{ form_widget(form.endDay) }}
                     </div>
-{#                        <div class="grid grid-cols-3 space-y-1">#}
-{#                            <div class="col-span-1">#}
-{#                                <span class="text-gray-700">Check-in</span>#}
-{#                            </div>#}
-
-{#                            <div class="bg-gray-100 cursor-pointer rounded-xl min-w-20 py-2 px-4 row-start-2 col-span-1">#}
-{#                                11/11/11#}
-{#                            </div>#}
-
-
-{#                            <div class="col-span-1 row-start-2 flex items-center justify-center">#}
-{#                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"#}
-{#                                     xmlns="http://www.w3.org/2000/svg">#}
-{#                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>#}
-{#                                </svg>#}
-{#                            </div>#}
-{#                            <div class="col-span-1 col-start-3">#}
-{#                                <span class="text-gray-700">Check-out</span>#}
-{#                            </div>#}
-
-{#                            <div class="bg-gray-100 rounded-xl min-w-20 py-2 px-4 row-start-2 col-span-1 cursor-pointer">#}
-{#                                11/11/11#}
-{#                            </div>#}
-{#                        </div>#}
-                    <button type="submit" class="btn btn-primary">Create</button>
-                    {{ form_end(form) }}
-
+                    <div>
+                        {{ form_label(form.name) }}
+                        {{ form_widget(form.name, {'attr': {'class': 'w-full bg-gray-100 pl-1 rounded-lg h-8 flex items-center'}}) }}
+                    </div>
+                    <div>
+                        {{ form_widget(form.notes) }}
                     </div>
 
 
-{#                </div>#}
-            {% endif %}
+                    <div class="flex justify-end mt-6">
+
+                        <label>
+                            <select name="{{ field_name(form.status) }}"
+                                    class="bg-blue-100 rounded-l-2xl pl-2 py-1 custom-select focus:outline-none">
+                                {% for label, value in field_choices(form.status) %}
+                                    <option
+                                        value="{{ value }}" {{ form.status.vars.value == value ? 'selected' }}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                        <div>
+                            <button type="submit"
+                                    class="bg-blue-100 px-4 py-1 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:hover:bg-blue-200 not-disabled:cursor-pointer rounded-r-2xl ml-0.5">
+                                Ajouter
+                            </button>
+                        </div>
+                    </div>
+{#                    <button type="submit" class="btn btn-primary">Create</button>#}
+
+                </div>
+            {{ form_end(form) }}
         </turbo-frame>
     </twig:Modal>
 {% endblock %}
 
 {% block success_stream %}
     <twig:Modal:Close />
-    <twig:Turbo:Stream:After target="#{{ target }}">
-        <twig:TravelItem:List_item item="{{ item }}" trip="{{ trip }}" day="{{ item.startDay }}" new />
-    </twig:Turbo:Stream:After>
+    <twig:Turbo:Stream:Refresh />
 {% endblock %}

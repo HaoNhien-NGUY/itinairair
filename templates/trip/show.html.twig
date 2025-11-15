@@ -20,7 +20,7 @@
 
         <main class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
 
-            <div class="flex flex-col space-y-3 lg:col-span-2">
+            <div class="flex flex-col space-y-6 lg:col-span-2">
                 {% for day in trip.days %}
                     {{ include('trip/day.html.twig', {day: day, trip: trip, items: items[day.id] ?? null, startDate: startDate}) }}
                 {% endfor %}

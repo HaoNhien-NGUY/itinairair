@@ -42,7 +42,7 @@ final class TravelItemController extends AbstractController
             $this->addFlash('success', 'Item deleted successfully.');
         }
 
-        return $this->redirectToRoute('app_travel_item');
+        return $this->redirect($request->headers->get('referer'));
     }
 
     #[Route('/travel-item/trip/{trip}/day/{day}', name: 'app_travelitem_create_day_item', methods: ['POST', 'GET'])]

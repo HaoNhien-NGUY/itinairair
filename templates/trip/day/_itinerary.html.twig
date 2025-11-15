@@ -1,0 +1,46 @@
+{% for item in items['itinerary'] %}
+    {% if not loop.first %}
+        {% set prevItem = items['itinerary'][loop.index0 - 1] %}
+        <div>
+            <div class="flex items-center">
+                <div class="relative flex items-center ml-6">
+                    <div class="h-8 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:w-px before:bg-gray-300 before:-translate-x-1/2"></div>
+                    <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id, position: item.position }) }}"
+                       class="relative border border-gray-300 bg-white rounded-md"
+                       data-turbo-frame="modal">
+                        <div>
+                            <twig:ux:icon name="bx:plus" class="size-4 text-gray-400"/>
+                        </div>
+                    </a>
+                </div>
+
+                <span class="shrink-0 pe-4 ps-6 text-blue-500 text-sm flex items-center">
+                    <twig:ux:icon name="ic:baseline-directions-walk" class="size-3.5" fill="currentColor"/>
+                    {% set mapsDirection = prevItem
+                        ? "https://www.google.com/maps/dir/?api=1&origin=" ~ (prevItem.place.name ~ prevItem.place.address)|url_encode ~ "&destination=" ~ (item.place.name ~ item.place.address)|url_encode
+                        : "" %}
+                    <span class="ps-1 hover:underline cursor-pointer">
+                        <a href="{{ mapsDirection }}" target="_blank">Itineraire</a>
+                    </span>
+                </span>
+            </div>
+        </div>
+    {% endif %}
+
+    <twig:TravelItem:List_item item="{{ item }}" newItem="{{ newItem ?? null }}" position="{{ loop.index }}"/>
+
+    {% if loop.last %}
+        <div class="flex">
+            <div class="relative flex items-end ml-6">
+                <div class="h-8 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:w-px before:bg-gray-300 before:-translate-x-1/2"></div>
+                <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id, position: item.position + 1 }) }}"
+                   class="relative border border-gray-300 bg-white rounded-md"
+                   data-turbo-frame="modal">
+                    <div>
+                        <twig:ux:icon name="bx:plus" class="size-4 text-gray-400"/>
+                    </div>
+                </a>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}

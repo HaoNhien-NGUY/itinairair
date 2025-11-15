@@ -1,0 +1,46 @@
+{% set dayWithNight = false %}
+
+<div id="day_{{ day.id }}_accommodation" class="space-y-2">
+    {% if items[accommodationEnum] is defined %}
+        {% for item in items[accommodationEnum] %}
+            <div class="bg-gray-50 rounded-xl py-2 px-4">
+                <div class="flex justify-between">
+                    <div class="flex items-center gap-2">
+                        <twig:ux:icon name="material-symbols:hotel" class="size-6 mr-2"/>
+                        {{ item.name }}
+                    </div>
+                    <div>
+
+                        <form action="{{ path('app_travelitem_delete', {'item': item.id}) }}" method="post" class="inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">
+                            <button type="submit" class="cursor-pointer text-red-600 hover:text-red-400 underline transition-colors">Delete</button>
+                        </form>
+                        {% set isStartDay = item.startDay is same as(day) %}
+                        {% set isEndDay = item.endDay is same as(day) %}
+                        {% set dayWithNight = dayWithNight or isStartDay or not isEndDay %}
+
+                        {% if isStartDay %}
+                            <span class="font-medium text-gray-700">Check-in</span>
+                        {% elseif isEndDay %}
+                            <span class="font-medium text-gray-700">Check-out</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if not dayWithNight %}
+        <div>
+            <div class="text-purple-700">
+                Vous n'avez pas encore de logement sur ces dates, 30 nov. - 12 janv.
+            </div>
+            <a href="{{ path('app_travelitem_create', {trip: trip.id, type: accommodationEnum }) }}"
+               data-turbo-frame="modal"
+            >
+                Ajouter un hebergement
+            </a>
+        </div>
+    {% endif %}
+</div>

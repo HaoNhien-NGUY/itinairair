@@ -21,7 +21,6 @@ class TravelItemRepository extends ServiceEntityRepository
 
     /**
      * Returns TravelItems grouped by day within the given trip.
-     * Format: [ <dayId> => [<TravelItem>, ...], ... ]
      */
     public function findItemDayPairsForTrip(Trip $trip): array
     {

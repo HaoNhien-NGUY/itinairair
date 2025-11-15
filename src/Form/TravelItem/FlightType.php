@@ -34,6 +34,7 @@ class FlightType extends AbstractType
         $builder
             ->add('flightNumber', TextType::class, [
                 'required' => false,
+                'label'    => 'Numero du vol'
             ])
             ->add('startDay', EntityType::class, [
                 'class' => Day::class,

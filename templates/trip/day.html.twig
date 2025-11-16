@@ -1,38 +1,153 @@
 {% set accommodationEnum = enum("App\\Enum\\TravelItemType").ACCOMMODATION.value %}
 {% set flightEnum = enum("App\\Enum\\TravelItemType").FLIGHT.value %}
 
+{% set flightSameDay = [] %}
+{% set flightStartDay = [] %}
+{% set flightEndDay = [] %}
+{% if items and items[flightEnum]|default([]) %}
+    {% for item in items[flightEnum] %}
+        {% if item.endDay is null %}
+            {% set flightSameDay = flightSameDay|merge([item]) %}
+        {% elseif item.startDay is same as(day) %}
+            {% set flightStartDay = flightStartDay|merge([item]) %}
+        {% else %}
+            {% set flightEndDay = flightEndDay|merge([item]) %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
 
-<div id="day_{{ day.id }}" class="pb-4 pt-6 px-4 lg:px-5 w-full bg-white rounded-4xl">
-    <div class="flex items-end mb-5">
+
+<div id="day_{{ day.id }}" class="w-full bg-white rounded-4xl">
+
+
+
+    <div class="flex items-end mb-5 p-4 rounded-t-4xl bg-indigo-100">
         <h2 class="font-bold text-2xl">{{ day.date|date('j/m') }}</h2>
         <div class="ml-4">{{ day.title }}</div>
     </div>
-
-    <div class="space-y-6">
-
-        {{ include('trip/day/_accommodation.html.twig') }}
-
-        {{ include('trip/day/_flight.html.twig') }}
-    </div>
+    <div class="px-4">
 
 
-    <div class="mt-10">
-        <div class="flex items-center">
-            <div class="relative flex items-start ml-6">
-                <div class="h-7 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:w-px before:bg-gray-300 before:-translate-x-1/2"></div>
-                <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id }) }}"
-                   class="relative border border-gray-300 bg-white rounded-md"
-                   data-turbo-frame="modal">
-                    <div>
-                        <twig:ux:icon name="bx:plus" class="size-4 text-gray-400" />
+        {% if flightEndDay|length > 0 %}
+            <div class="mb-8">
+                {% for item in flightEndDay %}
+                    <div class="flex items-center w-full">
+                        <div class="mx-12 size-8">
+                            {#                        <twig:ux:icon name="entypo:aircraft-landing" class="size-8 text-gray-400" />#}
+                        </div>
+
+                        <ol class="relative space-y-8 before:absolute before:-ml-px before:h-full before:w-0.5 before:rounded-full before:bg-blue-50">
+                            <li class="relative -ms-1.5 flex items-start gap-4">
+                                <span class="size-3 shrink-0 absolute rounded-full bg-blue-200 top-8"></span>
+                                <span class="size-3"></span>
+
+                                <div class="mt-6">
+                                    <time class="text-xl text-gray-700">
+                                        {{ item.endTime ? item.endTime|date("H:i") : 'TBD' }}
+                                        <span class="text-base pl-1 text-gray-500">+1</span>
+                                    </time>
+
+                                    <h3 class="text-lg font-bold text-gray-900">
+                                        {{ item.arrivalAirport.code ?: 'TBD' }}
+                                    </h3>
+
+                                    <p class="mt-0.5 text-sm text-gray-700">
+                                        {{ item.name }}
+                                    </p>
+                                </div>
+                            </li>
+                        </ol>
+
                     </div>
-                </a>
+                {% endfor %}
             </div>
+
+        {% endif %}
+
+        <div class="space-y-6">
+
+            {% for item in flightSameDay %}
+                <div class="w-full">
+                    <div class="grid grid-cols-3 max-w-[600px]">
+                        <div class="col-span-1 text-lg">
+                            {{ item.startTime ? item.startTime|date("H:i") : 'TBD' }}
+                        </div>
+                        <div class="col-span-1 col-start-3">
+                            {{ item.endTime ? item.endTime|date("H:i") : 'TBD' }}
+                            {{ item.endDay is not null and item.endDay is not same as(day) ? '+1' }}
+                        </div>
+                        <div class="col-span-1 font-bold row-start-2">
+                            {{ item.departureAirport.code ?: 'TBD' }}
+                        </div>
+                        <div class="col-span-1 row-start-2">
+                            <twig:ux:icon name="bi:arrow-right" class="size-4 mr-5"/>
+                        </div>
+                        <div class="col-span-1 font-bold row-start-2">
+                            {{ item.arrivalAirport.code ?: 'TBD' }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% include 'trip/day/_accommodation.html.twig' with { 'flightStartDay': flightStartDay|length > 0} %}
+
         </div>
 
 
-        {% if items['itinerary'] is defined %}
+        <div class="mt-10">
+            <div class="flex items-center">
+                <div class="relative flex items-start ml-6">
+                    <div class="h-7 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:w-px before:bg-gray-300 before:-translate-x-1/2"></div>
+                    <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id }) }}"
+                       class="relative border border-gray-300 bg-white rounded-md"
+                       data-turbo-frame="modal">
+                        <div>
+                            <twig:ux:icon name="bx:plus" class="size-4 text-gray-400" />
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+
             {{ include('trip/day/_itinerary.html.twig') }}
-        {% endif %}
+
+        </div>
     </div>
+
+
+    {% if flightStartDay|length > 0 %}
+{#        <div class="h-3 mt-6 w-full bg-indigo-100"></div>#}
+        <div class="mt-6 px-4">
+            {% for item in flightStartDay %}
+                <div class="flex w-full">
+
+                    <div class="mr-12 ml-10">
+                        <twig:ux:icon name="entypo:aircraft-take-off" class="size-8 text-gray-400" />
+                    </div>
+
+                    <ol class="relative space-y-8 w-full before:absolute before:-ml-px before:h-full before:w-0.5 before:rounded-full before:bg-blue-50">
+
+                        <li class="relative -ms-1.5 flex items-start gap-4">
+                            <span class="size-3 shrink-0 rounded-full bg-blue-200"></span>
+                            <div class="w-full mb-8 relative -top-1.5">
+
+                                <time class="text-xl text-gray-700">
+                                    {{ item.startTime ? item.startTime|date("H:i") : 'TBD' }}
+                                </time>
+
+                                <h3 class="text-lg font-bold text-gray-900">
+                                    {{ item.departureAirport.code ?: 'TBD' }}
+                                </h3>
+
+                                <p class="mt-0.5 text-sm text-gray-700">
+                                    {{ item.name }}
+                                </p>
+                            </div>
+
+                        </li>
+                    </ol>
+                </div>
+            {% endfor %}
+    </div>
+    {% endif %}
 </div>

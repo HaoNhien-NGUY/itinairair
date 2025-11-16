@@ -90,6 +90,7 @@ class TravelItemRepository extends ServiceEntityRepository
 //                'END'
 //            )
             ->addOrderBy('i.position', 'ASC')
+            ->addOrderBy('sd.position', 'ASC')
             ->getQuery()
             ->getResult();
 

@@ -1,4 +1,4 @@
-{% for item in items['itinerary'] %}
+{% for item in items['itinerary']|default([]) %}
     {% if not loop.first %}
         {% set prevItem = items['itinerary'][loop.index0 - 1] %}
         <div>

@@ -6,11 +6,13 @@
             {% set isStartDay = item.startDay is same as(day) %}
             {% set isEndDay = item.endDay is same as(day) %}
             {% set dayWithNight = dayWithNight or isStartDay or not isEndDay %}
-            {{ include('travel_item/accommodation/_show.frame.html.twig') }}
+            <div>
+                {{ include('travel_item/accommodation/_show.frame.html.twig') }}
+            </div>
         {% endfor %}
     {% endif %}
 
-    {% if not dayWithNight %}
+    {% if not dayWithNight and not flightStartDay|default(false) %}
         <div>
             <div class="text-purple-700">
                 Vous n'avez pas encore de logement sur ces dates, 30 nov. - 12 janv.

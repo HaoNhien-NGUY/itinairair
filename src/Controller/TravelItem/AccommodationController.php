@@ -29,6 +29,20 @@ final class AccommodationController extends AbstractController
         ]);
     }
 
+    #[Route('/travel-item/trip/{trip}/accommodation/{item}/details/{day}', name: 'app_travelitem_accommodation_details', methods: ['GET'])]
+    public function details(
+        Trip                   $trip,
+        Accommodation          $item,
+        ?Day                   $day = null,
+    ): Response
+    {
+        return $this->render('travel_item/accommodation/_details.frame.html.twig', [
+            'item' => $item,
+            'day'  => $day,
+            'trip' => $trip,
+        ]);
+    }
+
     #[Route('/travel-item/trip/{trip}/accommodation/{item}/edit/{day}', name: 'app_travelitem_accommodation_edit', methods: ['POST', 'GET'])]
     public function edit(
         Request                $request,

@@ -17,12 +17,16 @@
                     {% endif %}
                 {% endif %}
                 <div class="ml-6">
-                    <a href="{{ path('app_travelitem_accommodation_details', {'trip': trip.id, 'item': item.id, 'day': day.id ?? null}) }}"
-                       class="py-1 px-4 text-gray-900 bg-indigo-100 flex focus:outline-none hover:bg-indigo-200 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg">
-                        <twig:ux:icon name="uiw:down" class="size-4 text-gray-400" />
-                    </a>
+                    {% block open_details %}
+                        <a href="{{ path('app_travelitem_accommodation_details', {'trip': trip.id, 'item': item.id, 'day': day.id ?? null}) }}"
+                           class="py-1 px-4 text-gray-900 bg-indigo-100 flex focus:outline-none hover:bg-indigo-200 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg">
+                            <twig:ux:icon name="uiw:down" class="size-4 text-indigo-400" />
+                        </a>
+                    {% endblock %}
                 </div>
             </div>
         </div>
+        {% block details %}
+        {% endblock %}
     </div>
 </turbo-frame>

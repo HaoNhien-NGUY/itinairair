@@ -1,5 +1,5 @@
 <turbo-frame id="day_{{ day.id ?? '' }}_accommodation_{{ item.id}}">
-    <div class="bg-gray-50 rounded-2xl py-2 px-4">
+    <div class="bg-indigo-50 rounded-xl py-2 px-4">
         {{ form(form) }}
 
         <form action="{{ path('app_travelitem_delete', {'item': item.id}) }}" method="post" class="inline" data-turbo-frame="_top">

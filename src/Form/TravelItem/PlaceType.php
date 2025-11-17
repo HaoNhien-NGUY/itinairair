@@ -7,6 +7,7 @@ use App\Entity\Place;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -33,7 +34,7 @@ class PlaceType extends AbstractType
         ];
 
         foreach ($fields as $field) {
-            $builder->add($field, TextType::class, [ //TODO: make it a hidden field
+            $builder->add($field, HiddenType::class, [ //TODO: make it a hidden field
                 'attr' => [
                     'data-google-place-widget-target' => $field,
                 ],

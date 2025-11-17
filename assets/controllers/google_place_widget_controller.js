@@ -13,19 +13,19 @@ export default class extends Controller {
         'photoURI',
         'placeId',
         'type',
+        'nameDisplay',
+        'photoDisplay',
+        'addressDisplay',
+        'typeDisplay',
+        'placeHolder',
+        'placeInfo',
+        'addressLinkDisplay',
+        'submitButton',
     ];
+    static values = {
+        primaryTypes: {type: Array, default: []},
+    };
     placeAutocomplete = null;
-
-    // async connect() {
-    //     try {
-    //         this.component = await getComponent(this.element);
-    //     } catch (error) {
-    //         console.log('FUCK');
-    //         console.error('Error initializing live component:', error);
-    //     }
-    //     this.initializeGooglePlaces();
-    //
-    // }
 
     connect() {
         this.initializeGooglePlaces();
@@ -48,6 +48,7 @@ export default class extends Controller {
             return;
         }
 
+        this.placeAutocomplete.includedPrimaryTypes = this.primaryTypesValue;
         this.placeAutocomplete.addEventListener('gmp-select', this.handleSelection);
     }
 
@@ -78,16 +79,24 @@ export default class extends Controller {
     }
 
     setPlaceComponents(placeData) {
-        if (this.hasNameTarget) this.nameTarget.value = placeData.name || ""
-        if (this.hasAddressTarget) this.addressTarget.value = placeData.address || ""
-        if (this.hasCityTarget) this.cityTarget.value = placeData.locality || ""
-        if (this.hasGoogleMapsURITarget) this.googleMapsURITarget.value = placeData.googleMapsURI || ""
-        if (this.hasCountryTarget) this.countryTarget.value = placeData.country || ""
-        if (this.hasPostalCodeTarget) this.postalCodeTarget.value = placeData.postal_code || ""
-        if (this.hasPlaceIdTarget) this.placeIdTarget.value = placeData.placeId || ""
-        if (this.hasTypeTarget) this.typeTarget.value = placeData.type || ""
-        if (this.hasLocationTarget) this.locationTarget.value = placeData.location || ""
-        if (this.hasPhotoURITarget) this.photoURITarget.value = placeData.photoURI || ""
+        if (this.hasNameTarget) this.nameTarget.value = placeData.name || "";
+        if (this.hasAddressTarget) this.addressTarget.value = placeData.address || "";
+        if (this.hasCityTarget) this.cityTarget.value = placeData.locality || "";
+        if (this.hasGoogleMapsURITarget) this.googleMapsURITarget.value = placeData.googleMapsURI || "";
+        if (this.hasCountryTarget) this.countryTarget.value = placeData.country || "";
+        if (this.hasPostalCodeTarget) this.postalCodeTarget.value = placeData.postal_code || "";
+        if (this.hasPlaceIdTarget) this.placeIdTarget.value = placeData.placeId || "";
+        if (this.hasTypeTarget) this.typeTarget.value = placeData.type || "";
+        if (this.hasLocationTarget) this.locationTarget.value = placeData.location || "";
+        if (this.hasPhotoURITarget) this.photoURITarget.value = placeData.photoURI || "";
+        if (this.hasNameDisplayTarget) this.nameDisplayTarget.textContent = placeData.name || "";
+        if (this.hasPhotoDisplayTarget) this.photoDisplayTarget.src = placeData.photoURI || "";
+        if (this.hasAddressDisplayTarget) this.addressDisplayTarget.textContent = placeData.address || "";
+        if (this.hasAddressLinkDisplayTarget) this.addressLinkDisplayTarget.href = placeData.googleMapsURI || "";
+        if (this.hasTypeDisplayTarget) this.typeDisplayTarget.textContent = placeData.type || "";
+        if (this.hasPlaceHolderTarget) this.placeHolderTarget.classList.add('hidden');
+        if (this.hasPlaceInfoTarget) this.placeInfoTarget.classList.remove('hidden');
+        if (this.hasSubmitButtonTarget) this.submitButtonTarget.disabled = false;
     }
 
     formatPlaceData = place => {

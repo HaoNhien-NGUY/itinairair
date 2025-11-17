@@ -59,29 +59,26 @@ final class TravelItemController extends AbstractController
     {
         if ($day->getTrip() !== $trip) throw $this->createAccessDeniedException();
 
-        $item = $type->createInstance()->setStatus($status);
+        $item = $type->createInstance([$day, $status]);
         $form = $this->createForm($type->getFormType(), $item, ['action' => $request->getUri(), 'trip' => $trip]);;
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $itineraryService->insertItineraryItem($item, $position, $day);
+            $itineraryService->insertTravelItem($item, $position, $day);
 
             $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
 
-            return $this->renderBlock('travel_item/create/day_item.html.twig', 'success_stream', [
+            return $this->render('trip/day/_day_update.html.twig', [
                 'items'      => $travelItemRepository->findItemsForDay($day),
                 'trip'       => $trip,
                 'day'        => $day,
                 'newItem'    => $item,
-                'target'     => 'day_'.$day->getId(),
-                'place'      => $item->getPlace(),
             ]);
         }
 
-        return $this->renderBlock('travel_item/create/day_item.html.twig', 'form_modal', [
+        return $this->render('travel_item/activity/_create_modal.frame.html.twig', [
             'form'       => $form,
             'item'       => $item,
-            'formAction' => $request->getUri(),
         ]);
     }
 
@@ -90,18 +87,14 @@ final class TravelItemController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         Trip $trip,
-        #[MapQueryParameter] ItemStatus $status = ItemStatus::PLANNED,
         ?TravelItemType $type = TravelItemType::ACTIVITY,
         ?Day $day = null,
+        #[MapQueryParameter] ItemStatus $status = ItemStatus::PLANNED,
     ): Response
     {
         if ($day && $day->getTrip() !== $trip) throw $this->createAccessDeniedException();
 
-        $item = $type->createInstance()->setStatus($status);
-        $template = $type->getTemplate();
-
-        if ($day) $item->setStartDay($day);
-
+        $item = $type->createInstance([$day, $status]);
         $form = $this->createForm($type->getFormType(), $item, ['action' => $request->getUri(), 'trip' => $trip]);
         $form->handleRequest($request);
 
@@ -113,7 +106,7 @@ final class TravelItemController extends AbstractController
             return $this->render('stream/refresh.stream.html.twig');
         }
 
-        return $this->render($template, [
+        return $this->render($type->getTemplate(), [
             'form'       => $form,
             'trip'       => $trip,
             'type'       => $type,

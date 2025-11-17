@@ -32,6 +32,7 @@ class ActivityType extends AbstractType
             ])
             ->add('place', PlaceType::class, [
                 'required' => false,
+                'label'    => false,
             ]);
 
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {

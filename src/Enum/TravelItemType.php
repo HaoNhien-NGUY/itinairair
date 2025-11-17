@@ -37,7 +37,7 @@ enum TravelItemType: string
 
     public function createInstance(array $params = []): TravelItem
     {
-        return new ($this->getClass())($params);
+        return new ($this->getClass())(...$params);
     }
 
     public function getTemplate(): string

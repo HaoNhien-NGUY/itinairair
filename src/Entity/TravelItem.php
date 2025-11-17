@@ -52,10 +52,16 @@ abstract class TravelItem
     private ?\DateTime $endTime = null;
 
     #[ORM\Column(enumType: ItemStatus::class)]
-    private ItemStatus $status = ItemStatus::PLANNED;
+    private ItemStatus $status;
 
     #[ORM\ManyToOne(cascade: ['persist'])]
     private ?Place $place = null;
+
+    public function __construct(?Day $startDay = null, ItemStatus $status = ItemStatus::PLANNED)
+    {
+        $this->startDay = $startDay;
+        $this->status = $status;
+    }
 
     public function getPlace(): ?Place
     {

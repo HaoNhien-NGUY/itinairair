@@ -1,0 +1,24 @@
+<turbo-frame id="day_{{ day.id ?? '' }}_accommodation_{{ item.id}}">
+    <div class="bg-gray-50 rounded-xl py-2 px-4">
+        <div class="flex justify-between">
+            <div class="flex items-center gap-2">
+                <twig:ux:icon name="material-symbols:hotel" class="size-6 mr-2"/>
+                {{ item.name }}
+            </div>
+            <div>
+                <a href="{{ path('app_travelitem_accommodation_edit', {'trip': trip.id, 'item': item.id, 'day': day.id ?? null}) }}" class="bg-light-blue p-2 rounded">edit</a>
+
+                {% if day %}
+                    {% set isStartDay = isStartDay|default(item.startDay is same as(day)) %}
+                    {% set isEndDay = isEndDay|default(item.endDay is same as(day)) %}
+
+                    {% if isStartDay %}
+                        <span class="font-medium text-gray-700">Check-in</span>
+                    {% elseif isEndDay %}
+                        <span class="font-medium text-gray-700">Check-out</span>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</turbo-frame>

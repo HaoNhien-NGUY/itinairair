@@ -48,7 +48,7 @@
                                     </time>
 
                                     <h3 class="text-lg font-bold text-gray-900">
-                                        {{ item.arrivalAirport.code ?: 'TBD' }}
+                                        {{ item.arrivalAirport.code ?? 'TBD' }}
                                     </h3>
 
                                     <p class="mt-0.5 text-sm text-gray-700">
@@ -77,13 +77,13 @@
                             {{ item.endDay is not null and item.endDay is not same as(day) ? '+1' }}
                         </div>
                         <div class="col-span-1 font-bold row-start-2">
-                            {{ item.departureAirport.code ?: 'TBD' }}
+                            {{ item.departureAirport.code ?? 'TBD' }}
                         </div>
                         <div class="col-span-1 row-start-2">
                             <twig:ux:icon name="bi:arrow-right" class="size-4 mr-5"/>
                         </div>
                         <div class="col-span-1 font-bold row-start-2">
-                            {{ item.arrivalAirport.code ?: 'TBD' }}
+                            {{ item.arrivalAirport.code ?? 'TBD' }}
                         </div>
                     </div>
                 </div>
@@ -136,7 +136,7 @@
                                 </time>
 
                                 <h3 class="text-lg font-bold text-gray-900">
-                                    {{ item.departureAirport.code ?: 'TBD' }}
+                                    {{ item.departureAirport.code ?? 'TBD' }}
                                 </h3>
 
                                 <p class="mt-0.5 text-sm text-gray-700">

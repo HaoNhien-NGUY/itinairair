@@ -93,12 +93,12 @@ final class TravelItemController extends AbstractController
         #[MapQueryParameter] ItemStatus $status = ItemStatus::PLANNED,
         ?TravelItemType $type = TravelItemType::ACTIVITY,
         ?Day $day = null,
-        #[MapQueryParameter] ?string $target = null,
     ): Response
     {
         if ($day && $day->getTrip() !== $trip) throw $this->createAccessDeniedException();
 
         $item = $type->createInstance()->setStatus($status);
+        //TODO: get twig form template to render with Type
 
         if ($day) $item->setStartDay($day);
 
@@ -119,7 +119,6 @@ final class TravelItemController extends AbstractController
             'type'       => $type,
             'status'     => $status,
             'day'        => $day,
-            'target'     => $target,
         ]);
     }
 
@@ -141,25 +140,16 @@ final class TravelItemController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($item);
             $entityManager->flush();
+            $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
 
-//            $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
-
-            return $this->redirectToRoute('app_trip_show', ['id' => $trip->getId()], Response::HTTP_SEE_OTHER);
-
-//            return $this->renderBlock('travel_item/_create_widget.frame.html.twig', 'success_stream', [
-//                'item'       => $item,
-//                'trip'       => $trip,
-//                'prevItemId' => $prevItemId,
-//                'target'     => $target,
-//            ]);
+            return $this->renderBlock('travel_item/create.html.twig', 'success_stream');
         }
 
-        return $this->render('travel_item/flight/turbo/_create_widget.frame.html.twig', [
+        return $this->render('travel_item/flight/turbo/_create_modal.frame.html.twig', [
             'form'       => $form,
             'trip'       => $trip,
             'type'       => $type,
             'status'     => $status,
-            'frameId'    => $request->headers->get('Turbo-Frame'),
         ]);
     }
 }

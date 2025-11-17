@@ -10,7 +10,7 @@
         <h3>Depart</h3>
         <div class="grid grid-cols-2  space-y-1">
             <div class="grid grid-cols-3 space-x-1">
-                <div {{  stimulus_controller('calendar', {dayMapping: dayMapping, isRange: false, autoHide: true, inputMode: true}) }}
+                <div {{  stimulus_controller('calendar', {dayMapping: dayMapping, isRange: false, autoHide: true, inputMode: true, inModal: true}) }}
                     {{ stimulus_target('calendar', 'calendar') }}
                     class="col-span-1"
                 >
@@ -28,7 +28,7 @@
         <h3>Arriver</h3>
         <div class="grid grid-cols-2 space-y-1">
             <div class="grid grid-cols-3 space-x-1">
-                <div {{  stimulus_controller('calendar', {dayMapping: dayMapping, isRange: false, autoHide: true, inputMode: true}) }}
+                <div {{  stimulus_controller('calendar', {dayMapping: dayMapping, isRange: false, autoHide: true, inputMode: true, inModal: true}) }}
                     {{ stimulus_target('calendar', 'calendar') }}
                     class="col-span-1"
                 >
@@ -52,6 +52,6 @@
     <button type="submit" class="px-5 py-1 bg-amber-100 rounded-lg cursor-pointer">Ajouter</button>
     {{ form_end(form) }}
 
-    </div>
+</div>
 
 

@@ -1,6 +1,5 @@
 {% block form_modal %}
     <twig:Modal>
-        <turbo-frame id="travel_item_form">
 {#            {% include 'travel_item/component/_type_selector.html.twig' %}#}
             {{ form_start(form) }}
                 <div class="space-y-2">
@@ -41,7 +40,6 @@
 
                 </div>
             {{ form_end(form) }}
-        </turbo-frame>
     </twig:Modal>
 {% endblock %}
 

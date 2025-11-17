@@ -11,7 +11,8 @@ export default class extends Controller {
         isRange: {type: Boolean, default: false},
         inputMode: {type: Boolean, default: false},
         selectionTimeMode: {type: Number, default: 0},
-        autoHide: {type: Boolean, default: false}
+        autoHide: {type: Boolean, default: false},
+        inModal: {type: Boolean, default: false}
     };
     calendar;
 
@@ -35,7 +36,7 @@ export default class extends Controller {
             selectedDates: [startDate],
             selectedWeekends: [],
             styles: {
-                calendar: 'vc',
+                calendar: `vc ${this.inModalValue ? 'z-100' : ''}`,
                 dateBtn: 'vc-date__btn text-base!',
                 weekDay: 'vc-week__day text-sm!',
                 month: 'vc-month font-medium!',

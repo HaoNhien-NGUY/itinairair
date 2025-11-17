@@ -1,0 +1,41 @@
+<twig:Modal>
+    <div {{ stimulus_controller('google-place-widget') }}>
+        <gmp-place-autocomplete
+            id="place-autocomplete"
+            class="bg-gray-100 rounded-2xl focus:outline-none focus:ring-0 focus:border-none"
+            placeholder="Enter a location"
+            {{ stimulus_target('google-place-widget', 'placeInput') }}>
+        </gmp-place-autocomplete>
+
+
+        {{ form_start(form) }}
+        <div class="space-y-2">
+            <div class="w-full">
+                {{ form_widget(form.notes) }}
+            </div>
+
+            <div class="flex justify-end mt-6">
+
+                <label>
+                    <select name="{{ field_name(form.status) }}"
+                            class="bg-blue-100 rounded-l-2xl pl-2 py-1 custom-select focus:outline-none">
+                        {% for label, value in field_choices(form.status) %}
+                            <option
+                                value="{{ value }}" {{ form.status.vars.value == value ? 'selected' }}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <div>
+                    <button type="submit"
+                            class="bg-blue-100 px-4 py-1 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:hover:bg-blue-200 not-disabled:cursor-pointer rounded-r-2xl ml-0.5">
+                        Ajouter
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        {{ form_widget(form.place) }}
+        {{ form_end(form) }}
+    </div>
+</twig:Modal>

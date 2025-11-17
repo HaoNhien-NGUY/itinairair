@@ -50,7 +50,7 @@
                 <div class="bg-white rounded-2xl p-4" style="background-color: #F0F8FF">
                     Deplacements
                     <div class="mt-3 flex space-x-3">
-                        <a href="{{ path('app_travelitem_create_flight', {trip: trip.id }) }}"
+                        <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").FLIGHT.value}) }}"
                            class="px-5 py-3 rounded-lg text-sm bg-white"
                            data-turbo-frame="modal"
                         >

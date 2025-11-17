@@ -98,7 +98,7 @@ final class TravelItemController extends AbstractController
         if ($day && $day->getTrip() !== $trip) throw $this->createAccessDeniedException();
 
         $item = $type->createInstance()->setStatus($status);
-        //TODO: get twig form template to render with Type
+        $template = $type->getTemplate();
 
         if ($day) $item->setStartDay($day);
 
@@ -110,46 +110,15 @@ final class TravelItemController extends AbstractController
             $entityManager->flush();
 
             $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
-            return $this->renderBlock('travel_item/create.html.twig', 'success_stream');
+            return $this->render('stream/refresh.stream.html.twig');
         }
 
-        return $this->renderBlock('travel_item/create.html.twig', 'form_modal', [
+        return $this->render($template, [
             'form'       => $form,
             'trip'       => $trip,
             'type'       => $type,
             'status'     => $status,
             'day'        => $day,
-        ]);
-    }
-
-    #[Route('_frame/travel-item/trip/{trip}/flight/create/', name: 'app_travelitem_create_flight', methods: ['POST', 'GET'])]
-    public function createFlight(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        Trip $trip,
-        DayRepository $dayRepository,
-        TravelItemRepository $travelItemRepository,
-        #[MapQueryParameter] ItemStatus $status = ItemStatus::IDEA,
-    ): Response
-    {
-        $type = TravelItemType::FLIGHT;
-        $item = $type->createInstance()->setStatus($status);
-        $form = $this->createForm($type->getFormType(), $item, ['action' => $request->getUri(), 'trip' => $trip]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($item);
-            $entityManager->flush();
-            $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
-
-            return $this->renderBlock('travel_item/create.html.twig', 'success_stream');
-        }
-
-        return $this->render('travel_item/flight/turbo/_create_modal.frame.html.twig', [
-            'form'       => $form,
-            'trip'       => $trip,
-            'type'       => $type,
-            'status'     => $status,
         ]);
     }
 }

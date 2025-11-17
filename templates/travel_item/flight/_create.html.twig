@@ -49,7 +49,25 @@
     </div>
 
 
-    <button type="submit" class="px-5 py-1 bg-amber-100 rounded-lg cursor-pointer">Ajouter</button>
+
+    <div class="flex justify-end mt-6">
+
+        <label>
+            <select name="{{ field_name(form.status) }}"
+                    class="bg-blue-100 rounded-l-2xl pl-2 py-1 custom-select focus:outline-none">
+                {% for label, value in field_choices(form.status) %}
+                    <option
+                        value="{{ value }}" {{ form.status.vars.value == value ? 'selected' }}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <div>
+            <button type="submit"
+                    class="bg-blue-100 px-4 py-1 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:hover:bg-blue-200 not-disabled:cursor-pointer rounded-r-2xl ml-0.5">
+                Ajouter
+            </button>
+        </div>
+    </div>
     {{ form_end(form) }}
 
 </div>

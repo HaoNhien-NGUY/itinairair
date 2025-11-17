@@ -40,6 +40,15 @@ enum TravelItemType: string
         return new ($this->getClass())($params);
     }
 
+    public function getTemplate(): string
+    {
+        return match($this) {
+            self::FLIGHT => 'travel_item/flight/_create_modal.frame.html.twig',
+            self::ACCOMMODATION => 'travel_item/accommodation/_create_modal.frame.html.twig',
+            self::ACTIVITY => 'travel_item/activity/_create_modal.frame.html.twig',
+        };
+    }
+
     public function isPositionable(): bool
     {
         return match ($this) {

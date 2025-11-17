@@ -11,9 +11,9 @@
                     {% set isEndDay = isEndDay|default(item.endDay is same as(day)) %}
 
                     {% if isStartDay %}
-                        <span class="inline-flex items-center rounded-lg bg-blue-400/10 px-2 py-1 text-xs font-medium text-blue-500">Arrivee</span>
+                        <span class="inline-flex items-center rounded-lg px-2 py-1 text-xs font-medium text-blue-500">Arrivée</span>
                     {% elseif isEndDay %}
-                        <span class="inline-flex items-center rounded-md bg-gray-400/10 px-2 py-1 text-xs font-medium text-gray-400">Depart</span>
+                        <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-gray-400">Départ</span>
                     {% endif %}
                 {% endif %}
                 <div class="ml-6">

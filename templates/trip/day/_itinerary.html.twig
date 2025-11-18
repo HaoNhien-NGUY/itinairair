@@ -6,7 +6,7 @@
                 <div class="relative flex items-center ml-6">
                     <div class="h-8 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:w-px before:bg-gray-300 before:-translate-x-1/2"></div>
                     <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id, position: item.position }) }}"
-                       class="relative border border-gray-300 bg-white rounded-md"
+                       class="relative border border-gray-300 hover:bg-gray-100 bg-white rounded-md"
                        data-turbo-frame="modal">
                         <div>
                             <twig:ux:icon name="bx:plus" class="size-4 text-gray-400"/>
@@ -34,7 +34,7 @@
             <div class="relative flex items-end ml-6">
                 <div class="h-8 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:w-px before:bg-gray-300 before:-translate-x-1/2"></div>
                 <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id, position: item.position + 1 }) }}"
-                   class="relative border border-gray-300 bg-white rounded-md"
+                   class="relative border border-gray-300 hover:bg-gray-100 bg-white rounded-md"
                    data-turbo-frame="modal">
                     <div>
                         <twig:ux:icon name="bx:plus" class="size-4 text-gray-400"/>

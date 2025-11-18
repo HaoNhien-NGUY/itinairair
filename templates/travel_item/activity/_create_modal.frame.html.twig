@@ -1,40 +1,46 @@
 <twig:Modal>
+    {% block title %}<span class="font-medium text-gray-700">Ajouter une activité</span>{% endblock %}
     <div {{ stimulus_controller('google-place-widget', {primaryTypes: ['food', 'tourist_attraction', 'point_of_interest', 'store', 'cafe']}) }}>
-        <gmp-place-autocomplete
-            id="place-autocomplete"
-            class="bg-gray-100 rounded-2xl focus:outline-none focus:ring-0 focus:border-none"
-            placeholder="Enter a location"
-            {{ stimulus_target('google-place-widget', 'placeInput') }}>
-        </gmp-place-autocomplete>
+        <div class="border border-t-0 rounded-2xl border-gray-200 mb-5">
+            <gmp-place-autocomplete
+                id="place-autocomplete"
+                class="bg-gray-100 rounded-2xl focus:outline-none focus:ring-0 focus:border-none"
+                placeholder="Enter a location"
+                {{ stimulus_target('google-place-widget', 'placeInput') }}>
+            </gmp-place-autocomplete>
 
-{#        {% if placeData %} #}
-        <div class="min-h-[112px]">
-            <div {{ stimulus_target('google-place-widget', 'placeHolder') }} class="">
-                <div class="min-h-[112px] my-4 flex justify-center items-center">
-                    Chercher un lieu
+
+            <div class="min-h-[112px] px-3">
+                <div {{ stimulus_target('google-place-widget', 'placeHolder') }} class="">
+                    <div class="min-h-[112px] my-4 flex flex-col justify-center items-center">
+                        <img src="{{ asset('images/icons/search-place-icon.png') }}" alt="map-marker" class="size-18" />
+                        <div class="" style="color: #6a6ba5">
+                            Choisissez un lieu
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="hidden">
-                <div class="my-4 flex space-x-3">
-                    <img class="h-28 w-28 rounded-lg shrink-0 object-cover"
-                         src=""
-                         {{ stimulus_target('google-place-widget', 'photoDisplay') }}
-                         alt="place-photo" />
+                <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="hidden">
+                    <div class="my-4 flex space-x-3">
 
-                    <div class="w-full flex flex-col justify-between">
-                        <div>
-                            <p {{ stimulus_target('google-place-widget', 'typeDisplay')}} class="text-sm text-purple-900 font-medium mb-1.5"></p>
-                            <div class="font-medium text-base/5 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}></div>
-                            <div {{ stimulus_target('google-place-widget', 'addressDisplay') }} class="text-xs/snug text-gray-500 line-clamp-2"></div>
+                        <div class="w-full flex flex-col justify-between">
+                            <div>
+                                <p {{ stimulus_target('google-place-widget', 'typeDisplay')}} class="text-sm text-purple-900 font-medium mb-1.5"></p>
+                                <div class="font-medium text-base/5 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}></div>
+                                <div {{ stimulus_target('google-place-widget', 'addressDisplay') }} class="text-sm/snug text-gray-500 line-clamp-2"></div>
+                            </div>
+
+                            <div class="flex mt-3">
+                                <a {{ stimulus_target('google-place-widget', 'addressLinkDisplay') }} href="" target="_blank" rel="noopener noreferrer" class="px-2 pt-0.5 pb-1 inline-flex items-center gap-1 font-normal text-sm bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300">
+                                    Maps
+                                    <twig:ux:icon name="bx:link-external" class="size-4" />
+                                </a>
+                            </div>
                         </div>
-
-                        <div class="flex justify-end mt-2">
-                            <a {{ stimulus_target('google-place-widget', 'addressLinkDisplay') }} href="" target="_blank" rel="noopener noreferrer" class="px-2 pt-0.5 pb-1 inline-flex items-center gap-1 font-normal text-sm bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300">
-                                Maps
-                                <twig:ux:icon name="bx:link-external" class="size-4" />
-                            </a>
-                        </div>
+                        <img class="h-28 w-28 rounded-2xl shrink-0 object-cover"
+                             src=""
+                            {{ stimulus_target('google-place-widget', 'photoDisplay') }}
+                             alt="place-photo" />
                     </div>
                 </div>
             </div>

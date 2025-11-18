@@ -34,7 +34,7 @@ class PlaceType extends AbstractType
         ];
 
         foreach ($fields as $field) {
-            $builder->add($field, HiddenType::class, [ //TODO: make it a hidden field
+            $builder->add($field, HiddenType::class, [
                 'attr' => [
                     'data-google-place-widget-target' => $field,
                 ],

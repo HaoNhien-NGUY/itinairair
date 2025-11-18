@@ -48,6 +48,7 @@ export default class extends Controller {
             return;
         }
 
+        this.placeAutocomplete.Dg?.setAttribute('placeholder', 'Rechercher par nom');
         this.placeAutocomplete.includedPrimaryTypes = this.primaryTypesValue;
         this.placeAutocomplete.addEventListener('gmp-select', this.handleSelection);
     }
@@ -70,9 +71,6 @@ export default class extends Controller {
 
             const placeData = this.formatPlaceData(place);
             this.setPlaceComponents(placeData);
-
-            // this.component.action('placeSelected', { placeData });
-
         } catch (error) {
             console.error('Error handling place selection:', error);
         }

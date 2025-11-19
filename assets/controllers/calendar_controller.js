@@ -9,10 +9,11 @@ export default class extends Controller {
         startDate: {type: String, default: ''},
         dayMapping: Object,
         isRange: {type: Boolean, default: false},
-        inputMode: {type: Boolean, default: false},
+        inputMode: {type: Boolean, default: true},
         selectionTimeMode: {type: Number, default: 0},
         autoHide: {type: Boolean, default: false},
-        inModal: {type: Boolean, default: false}
+        inModal: {type: Boolean, default: false},
+        fullWidth: {type: Boolean, default: false},
     };
     calendar;
 
@@ -25,7 +26,6 @@ export default class extends Controller {
             enableDates: Object.keys(this.dayMappingValue),
             displayDisabledDates: true,
             selectionTimeMode: this.selectionTimeModeValue,
-            // positionToInput: ['top', 'center'],
             selectedTheme: 'light',
             enableEdgeDatesOnly: true,
             enableMonthChangeOnDayClick: false,
@@ -35,14 +35,19 @@ export default class extends Controller {
             dateToday: startDate ?? 'today',
             selectedDates: [startDate],
             selectedWeekends: [],
+            onShow: (self) => {
+                if (this.fullWidthValue) self.context.mainElement.style.width = `${this.element.offsetWidth}px`;
+            },
             styles: {
-                calendar: `vc ${this.inModalValue ? 'z-100' : ''}`,
+                calendar: `vc border border-gray-300 ${this.inModalValue ? 'z-100' : ''}`,
                 dateBtn: 'vc-date__btn text-base!',
                 weekDay: 'vc-week__day text-sm!',
                 month: 'vc-month font-medium!',
                 year: 'vc-year font-medium!',
             },
         };
+
+        if (startDate) this.startDayDisplayTarget.innerText = this.formatDate(startDate);
 
         this.calendar = new Calendar(this.calendarTarget, options);
         this.calendar.init();
@@ -56,22 +61,29 @@ export default class extends Controller {
     }
 
     formatDate(date) {
-        const [year, month, day] = date.split('-');
-        return `${day}/${month}`;
+        console.log(date)
+        if (!date instanceof Date) return '-';
+
+        return date.toLocaleDateString('fr-FR', {
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short'
+        });
     }
 
     handleDateSelection(calendar, selectedDates) {
         if (selectedDates.length === 1) {
             if (this.hasEndDaySelectTarget) this.endDaySelectTarget.value = '';
-            if (this.hasEndDayDisplayTarget) this.startDayDisplayTarget.innerText = '';
-            if (this.hasStartDayDisplayTarget) this.startDayDisplayTarget.innerText = this.formatDate(selectedDates[0]);
+            if (this.hasEndDayDisplayTarget) this.endDayDisplayTarget.innerText = '';
+            if (this.hasStartDayDisplayTarget) this.startDayDisplayTarget.innerText = this.formatDate(new Date(selectedDates[0]));
             this.startDaySelectTarget.value = this.dayMappingValue[selectedDates[0]] ?? '';
         } else if (selectedDates.length === 2) {
             this.startDaySelectTarget.value = this.dayMappingValue[selectedDates[0]] ?? '';
             this.endDaySelectTarget.value = this.dayMappingValue[selectedDates[1]] ?? '';
 
-            if (this.hasStartDayDisplayTarget) this.startDayDisplayTarget.innerText = this.formatDate(selectedDates[0]);
-            if (this.hasEndDayDisplayTarget) this.endDayDisplayTarget.innerText = this.formatDate(selectedDates[1]);
+            if (this.hasStartDayDisplayTarget) this.startDayDisplayTarget.innerText = this.formatDate(new Date(selectedDates[0]));
+            if (this.hasEndDayDisplayTarget) this.endDayDisplayTarget.innerText = this.formatDate(new Date(selectedDates[1]));
+            calendar.hide();
         } else {
             this.startDaySelectTarget.value = '';
             if (this.hasEndDaySelectTarget) this.endDaySelectTarget.value = '';

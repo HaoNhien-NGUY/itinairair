@@ -1,11 +1,12 @@
 <turbo-frame id="day_{{ day.id ?? '' }}_accommodation_{{ item.id}}">
-    <div class="bg-indigo-50 rounded-xl py-2 px-4">
+    <div class="bg-indigo-50 rounded-xl py-2 px-2">
         <div class="flex justify-between">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center">
                 <twig:ux:icon name="material-symbols:hotel" class="size-6 mr-2"/>
                 {{ item.name }}
             </div>
             <div class="flex items-center">
+                <twig:ux:icon name="wpf:note" class="size-4 text-gray-400 mr-2" />
                 {% if day %}
                     {% set isStartDay = isStartDay|default(item.startDay is same as(day)) %}
                     {% set isEndDay = isEndDay|default(item.endDay is same as(day)) %}

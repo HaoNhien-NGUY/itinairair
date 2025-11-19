@@ -9,8 +9,9 @@ use App\Entity\Trip;
 use App\Repository\DayRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AccommodationType extends AbstractType
@@ -21,7 +22,7 @@ class AccommodationType extends AbstractType
         $trip = $options['trip'];
 
         $builder
-            ->add('name', TextType::class)
+//            ->add('name', TextType::class)
             ->add('startDay', EntityType::class, [
                 'class' => Day::class,
                 'query_builder' => function (DayRepository $dayRepository) use ($trip) {
@@ -50,8 +51,18 @@ class AccommodationType extends AbstractType
                 ],
                 'choice_label' => fn(Day $day) => $day->getTitle(),
                 'required' => false,
+            ])
+            ->add('place', PlaceType::class, [
+                'required' => true,
+                'label'    => false,
             ]);
 
+
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            /** @var Accommodation $accommodation */
+            $accommodation = $event->getData();
+            $accommodation->setName($accommodation->getPlace()->getName());
+        });
     }
 
     public function getParent(): string

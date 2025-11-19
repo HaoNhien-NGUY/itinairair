@@ -11,27 +11,49 @@
     <div>
         <div>
             <div class="text-sm text-gray-500">
-                address: {{ item.address }}
+                {{ item.place.address }}
             </div>
-            <div class="mt-1">
-                {{ item.startDay.date|date('d/m/Y') }} - {{ item.endDay.date|date('d/m/Y') }}
+            <div class="mt-1 text-blue-500 font-medium">
+                {{ item.startDay.date|date_short }} - {{ item.endDay.date|date_short }}
             </div>
         </div>
-        {% if item.notes is not empty %}
-            <div class="flex mt-4 items-center border-1 border-gray-300 rounded-xl border-dashed px-4 py-2">
-                <twig:ux:icon name="wpf:note" class="size-4 text-gray-500 mr-4" />
-                <span class="text-gray-600">
-                    {{ item.notes }}
-                </span>
+        <div class="flex justify-between items-end mt-3">
+            <div class="flex items-center">
+                {% if item.notes is not empty %}
+                    <twig:ux:icon name="wpf:note" class="size-5 text-gray-400 mr-2" />
+                    <span class="text-gray-500 py-1">
+                        {{ item.notes }}
+                    </span>
+                {% endif %}
             </div>
-        {% endif %}
-        <div class="flex justify-end mt-8">
-            <a href="{{ path('app_travelitem_accommodation_edit', {'trip': trip.id, 'item': item.id, 'day': day.id ?? null}) }}"
-               class="py-1 px-3 text-gray-500 text-sm bg-gray-200 flex items-center focus:outline-none hover:bg-gray-300 focus:ring-4 focus:ring-gray-100 font-medium rounded-2xl"
-            >
-                <twig:ux:icon name="fluent:edit-12-filled" class="size-4 mr-2" />
-                Modifier
-            </a>
+            <div>
+
+                <a href="{{ item.place.googleMapsURI }}"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="ml-6 py-1 px-3 text-gray-500 text-sm bg-gray-200 flex items-center focus:outline-none hover:bg-gray-300 focus:ring-4 focus:ring-gray-100 font-medium rounded-xl">
+                    Ouvrir dans Maps
+                    <twig:ux:icon name="bxs:map" class="size-4 ml-1" />
+                </a>
+            </div>
         </div>
+
+{#        <div class="flex justify-end items-center mt-4">#}
+{#            <a href="{{ path('app_travelitem_accommodation_edit', {'trip': trip.id, 'item': item.id, 'day': day.id ?? null}) }}"#}
+{#               class="py-1 px-3 text-gray-600 text-sm bg-gray-200 flex items-center focus:outline-none hover:bg-gray-300 focus:ring-4 focus:ring-gray-100 font-medium rounded-xl"#}
+{#            >#}
+{#                <twig:ux:icon name="fluent:edit-12-filled" class="size-4 mr-2" />#}
+{#                Modifier#}
+{#            </a>#}
+
+{#            <a href="{{ item.place.googleMapsURI }}"#}
+{#               target="_blank"#}
+{#               rel="noopener noreferrer"#}
+{#               class="ml-6 py-1 px-3 text-gray-600 text-sm bg-gray-200 flex items-center focus:outline-none hover:bg-gray-300 focus:ring-4 focus:ring-gray-100 font-medium rounded-xl">#}
+{#                <twig:ux:icon name="bxs:map" class="size-4 mr-2" />#}
+{#                Maps#}
+{#                <twig:ux:icon name="iconoir:map" />#}
+{#            </a>#}
+{#        </div>#}
     </div>
 {% endblock %}

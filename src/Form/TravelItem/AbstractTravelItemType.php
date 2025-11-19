@@ -30,7 +30,7 @@ class AbstractTravelItemType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Ajouter une note, un lien, etc...',
-                    'class' => 'focus:outline-none resize-none p-3 w-full border-2border-dashedborder-gray-300 bg-gray-100 rounded-2xl',
+                    'class' => 'focus:outline-none resize-none px-3 py-2 w-full bg-gray-100 rounded-xl',
                     'rows' => 1,
                 ],
                 'constraints' => [

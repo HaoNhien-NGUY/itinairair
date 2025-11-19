@@ -6,7 +6,6 @@
                 {{ item.name }}
             </div>
             <div class="flex items-center">
-                <twig:ux:icon name="wpf:note" class="size-4 text-gray-400 mr-2" />
                 {% if day %}
                     {% set isStartDay = isStartDay|default(item.startDay is same as(day)) %}
                     {% set isEndDay = isEndDay|default(item.endDay is same as(day)) %}
@@ -17,6 +16,7 @@
                         <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-gray-400">Départ</span>
                     {% endif %}
                 {% endif %}
+                <twig:ux:icon name="wpf:note" class="size-4 text-gray-400 ml-2" />
                 <div class="ml-6">
                     {% block open_details %}
                         <a href="{{ path('app_travelitem_accommodation_details', {'trip': trip.id, 'item': item.id, 'day': day.id ?? null}) }}"

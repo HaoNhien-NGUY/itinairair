@@ -16,8 +16,13 @@ export default class extends Controller {
         fullWidth: {type: Boolean, default: false},
     };
     calendar;
+    startDayElement;
+    endDayElement;
 
     initialize() {
+        if (this.hasStartDayDisplayTarget) this.startDayElement = this.startDayDisplayTarget.firstElementChild;
+        if (this.hasEndDayDisplayTarget) this.endDayElement = this.endDayDisplayTarget.firstElementChild;
+
         const startDate =  this.startDateValue ? new Date(this.startDateValue) : null;
         const options = {
             type: 'default',
@@ -61,9 +66,6 @@ export default class extends Controller {
     }
 
     formatDate(date) {
-        console.log(date)
-        if (!date instanceof Date) return '-';
-
         return date.toLocaleDateString('fr-FR', {
             weekday: 'short',
             day: 'numeric',
@@ -74,13 +76,12 @@ export default class extends Controller {
     handleDateSelection(calendar, selectedDates) {
         if (selectedDates.length === 1) {
             if (this.hasEndDaySelectTarget) this.endDaySelectTarget.value = '';
-            if (this.hasEndDayDisplayTarget) this.endDayDisplayTarget.innerText = '';
+            if (this.hasEndDayDisplayTarget) this.endDayDisplayTarget.replaceChildren(this.endDayElement);
             if (this.hasStartDayDisplayTarget) this.startDayDisplayTarget.innerText = this.formatDate(new Date(selectedDates[0]));
             this.startDaySelectTarget.value = this.dayMappingValue[selectedDates[0]] ?? '';
-        } else if (selectedDates.length === 2) {
+        } else if (selectedDates.length === 2 && selectedDates[0] !== undefined && selectedDates[1] !== undefined) {
             this.startDaySelectTarget.value = this.dayMappingValue[selectedDates[0]] ?? '';
             this.endDaySelectTarget.value = this.dayMappingValue[selectedDates[1]] ?? '';
-
             if (this.hasStartDayDisplayTarget) this.startDayDisplayTarget.innerText = this.formatDate(new Date(selectedDates[0]));
             if (this.hasEndDayDisplayTarget) this.endDayDisplayTarget.innerText = this.formatDate(new Date(selectedDates[1]));
             calendar.hide();
@@ -88,8 +89,8 @@ export default class extends Controller {
             this.startDaySelectTarget.value = '';
             if (this.hasEndDaySelectTarget) this.endDaySelectTarget.value = '';
 
-            if (this.hasStartDayDisplayTarget) this.startDayDisplayTarget.innerText = '';
-            if (this.hasEndDayDisplayTarget) this.endDayDisplayTarget.innerText = '';
+            if (this.hasStartDayDisplayTarget) this.startDayDisplayTarget.replaceChildren(this.startDayElement);
+            if (this.hasEndDayDisplayTarget) this.endDayDisplayTarget.replaceChildren(this.endDayElement);
         }
 
         if (this.autoHideValue) calendar.hide();

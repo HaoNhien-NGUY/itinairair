@@ -32,14 +32,40 @@
             <div>
                 <div class="bg-gray-100 rounded-3xl space-y-5">
                     <div class="bg-white rounded-3xl p-4">
-                        <h2>Page du voyage : {{ trip.name }}</h2>
+                        <h3 class="font-semibold mb-3">{{ trip.name }}</h3>
+
+{#                        <h2>Page du voyage : {{ trip.name }}#}
 {#                            <form action="{{ path('app_trip_delete', {'id': trip.id}) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this trip?');">#}
 {#                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trip.id) }}">#}
 {#                                <button type="submit" class="cursor-crosshair text-red-600 hover:text-red-400 underline transition-colors">Delete</button>#}
 {#                            </form></h2>#}
 {#                        <p>{{ startDate|date }} - {{ trip.endDate|date }}</p>#}
 
-                        Ici les stats du voyage, nb de jours, pays, etc
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="bg-blue-50 p-3 rounded-xl">
+                                <div class="text-2xl font-bold text-blue-600">{{ statistics.duration }}</div>
+                                <div class="text-xs text-blue-400 font-medium uppercase tracking-wide">Jours</div>
+                            </div>
+                            <div class="bg-purple-50 p-3 rounded-xl">
+                                <div class="text-2xl font-bold text-purple-600">{{ statistics.country_count }}</div>
+                                <div class="text-xs text-purple-400 font-medium uppercase tracking-wide">Pays</div>
+                            </div>
+                            <div class="bg-green-50 p-3 rounded-xl">
+                                <div class="text-2xl font-bold text-green-600">{{ statistics.city_count }}</div>
+                                <div class="text-xs text-green-400 font-medium uppercase tracking-wide">Villes</div>
+                            </div>
+                        </div>
+
+                        {% if statistics.countries|length > 0 %}
+                            <div class="">
+                                <h3 class="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wide">Pays visités</h3>
+                                <div class="flex flex-wrap gap-2">
+                                    {% for country in statistics.countries %}
+                                        <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">{{ country }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
 
 

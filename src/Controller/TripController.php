@@ -11,6 +11,7 @@ use App\Repository\FlightRepository;
 use App\Repository\TravelItemRepository;
 use App\Repository\TripMembershipRepository;
 use App\Repository\TripRepository;
+use App\Service\TripService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,14 +60,21 @@ final class TripController extends AbstractController
     }
 
     #[Route('/trip/{id}', name: 'app_trip_show', methods: ['GET'])]
-    public function show(Request $request, Trip $trip, TravelItemRepository $travelItemRepository, AccommodationRepository $accommodationRepository, FlightRepository $flightRepository): Response
+    public function show(
+        Trip $trip, TravelItemRepository $travelItemRepository,
+        AccommodationRepository $accommodationRepository,
+        FlightRepository $flightRepository,
+        TripService $tripService,
+    ): Response
     {
+        $accommodations = $accommodationRepository->findAccommodationsByTrip($trip);
 
         return $this->render('trip/show.html.twig', [
             'trip'  => $trip,
             'items' => $travelItemRepository->findItemDayPairsForTrip($trip),
-            'accommodations' => $accommodationRepository->findAccommodationsByTrip($trip),
+            'accommodations' => $accommodations,
             'flights' => $flightRepository->findFlightsByTrip($trip),
+            'statistics' => $tripService->getTripStatistics($trip, $accommodations),
         ]);
     }
 

@@ -40,4 +40,15 @@ class FlightRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findFlightsByTrip(\App\Entity\Trip $trip): array
+    {
+        return $this->createQueryBuilder('f')
+            ->join('f.startDay', 'sd')
+            ->where('sd.trip = :trip')
+            ->setParameter('trip', $trip)
+            ->orderBy('sd.position', 'ASC')
+            ->addOrderBy('f.startTime', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

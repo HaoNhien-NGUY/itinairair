@@ -6,6 +6,8 @@ use App\Entity\Trip;
 use App\Entity\TripMembership;
 use App\Enum\TripRole;
 use App\Form\TripType;
+use App\Repository\AccommodationRepository;
+use App\Repository\FlightRepository;
 use App\Repository\TravelItemRepository;
 use App\Repository\TripMembershipRepository;
 use App\Repository\TripRepository;
@@ -20,7 +22,7 @@ final class TripController extends AbstractController
     #[Route('/trip', name: 'app_trip')]
     public function index(TripMembershipRepository $tripMembershipRepository, TripRepository $tripRepository): Response
     {
-//        TODO: Redo query in repo
+        //        TODO: Redo query in repo
         $user = $this->getUser();
         $memberships = $tripMembershipRepository->findBy(['member' => $user]);
 
@@ -57,19 +59,21 @@ final class TripController extends AbstractController
     }
 
     #[Route('/trip/{id}', name: 'app_trip_show', methods: ['GET'])]
-    public function show(Request $request, Trip $trip, TravelItemRepository $travelItemRepository): Response
+    public function show(Request $request, Trip $trip, TravelItemRepository $travelItemRepository, AccommodationRepository $accommodationRepository, FlightRepository $flightRepository): Response
     {
 
         return $this->render('trip/show.html.twig', [
             'trip'  => $trip,
             'items' => $travelItemRepository->findItemDayPairsForTrip($trip),
+            'accommodations' => $accommodationRepository->findAccommodationsByTrip($trip),
+            'flights' => $flightRepository->findFlightsByTrip($trip),
         ]);
     }
 
     #[Route('/trip/{id}/delete', name: 'app_trip_delete', methods: ['POST'])]
     public function delete(Request $request, Trip $trip, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$trip->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $trip->getId(), $request->request->get('_token'))) {
             $entityManager->remove($trip);
             $entityManager->flush();
 

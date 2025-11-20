@@ -71,9 +71,19 @@ class FlightType extends AbstractType
                 'property_path' => 'departureAirport[code]',
                 'required' => false,
             ])
+            ->add('departureTerminal', TextType::class, [
+                'attr' => ['placeholder' => 'Terminal'],
+                'property_path' => 'departureAirport[terminal]',
+                'required' => false,
+            ])
             ->add('arrivalAirportCode', TextType::class, [
                 'attr' => ['placeholder' => 'Code IATA (ex: CDG)', 'maxLength' => 4],
                 'property_path' => 'arrivalAirport[code]',
+                'required' => false,
+            ])
+            ->add('arrivalTerminal', TextType::class, [
+                'attr' => ['placeholder' => 'Terminal'],
+                'property_path' => 'arrivalAirport[terminal]',
                 'required' => false,
             ])
             ->add('startTime', TimeType::class, [

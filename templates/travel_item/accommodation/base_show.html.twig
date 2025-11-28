@@ -16,7 +16,9 @@
                         <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-gray-400">Départ</span>
                     {% endif %}
                 {% endif %}
-                <twig:ux:icon name="wpf:note" class="size-4 text-gray-400 ml-2" />
+                {% if item.notes is not empty %}
+                    <twig:ux:icon name="wpf:note" class="size-4 text-gray-400 ml-2" />
+                {% endif %}
                 <div class="ml-6">
                     {% block open_details %}
                         <a href="{{ path('app_travelitem_accommodation_details', {'trip': trip.id, 'item': item.id, 'day': day.id ?? null}) }}"

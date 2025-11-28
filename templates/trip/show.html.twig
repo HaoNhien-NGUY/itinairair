@@ -18,18 +18,21 @@
     {% set startDate = trip.startDate %}
     {% set statusPlanned = enum('App\\Enum\\ItemStatus').PLANNED.value %}
 
-    <div class="container py-12 mx-auto">
+    <div class="container max-w-6xl py-12 mx-auto px-2">
 
-        <main class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
+        <main class="grid bg-gray-1z00 rounded-4xl grid-cols-1 gap-4 lg:grid-cols-3">
 
-            <div class="flex flex-col space-y-6 lg:col-span-2">
-                {% for day in trip.days %}
-                    {{ include('trip/day.html.twig', {day: day, trip: trip, items: items[day.id] ?? null, startDate: startDate}) }}
-                {% endfor %}
+            <div class="lg:col-span-2 flex flex-col">
+
+                <div class="flex flex-col space-y-3">
+                    {% for day in trip.days %}
+                        {{ include('trip/day.html.twig', {day: day, trip: trip, items: items[day.id] ?? null, startDate: startDate}) }}
+                    {% endfor %}
+                </div>
             </div>
 
 
-            <div>
+            <div class="max-lg:hidden">
                 <div class="bg-gray-100 rounded-3xl space-y-5">
                     <div class="bg-white rounded-3xl p-4">
                         <h3 class="font-semibold mb-3">{{ trip.name }}</h3>

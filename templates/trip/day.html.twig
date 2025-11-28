@@ -17,15 +17,15 @@
 {% endif %}
 
 
-<div id="day_{{ day.id }}" class="w-full bg-white rounded-4xl">
+<div id="day_{{ day.id }}" class="w-full scroll-margin bg-white rounded-xl">
 
 
 
-    <div class="flex items-end mb-5 p-4 rounded-t-4xl bg-gray-50">
+    <div class="flex items-end lg:px-14 md:px-8 px-2 pt-4">
         <h2 class="font-bold text-2xl">{{ day.date|date('j/m') }}</h2>
         <div class="ml-4">{{ day.title }}</div>
     </div>
-    <div class="px-4">
+    <div class="lg:px-14 md:px-8 px-2">
 
 
         {% if flightEndDay|length > 0 %}
@@ -64,7 +64,7 @@
 
         {% endif %}
 
-        <div class="space-y-6">
+        <div class="space-y-6 mt-5">
 
             {% for item in flightSameDay %}
                 <div class="rounded-3xl">
@@ -107,7 +107,7 @@
         <div class="mt-10">
             <div class="flex items-center">
                 <div class="relative flex items-start ml-6">
-                    <div class="h-7 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:w-px before:bg-gray-300 before:-translate-x-1/2"></div>
+                    <div class="h-7 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:w-px before:bg-gray-200 before:-translate-x-1/2"></div>
                     <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id }) }}"
                        class="relative border border-gray-300 hover:bg-gray-100 bg-white rounded-md"
                        data-turbo-frame="modal">
@@ -122,41 +122,42 @@
             {{ include('trip/day/_itinerary.html.twig') }}
 
         </div>
-    </div>
 
 
-    {% if flightStartDay|length > 0 %}
-        <div class="mt-6 px-4">
-            {% for item in flightStartDay %}
-                <div class="flex w-full">
 
-                    <div class="mr-12 ml-10">
-                        <twig:ux:icon name="entypo:aircraft-take-off" class="size-8 text-gray-400" />
+        {% if flightStartDay|length > 0 %}
+            <div class="mt-6">
+                {% for item in flightStartDay %}
+                    <div class="flex w-full">
+
+                        <div class="mx-12">
+                            <twig:ux:icon name="entypo:aircraft-take-off" class="size-8 text-gray-400" />
+                        </div>
+
+                        <ol class="relative space-y-8 w-full before:absolute before:-ml-px before:h-full before:w-0.5 before:rounded-full before:bg-blue-50">
+
+                            <li class="relative -ms-1.5 flex items-start gap-4">
+                                <span class="size-3 shrink-0 rounded-full bg-blue-200"></span>
+                                <div class="w-full mb-8 relative -top-1.5">
+
+                                    <time class="text-xl text-gray-700">
+                                        {{ item.startTime ? item.startTime|date("H:i") : 'TBD' }}
+                                    </time>
+
+                                    <h3 class="text-lg font-bold text-gray-900">
+                                        {{ item.departureAirport.code ?? 'TBD' }}
+                                    </h3>
+
+                                    <p class="mt-0.5 text-sm text-gray-700">
+                                        {{ item.name }}
+                                    </p>
+                                </div>
+
+                            </li>
+                        </ol>
                     </div>
-
-                    <ol class="relative space-y-8 w-full before:absolute before:-ml-px before:h-full before:w-0.5 before:rounded-full before:bg-blue-50">
-
-                        <li class="relative -ms-1.5 flex items-start gap-4">
-                            <span class="size-3 shrink-0 rounded-full bg-blue-200"></span>
-                            <div class="w-full mb-8 relative -top-1.5">
-
-                                <time class="text-xl text-gray-700">
-                                    {{ item.startTime ? item.startTime|date("H:i") : 'TBD' }}
-                                </time>
-
-                                <h3 class="text-lg font-bold text-gray-900">
-                                    {{ item.departureAirport.code ?? 'TBD' }}
-                                </h3>
-
-                                <p class="mt-0.5 text-sm text-gray-700">
-                                    {{ item.name }}
-                                </p>
-                            </div>
-
-                        </li>
-                    </ol>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
-    {% endif %}
 </div>

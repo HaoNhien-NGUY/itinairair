@@ -58,3 +58,16 @@ gmp-place-autocomplete {
     padding-right: 30px; /* Make space for the arrow */
 }
 
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scroll-margin {
+    scroll-margin-top: 70px;
+}

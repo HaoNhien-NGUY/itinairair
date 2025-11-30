@@ -1,3 +1,20 @@
+{% if items['itinerary']|default([])|length > 0 %}
+    <div class="flex items-center">
+        <div class="relative flex items-start ml-6">
+            <div class="h-7 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:w-px before:bg-gray-200 before:-translate-x-1/2"></div>
+            <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id }) }}"
+               class="relative border border-gray-300 hover:bg-gray-100 bg-white rounded-md"
+               data-turbo-frame="modal">
+                <div>
+                    <twig:ux:icon name="bx:plus" class="size-4 text-gray-400" />
+                </div>
+            </a>
+        </div>
+    </div>
+{% else %}
+    {{ _self.addItem(trip, day) }}
+{% endif %}
+
 {% for item in items['itinerary']|default([]) %}
     {% if not loop.first %}
         {% set prevItem = items['itinerary'][loop.index0 - 1] %}
@@ -30,17 +47,25 @@
     <twig:TravelItem:List_item item="{{ item }}" newItem="{{ newItem ?? null }}" position="{{ loop.index }}"/>
 
     {% if loop.last %}
-        <div class="flex">
-            <div class="relative flex items-end ml-6">
-                <div class="h-8 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:w-px before:bg-gray-200 before:-translate-x-1/2"></div>
-                <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id, position: item.position + 1 }) }}"
-                   class="relative border border-gray-300 hover:bg-gray-100 bg-white rounded-md"
-                   data-turbo-frame="modal">
-                    <div>
-                        <twig:ux:icon name="bx:plus" class="size-4 text-gray-400"/>
-                    </div>
-                </a>
-            </div>
-        </div>
+        {{ _self.addItem(trip, day, item.position + 1) }}
+{#        <div class="mt-8">#}
+{#            <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id, position: item.position + 1 }) }}"#}
+{#               class="flex items-center bg-gray-100 rounded-md px-4 py-2 hover:bg-gray-200"#}
+{#               data-turbo-frame="modal">#}
+{#                <twig:ux:icon name="bx:plus" class="size-4 mr-4 text-gray-400"/>#}
+{#                Ajouter un lieu#}
+{#            </a>#}
+{#        </div>#}
     {% endif %}
 {% endfor %}
+
+{% macro addItem(trip, day, position = 0) %}
+    <div class="mt-8">
+        <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id, position: position }) }}"
+           class="flex items-center text-gray-500 bg-gray-100 rounded-xl px-4 py-2 hover:bg-gray-200"
+           data-turbo-frame="modal">
+            <twig:ux:icon name="bx:plus" class="size-4 mr-2 text-gray-400"/>
+            Ajouter une activité
+        </a>
+    </div>
+{% endmacro %}

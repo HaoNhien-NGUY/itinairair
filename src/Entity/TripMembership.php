@@ -23,7 +23,14 @@ class TripMembership
     private ?User $member = null;
 
     #[ORM\Column(length: 255, enumType: TripRole::class)]
-    private TripRole $role = TripRole::VIEWER;
+    private TripRole $role;
+
+    public function __construct(Trip $trip, User $member, TripRole $role = TripRole::VIEWER)
+    {
+        $this->trip = $trip;
+        $this->member = $member;
+        $this->role = $role;
+    }
 
     public function getId(): ?int
     {

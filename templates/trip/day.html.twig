@@ -17,15 +17,19 @@
 {% endif %}
 
 
-<div id="day_{{ day.id }}" class="w-full scroll-margin bg-white rounded-xl">
+<div class="flex items-end px-4">
+    <h2 class="font-bold text-xl">{{ day.date|date('j/m') }}</h2>
+    <div class="ml-4">{{ day.title }}</div>
+</div>
+<div id="day_{{ day.id }}" class="w-full scroll-margin lg:px-10 md:px-8 px-2 pb-4 bg-white">
 
 
 
-    <div class="flex items-end lg:px-14 md:px-8 px-2 pt-4">
-        <h2 class="font-bold text-2xl">{{ day.date|date('j/m') }}</h2>
-        <div class="ml-4">{{ day.title }}</div>
-    </div>
-    <div class="lg:px-14 md:px-8 px-2">
+{#    <div class="flex items-end pt-4">#}
+{#        <h2 class="font-bold text-2xl">{{ day.date|date('j/m') }}</h2>#}
+{#        <div class="ml-4">{{ day.title }}</div>#}
+{#    </div>#}
+    <div>
 
 
         {% if flightEndDay|length > 0 %}
@@ -105,20 +109,6 @@
 
 
         <div class="mt-10">
-            <div class="flex items-center">
-                <div class="relative flex items-start ml-6">
-                    <div class="h-7 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:w-px before:bg-gray-200 before:-translate-x-1/2"></div>
-                    <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id }) }}"
-                       class="relative border border-gray-300 hover:bg-gray-100 bg-white rounded-md"
-                       data-turbo-frame="modal">
-                        <div>
-                            <twig:ux:icon name="bx:plus" class="size-4 text-gray-400" />
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-
             {{ include('trip/day/_itinerary.html.twig') }}
 
         </div>

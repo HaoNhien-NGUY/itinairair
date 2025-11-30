@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Trip;
 use App\Entity\TripMembership;
+use App\Entity\User;
 use App\Enum\TripRole;
 use App\Form\TripType;
 use App\Repository\AccommodationRepository;
@@ -17,10 +18,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\ByteString;
 
+#[Route('/trip')]
 final class TripController extends AbstractController
 {
-    #[Route('/trip', name: 'app_trip')]
+    #[Route('/', name: 'app_trip')]
     public function index(TripMembershipRepository $tripMembershipRepository, TripRepository $tripRepository): Response
     {
         //        TODO: Redo query in repo
@@ -34,7 +37,7 @@ final class TripController extends AbstractController
     }
 
     // TODO: create in dialog
-    #[Route('/trip/create', name: 'app_trip_create', methods: ['POST', 'GET'])]
+    #[Route('/create', name: 'app_trip_create', methods: ['POST', 'GET'])]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
         $trip = new Trip();
@@ -59,9 +62,10 @@ final class TripController extends AbstractController
         ]);
     }
 
-    #[Route('/trip/{id}', name: 'app_trip_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_trip_show', methods: ['GET'])]
     public function show(
-        Trip $trip, TravelItemRepository $travelItemRepository,
+        Trip $trip,
+        TravelItemRepository $travelItemRepository,
         AccommodationRepository $accommodationRepository,
         FlightRepository $flightRepository,
         TripService $tripService,
@@ -78,7 +82,66 @@ final class TripController extends AbstractController
         ]);
     }
 
-    #[Route('/trip/{id}/delete', name: 'app_trip_delete', methods: ['POST'])]
+    #[Route('/{trip}/share-link', name: 'app_trip_share_link', methods: ['GET'])]
+    public function shareLink(
+        Trip $trip,
+    ): Response
+    {
+        if (!$trip->getInviteToken()) {
+            return $this->redirectToRoute('app_trip_share_create_link', ['trip' => $trip->getId()]);
+        }
+
+        return $this->render('trip/share/_share_link_modal.frame.html.twig', ['trip' => $trip]);
+    }
+
+    #[Route('/{trip}/create-share-link', name: 'app_trip_share_create_link', methods: ['GET', 'POST'])]
+    public function shareCreateLink(
+        Trip $trip,
+        Request $request,
+        EntityManagerInterface $entityManager,
+    ): Response
+    {
+        if ($request->isMethod('POST') && !$trip->getInviteToken() && $this->isCsrfTokenValid('toggle_share_link', $request->request->get('_token'))) {
+            $trip->setInviteToken(ByteString::fromRandom(32));
+            $entityManager->flush();
+
+            return $this->render('trip/share/_share_link_modal.frame.html.twig', [
+                'success' => true,
+                'trip'    => $trip,
+            ]);
+        }
+
+        return $this->render('trip/share/_enable_share_modal.frame.html.twig');
+    }
+
+    #[Route('/join/{inviteToken:trip}', name: 'app_trip_join')]
+    public function join(
+        ?Trip $trip,
+        EntityManagerInterface $entityManager,
+        TripRepository $tripRepository,
+        TripMembershipRepository $tripMembershipRepository,
+    ): Response {
+        if (!$trip) {
+            //TODO: render page to suggest inviteToken has expired
+            throw $this->createNotFoundException('This invite link is invalid or has expired.');
+        }
+
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $membership = $tripMembershipRepository->findOneBy(['trip' => $trip, 'member' => $user]);
+
+        if (!$membership) {
+            $membership = new TripMembership($trip, $user);
+            $entityManager->persist($membership);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_trip_show', ['id' => $trip->getId()]);
+    }
+
+    #[Route('/{id}/delete', name: 'app_trip_delete', methods: ['POST'])]
     public function delete(Request $request, Trip $trip, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $trip->getId(), $request->request->get('_token'))) {

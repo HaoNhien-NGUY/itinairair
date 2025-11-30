@@ -1,0 +1,16 @@
+<twig:Modal>
+    {% block title %}
+        <div class="w-100 flex items-center">
+            {{ ux_icon('material-symbols:link', {class: 'size-5 mr-2'}) }}
+            Creer un lien de partage
+        </div>
+    {% endblock %}
+
+    Autoriser toutes les personnes disposant du lien à rejoindre et a modifier ce voyage
+    <hr class="my-8 text-gray-200" />
+
+    <form method="post" action="{{ app.request.uri }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('toggle_share_link') }}">
+        <button type="submit" class="px-5 py-3 cursor-pointer rounded-lg text-sm bg-gray-50 hover:bg-gray-100 transition-colors">Creer un lien</button>
+    </form>
+</twig:Modal>

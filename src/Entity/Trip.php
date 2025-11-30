@@ -44,6 +44,9 @@ class Trip
     #[ORM\OneToMany(targetEntity: TripMembership::class, mappedBy: 'trip', orphanRemoval: true)]
     private Collection $tripMemberships;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $inviteToken = null;
+
     public function __construct()
     {
         $this->days = new ArrayCollection();
@@ -172,5 +175,17 @@ class Trip
         }
 
         return $mapping;
+    }
+
+    public function getInviteToken(): ?string
+    {
+        return $this->inviteToken;
+    }
+
+    public function setInviteToken(?string $inviteToken): static
+    {
+        $this->inviteToken = $inviteToken;
+
+        return $this;
     }
 }

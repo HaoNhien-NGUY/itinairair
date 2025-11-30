@@ -15,12 +15,12 @@
     {% if not dayWithNight and not flightStartDay|default(false) %}
         <div>
             <div class="text-purple-700">
-                Vous n'avez pas encore de logement sur ces dates, 30 nov. - 12 janv.
+                Quel sera votre destination ?
             </div>
             <a href="{{ path('app_travelitem_create', {trip: trip.id, type: accommodationEnum, day: day.id }) }}"
                data-turbo-frame="modal"
             >
-                Ajouter un hebergement
+                Ajouter une destination
             </a>
         </div>
     {% endif %}

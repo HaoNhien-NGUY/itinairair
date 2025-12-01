@@ -22,6 +22,8 @@ class TripMembership
     #[ORM\JoinColumn(nullable: false)]
     private ?User $member = null;
 
+    //TODO: add a display nane field ?
+
     #[ORM\Column(length: 255, enumType: TripRole::class)]
     private TripRole $role;
 

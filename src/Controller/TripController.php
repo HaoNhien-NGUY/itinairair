@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\ByteString;
 
 #[Route('/trip')]
@@ -62,6 +63,7 @@ final class TripController extends AbstractController
         ]);
     }
 
+    #[isGranted('TRIP_VIEW', 'trip')]
     #[Route('/{id}', name: 'app_trip_show', methods: ['GET'])]
     public function show(
         Trip $trip,
@@ -82,6 +84,7 @@ final class TripController extends AbstractController
         ]);
     }
 
+    #[isGranted('TRIP_EDIT', 'trip')]
     #[Route('/{trip}/share-link', name: 'app_trip_share_link', methods: ['GET'])]
     public function shareLink(
         Trip $trip,
@@ -94,6 +97,7 @@ final class TripController extends AbstractController
         return $this->render('trip/share/_share_link_modal.frame.html.twig', ['trip' => $trip]);
     }
 
+    #[isGranted('TRIP_EDIT', 'trip')]
     #[Route('/{trip}/create-share-link', name: 'app_trip_share_create_link', methods: ['GET', 'POST'])]
     public function shareCreateLink(
         Trip $trip,
@@ -141,6 +145,7 @@ final class TripController extends AbstractController
         return $this->redirectToRoute('app_trip_show', ['id' => $trip->getId()]);
     }
 
+    #[isGranted('TRIP_MANAGE', 'trip')]
     #[Route('/{id}/delete', name: 'app_trip_delete', methods: ['POST'])]
     public function delete(Request $request, Trip $trip, EntityManagerInterface $entityManager): Response
     {

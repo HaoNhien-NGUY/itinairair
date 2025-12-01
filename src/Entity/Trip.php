@@ -5,7 +5,9 @@ namespace App\Entity;
 use App\Repository\TripRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -175,6 +177,15 @@ class Trip
         }
 
         return $mapping;
+    }
+
+    public function getMembershipForUser(UserInterface $user): ?TripMembership
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('member', $user))
+            ->setMaxResults(1);
+
+        return $this->tripMemberships->matching($criteria)->first() ?: null;
     }
 
     public function getInviteToken(): ?string

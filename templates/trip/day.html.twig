@@ -16,138 +16,131 @@
     {% endfor %}
 {% endif %}
 
+<div id="day_{{ day.id }}">
+    <div class="flex items-end bg-indigo-100 text-gray-600 mb-4 px-4 py-1">
+        <div class="font-bold text-lg">{{ day.date|date('j/m') }}</div>
+        <div class="ml-2">{{ day.title }}</div>
+    </div>
+    <div class="scroll-margin lg:px-10 md:px-8 px-2 pb-4">
+        <div>
+            {% if flightEndDay|length > 0 %}
+                <div class="mb-8">
+                    {% for item in flightEndDay %}
+                        <div class="flex items-center w-full">
+                            <div class="mx-12 size-8">
+                                {#                        <twig:ux:icon name="entypo:aircraft-landing" class="size-8 text-gray-400" /> #}
+                            </div>
 
-<div class="flex items-end px-4">
-    <h2 class="font-bold text-xl">{{ day.date|date('j/m') }}</h2>
-    <div class="ml-4">{{ day.title }}</div>
-</div>
-<div id="day_{{ day.id }}" class="w-full scroll-margin lg:px-10 md:px-8 px-2 pb-4 bg-white">
+                            <ol class="relative space-y-8 before:absolute before:-ml-px before:h-full before:w-0.5 before:rounded-full before:bg-blue-50">
+                                <li class="relative -ms-1.5 flex items-start gap-4">
+                                    <span class="size-3 shrink-0 absolute rounded-full bg-blue-200 top-8"></span>
+                                    <span class="size-3"></span>
 
+                                    <div class="mt-6">
+                                        <time class="text-xl text-gray-700">
+                                            {{ item.endTime ? item.endTime|date("H:i") : 'TBD' }}
+                                            <span class="text-base pl-1 text-gray-500">+1</span>
+                                        </time>
 
+                                        <h3 class="text-lg font-bold text-gray-900">
+                                            {{ item.arrivalAirport.code ?? 'TBD' }}
+                                        </h3>
 
-{#    <div class="flex items-end pt-4">#}
-{#        <h2 class="font-bold text-2xl">{{ day.date|date('j/m') }}</h2>#}
-{#        <div class="ml-4">{{ day.title }}</div>#}
-{#    </div>#}
-    <div>
+                                        <p class="mt-0.5 text-sm text-gray-700">
+                                            {{ item.name }}
+                                        </p>
+                                    </div>
+                                </li>
+                            </ol>
 
-
-        {% if flightEndDay|length > 0 %}
-            <div class="mb-8">
-                {% for item in flightEndDay %}
-                    <div class="flex items-center w-full">
-                        <div class="mx-12 size-8">
-                            {#                        <twig:ux:icon name="entypo:aircraft-landing" class="size-8 text-gray-400" />#}
                         </div>
-
-                        <ol class="relative space-y-8 before:absolute before:-ml-px before:h-full before:w-0.5 before:rounded-full before:bg-blue-50">
-                            <li class="relative -ms-1.5 flex items-start gap-4">
-                                <span class="size-3 shrink-0 absolute rounded-full bg-blue-200 top-8"></span>
-                                <span class="size-3"></span>
-
-                                <div class="mt-6">
-                                    <time class="text-xl text-gray-700">
-                                        {{ item.endTime ? item.endTime|date("H:i") : 'TBD' }}
-                                        <span class="text-base pl-1 text-gray-500">+1</span>
-                                    </time>
-
-                                    <h3 class="text-lg font-bold text-gray-900">
-                                        {{ item.arrivalAirport.code ?? 'TBD' }}
-                                    </h3>
-
-                                    <p class="mt-0.5 text-sm text-gray-700">
-                                        {{ item.name }}
-                                    </p>
-                                </div>
-                            </li>
-                        </ol>
-
-                    </div>
-                {% endfor %}
-            </div>
-
-        {% endif %}
-
-        <div class="space-y-6 mt-5">
-
-            {% for item in flightSameDay %}
-                <div class="rounded-3xl">
-                    <div class="px-4 py-1 rounded-t-3xl bg-indigo-100 flex items-center">
-                        <twig:ux:icon name="entypo:aircraft-take-off" class="size-8 text-gray-700 mr-4" />
-                        Vol {{ item.flightNumber ?? 'TBD' }}
-                    </div>
-
-                    <div class="p-4 bg-indigo-50 rounded-b-3xl">
-                        <div class="grid grid-cols-3 max-w-md">
-                            <div class="col-span-1 text-lg">
-                                {{ item.startTime ? item.startTime|date("H:i") : 'TBD' }}
-                            </div>
-                            <div class="col-span-1 col-start-3">
-                                {{ item.endTime ? item.endTime|date("H:i") : 'TBD' }}
-                                {{ item.endDay is not null and item.endDay is not same as(day) ? '+1' }}
-                            </div>
-                            <div class="col-span-1 font-bold row-start-2">
-                                {{ item.departureAirport.code ?? 'TBD' }}
-                            </div>
-                            <div class="col-span-1 row-start-2">
-                                <twig:ux:icon name="bi:arrow-right" class="size-4 mr-5"/>
-                            </div>
-                            <div class="col-span-1 font-bold row-start-2">
-                                {{ item.arrivalAirport.code ?? 'TBD' }}
-                            </div>
-                        </div>
-                    </div>
-
-{#                    <div class="h-3 rounded-3xl bg-indigo-100">#}
-{#                    </div>#}
+                    {% endfor %}
                 </div>
-            {% endfor %}
 
-            {% include 'trip/day/_accommodation.html.twig' with { 'flightStartDay': flightStartDay|length > 0} %}
-
-        </div>
+            {% endif %}
 
 
-        <div class="mt-10">
-            {{ include('trip/day/_itinerary.html.twig') }}
+                {% if flightSameDay|length > 0 %}
+                    <div class="space-y-6 mt-5">
 
-        </div>
-
-
-
-        {% if flightStartDay|length > 0 %}
-            <div class="mt-6">
-                {% for item in flightStartDay %}
-                    <div class="flex w-full">
-
-                        <div class="mx-12">
-                            <twig:ux:icon name="entypo:aircraft-take-off" class="size-8 text-gray-400" />
-                        </div>
-
-                        <ol class="relative space-y-8 w-full before:absolute before:-ml-px before:h-full before:w-0.5 before:rounded-full before:bg-blue-50">
-
-                            <li class="relative -ms-1.5 flex items-start gap-4">
-                                <span class="size-3 shrink-0 rounded-full bg-blue-200"></span>
-                                <div class="w-full mb-8 relative -top-1.5">
-
-                                    <time class="text-xl text-gray-700">
-                                        {{ item.startTime ? item.startTime|date("H:i") : 'TBD' }}
-                                    </time>
-
-                                    <h3 class="text-lg font-bold text-gray-900">
-                                        {{ item.departureAirport.code ?? 'TBD' }}
-                                    </h3>
-
-                                    <p class="mt-0.5 text-sm text-gray-700">
-                                        {{ item.name }}
-                                    </p>
+                        {% for item in flightSameDay %}
+                            <div class="rounded-3xl">
+                                <div class="px-4 py-1 rounded-t-3xl bg-indigo-100 flex items-center">
+                                    <twig:ux:icon name="entypo:aircraft-take-off" class="size-8 text-gray-700 mr-4"/>
+                                    Vol {{ item.flightNumber ?? 'TBD' }}
                                 </div>
 
-                            </li>
-                        </ol>
+                                <div class="p-4 bg-indigo-50 rounded-b-3xl">
+                                    <div class="grid grid-cols-3 max-w-md">
+                                        <div class="col-span-1 text-lg">
+                                            {{ item.startTime ? item.startTime|date("H:i") : 'TBD' }}
+                                        </div>
+                                        <div class="col-span-1 col-start-3">
+                                            {{ item.endTime ? item.endTime|date("H:i") : 'TBD' }}
+                                            {{ item.endDay is not null and item.endDay is not same as(day) ? '+1' }}
+                                        </div>
+                                        <div class="col-span-1 font-bold row-start-2">
+                                            {{ item.departureAirport.code ?? 'TBD' }}
+                                        </div>
+                                        <div class="col-span-1 row-start-2">
+                                            <twig:ux:icon name="bi:arrow-right" class="size-4 mr-5"/>
+                                        </div>
+                                        <div class="col-span-1 font-bold row-start-2">
+                                            {{ item.arrivalAirport.code ?? 'TBD' }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                {% endif %}
+
+            <div class="">
+                {% include 'trip/day/_accommodation.html.twig' with { 'flightStartDay': flightStartDay|length > 0} %}
             </div>
-        {% endif %}
+
+
+
+            <div class="mt-6">
+                {{ include('trip/day/_itinerary.html.twig') }}
+
+            </div>
+
+
+            {% if flightStartDay|length > 0 %}
+                <div class="mt-6">
+                    {% for item in flightStartDay %}
+                        <div class="flex w-full">
+
+                            <div class="mx-12">
+                                <twig:ux:icon name="entypo:aircraft-take-off" class="size-8 text-gray-400"/>
+                            </div>
+
+                            <ol class="relative space-y-8 w-full before:absolute before:-ml-px before:h-full before:w-0.5 before:rounded-full before:bg-blue-50">
+
+                                <li class="relative -ms-1.5 flex items-start gap-4">
+                                    <span class="size-3 shrink-0 rounded-full bg-blue-200"></span>
+                                    <div class="w-full mb-8 relative -top-1.5">
+
+                                        <time class="text-xl text-gray-700">
+                                            {{ item.startTime ? item.startTime|date("H:i") : 'TBD' }}
+                                        </time>
+
+                                        <h3 class="text-lg font-bold text-gray-900">
+                                            {{ item.departureAirport.code ?? 'TBD' }}
+                                        </h3>
+
+                                        <p class="mt-0.5 text-sm text-gray-700">
+                                            {{ item.name }}
+                                        </p>
+                                    </div>
+
+                                </li>
+                            </ol>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
     </div>
 </div>

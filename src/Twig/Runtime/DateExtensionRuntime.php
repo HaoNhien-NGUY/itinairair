@@ -23,4 +23,18 @@ class DateExtensionRuntime implements RuntimeExtensionInterface
 
         return $formatter->format($date);
     }
+
+    public function formatDateXs(\DateTimeInterface $date): string
+    {
+        $formatter = new \IntlDateFormatter(
+            'fr_FR',
+            \IntlDateFormatter::NONE,
+            \IntlDateFormatter::NONE,
+            null,
+            null,
+            'd MMM'
+        );
+
+        return $formatter->format($date);
+    }
 }

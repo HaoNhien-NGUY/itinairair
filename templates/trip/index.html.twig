@@ -3,18 +3,44 @@
 {% block title %}Hello TripController!{% endblock %}
 
 {% block body %}
-    <header class="my-4 text-center">
-        <a href="{{ path('app_home') }}">home</a>
-        MES VOYAGES
-    </header>
-    <div class="container mx-auto">
-        <div class="flex space-x-4 p-5 border-2 border-blue-300 rounded-2xl">
-            {% for membership in memberships %}
-                {% set trip = membership.trip %}
-                <div class="flex items-center bg-lime-200 px-2 hover:bg-lime-300">
-                    <a href="{{ path('app_trip_show', {id: trip.id}) }}">{{ trip.name }}</a>
+    <div class="container max-w-7xl mx-auto mt-14">
+        <div class="grid grid-cols-5 gap-6">
+            <div class="col-span-2">
+
+                <div class="rounded-3xl bg-indigo-50 p-8">
+                    <div class="flex items-center">
+                        <img src="https://placehold.co/800?text={{ app.user.email[:1] }}&font=roboto" alt="airplane" class="rounded-full size-16 mr-4" />
+                        <div class="text-center text-lg">
+                            {{ app.user.email }}
+                        </div>
+                    </div>
                 </div>
-            {% endfor %}
+            </div>
+            <div class="col-span-3">
+                <div class="border-2 border-indigo-100 rounded-3xl p-8">
+                    <h1 class="text-xl mb-6">Vos voyages</h1>
+                    <div class="flex space-x-3">
+                        {% for membership in memberships %}
+                            {% set trip = membership.trip %}
+                            <a href="{{ path('app_trip_show', {id: trip.id}) }}" class="bg-gray-50 hover:bg-gray-100 rounded-xl p-4">
+                                <div class="text-lg">{{ trip.name }}</div>
+                                <div>
+                                    <span class="text-gray-500 text-sm">{{ trip.startDate|date_xs }} <span class="mx-2">•</span> {{ trip.endDate.diff(trip.startDate).days }} jours</span>
+{#                                <span>{{ trip.endDate.diff(trip.startDate).days }} jours</span>#}
+                                </div>
+                                <div class="flex space-x-1 mt-3">
+                                    {% for membership in trip.tripMemberships %}
+                                        <div class="flex items-center">
+                                            <img src="https://placehold.co/800?text={{ membership.member.email[:1] }}&font=roboto" class="rounded-full size-8" alt="{{ membership.member.email }}">
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 {% endblock %}

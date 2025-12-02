@@ -27,12 +27,10 @@ final class TripController extends AbstractController
     #[Route('/', name: 'app_trip')]
     public function index(TripMembershipRepository $tripMembershipRepository, TripRepository $tripRepository): Response
     {
-        //        TODO: Redo query in repo
         $user = $this->getUser();
         $memberships = $tripMembershipRepository->findBy(['member' => $user]);
 
         return $this->render('trip/index.html.twig', [
-            'controller_name' => 'TripController',
             'memberships' => $memberships,
         ]);
     }

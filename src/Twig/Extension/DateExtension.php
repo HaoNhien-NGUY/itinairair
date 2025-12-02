@@ -13,13 +13,13 @@ class DateExtension extends AbstractExtension
     {
         return [
             new TwigFilter('date_short', [DateExtensionRuntime::class, 'formatDateShort'], ['is_safe' => ['html']]),
+            new TwigFilter('date_xs', [DateExtensionRuntime::class, 'formatDateXs'], ['is_safe' => ['html']]),
         ];
     }
 
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('function_name', [DateExtensionRuntime::class, 'doSomething']),
         ];
     }
 }

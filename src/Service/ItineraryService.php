@@ -19,13 +19,13 @@ class ItineraryService
     /**
      * @throws Exception
      */
-    public function insertTravelItem(TravelItem $item, ?int $position = null): void
+    public function insertTravelItem(TravelItem $item, Day $day, ?int $position = null): void
     {
-        $this->entityManager->wrapInTransaction(function () use ($item, $position) {
+        $this->entityManager->wrapInTransaction(function () use ($item, $day, $position) {
             if ($item->getItemType()->isPositionable()) {
                 $position = $position ?? 0;
                 $item->setPosition($position);
-                $this->travelItemRepository->makeSpaceAtPosition($item->getStartDay(), $position);
+                $this->travelItemRepository->makeSpaceAtPosition($day, $position);
             }
 
             $this->entityManager->persist($item);

@@ -5,12 +5,8 @@ namespace App\Controller;
 use App\Entity\Day;
 use App\Entity\TravelItem;
 use App\Entity\Trip;
-use App\Entity\TripMembership;
 use App\Enum\ItemStatus;
 use App\Enum\TravelItemType;
-use App\Enum\TripRole;
-use App\Form\TripType;
-use App\Repository\DayRepository;
 use App\Repository\TravelItemRepository;
 use App\Service\ItineraryService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,19 +15,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\UX\Turbo\TurboBundle;
 
 final class TravelItemController extends AbstractController
 {
-    #[Route('/travel-item', name: 'app_travel_item')]
-    public function index(): Response
-    {
-        return $this->render('travel_item/index.html.twig', [
-            'controller_name' => 'TravelItemController',
-        ]);
-    }
-
-
+    #[isGranted('TRIP_EDIT', 'trip')]
     #[Route('/travel-item/{item}/delete', name: 'app_travelitem_delete', methods: ['POST'])]
     public function delete(Request $request, TravelItem $item, EntityManagerInterface $entityManager): Response
     {
@@ -45,6 +34,7 @@ final class TravelItemController extends AbstractController
         return $this->redirect($request->headers->get('referer'));
     }
 
+    #[isGranted('TRIP_EDIT', 'trip')]
     #[Route('/travel-item/trip/{trip}/day/{day}', name: 'app_travelitem_create_day_item', methods: ['POST', 'GET'])]
     public function createDayItem(
         Request $request,
@@ -64,7 +54,7 @@ final class TravelItemController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $itineraryService->insertTravelItem($item, $position, $day);
+            $itineraryService->insertTravelItem($item, $day, $position);
 
             $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
 
@@ -82,6 +72,51 @@ final class TravelItemController extends AbstractController
         ]);
     }
 
+    #[isGranted('TRIP_EDIT', 'trip')]
+    #[Route('/travel-item/trip/{trip}/day/{day}/reorder', name: 'app_travelitem_reorder_day_item', methods: ['POST'])]
+    public function reorderDayItem(
+        Request $request,
+        TravelItemRepository $travelItemRepository,
+        TravelItemRepository $itemRepository,
+        EntityManagerInterface $entityManager,
+        Trip $trip,
+        Day $day,
+    ): Response
+    {
+        if ($day->getTrip() !== $trip
+            || !$this->isCsrfTokenValid('itinerary_reorder', $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $orderedItemsJson = $request->request->get('ordered_items');
+        $orderedItems = json_decode($orderedItemsJson) ?? [];
+
+        $items = $itemRepository->findBy([
+            'id' => $orderedItems,
+            'startDay' => $day,
+            'status' => ItemStatus::committed()],
+        );
+        $itemsById = [];
+        foreach ($items as $item) $itemsById[$item->getId()] = $item;
+
+        foreach ($orderedItems as $position => $id) {
+            if (!isset($itemsById[$id])) continue;
+
+            $itemsById[$id]->setPosition($position);
+        }
+
+        $entityManager->flush();
+
+        $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+
+        return $this->render('trip/day/_day_update.html.twig', [
+            'items'      => $travelItemRepository->findItemsForDay($day),
+            'trip'       => $trip,
+            'day'        => $day,
+        ]);
+    }
+
+    #[isGranted('TRIP_EDIT', 'trip')]
     #[Route('_frame/travel-item/trip/{trip}/create/{type}/{day}', name: 'app_travelitem_create', methods: ['POST', 'GET'])]
     public function create(
         Request $request,

@@ -3,7 +3,7 @@ import Sortable from "sortablejs";
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
-    static targets = ['form', 'formInput', 'newItemInput'];
+    static targets = ['form', 'formInput'];
 
     static values = {
         primaryTypes: {type: Array, default: []},
@@ -38,7 +38,7 @@ export default class extends Controller {
             options.onSort = (event) => {
                 if (event.newIndex === event.oldIndex || event.from !== event.to) return;
 
-                this.persistSort();
+                this.persistSort(JSON.stringify(this.sortable.toArray()));
             }
         }
 
@@ -64,6 +64,7 @@ export default class extends Controller {
     }
 
     persistSort(data) {
+        console.log(data);
         this.formInputTarget.value = data;
         this.formTarget.requestSubmit();
     }

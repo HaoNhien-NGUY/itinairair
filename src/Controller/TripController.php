@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Trip;
 use App\Entity\TripMembership;
 use App\Entity\User;
+use App\Enum\ItemStatus;
 use App\Enum\TripRole;
 use App\Form\TripType;
 use App\Repository\AccommodationRepository;
@@ -72,6 +73,7 @@ final class TripController extends AbstractController
     ): Response
     {
         $accommodations = $accommodationRepository->findAccommodationsByTrip($trip);
+        $ideas = $travelItemRepository->findBy(['trip' => $trip, 'status' => ItemStatus::draft()]);
 
         return $this->render('trip/show.html.twig', [
             'trip'  => $trip,
@@ -79,6 +81,7 @@ final class TripController extends AbstractController
             'accommodations' => $accommodations,
             'flights' => $flightRepository->findFlightsByTrip($trip),
             'statistics' => $tripService->getTripStatistics($trip, $accommodations),
+            'ideas' => $ideas,
         ]);
     }
 

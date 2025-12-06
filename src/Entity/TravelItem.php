@@ -57,8 +57,13 @@ abstract class TravelItem
     #[ORM\ManyToOne(cascade: ['persist'])]
     private ?Place $place = null;
 
-    public function __construct(?Day $startDay = null, ItemStatus $status = ItemStatus::PLANNED)
+    #[ORM\ManyToOne(inversedBy: 'travelItems')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Trip $trip = null;
+
+    public function __construct(Trip $trip, ?Day $startDay = null, ItemStatus $status = ItemStatus::PLANNED)
     {
+        $this->trip = $trip;
         $this->startDay = $startDay;
         $this->status = $status;
     }
@@ -141,6 +146,14 @@ abstract class TravelItem
 
     public function setStartDay(?Day $startDay): static
     {
+        if ($startDay
+            && $this->trip
+            && $this->trip !== $startDay->getTrip()) {
+                throw new \InvalidArgumentException('You cannot schedule an item on a day from a different trip!');
+        }
+
+        if ($startDay && !$this->trip) $this->trip = $startDay->getTrip();
+
         $this->startDay = $startDay;
 
         return $this;
@@ -190,6 +203,18 @@ abstract class TravelItem
     public function setStatus(ItemStatus $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getTrip(): ?Trip
+    {
+        return $this->trip;
+    }
+
+    public function setTrip(?Trip $trip): static
+    {
+        $this->trip = $trip;
 
         return $this;
     }

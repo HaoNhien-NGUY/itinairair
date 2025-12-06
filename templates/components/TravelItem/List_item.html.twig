@@ -1,7 +1,7 @@
-<div id="item_{{ item.id }}">
+<div id="item_{{ item.id }}" class="itinerary-item">
     <div class="{{ newItem is same as(item) ? 'new-item' }}">
         <div class="flex space-x-3">
-            <div class="flex-1 relative p-2.5 md:py-3 pl-6 border border-indigo-200 [.sortable-chosen_&]:bg-indigo-50 rounded-xl">
+            <div class="flex-1 [.idea-container_&]:mx-0 relative p-2.5 md:py-3 pl-6 border border-indigo-200 [.sortable-chosen_&]:bg-indigo-50 rounded-xl group/item">
 {#                <p class="text-sm text-purple-900 font-medium -mt-1.5">{{ item.place.type }}</p>#}
 {#                <div class="w-100 ">#}
                     <div class="font-medium text-base/6 line-clamp-2">{{ item.place.name }}</div>
@@ -16,14 +16,19 @@
                             </div>
                         </div>
                     {% endif %}
-                <div class="absolute handle cursor-grabbing inline-flex items-center justify-center w-7 h-7 top-3 -start-3">
-                    <div class="absolute w-full h-full bg-indigo-300 border-2 border-white rounded-full rounded-br-none transform rotate-45"></div>
+                <div class="absolute handle cursor-grabbing  top-3 -start-3.5">
+                    <div class="inline-flex relative items-center justify-center w-7 h-7">
+                        <div class="absolute w-full h-full bg-indigo-300 border-2 border-white rounded-full rounded-br-none transform rotate-45"></div>
 
-                    <span class="relative text-white font-bold textz transform ">{{ position }}</span>
+                        <span class="relative text-white font-bold transform ">{{ position }}</span>
+                    </div>
+                    <div class="mt-3.5 opacity-0 group-hover/item:[&:not(.sortable-ghost_&)]:opacity-100 transition-opacity bg-white rounded-md flex justify-center">
+                        <twig:ux:icon name="ic:baseline-drag-indicator" class="size-6 text-indigo-200" />
+                    </div>
                 </div>
             </div>
 
-            <img class="w-40 h-24 rounded-xl shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
+            <img class="w-40 h-24 rounded-xl [.idea-container_&]:hidden shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
 
 {#            <div class="self-center justify-self-end">#}
 {#                <form action="{{ path('app_travelitem_delete', {'item': item.id}) }}" method="post">#}

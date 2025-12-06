@@ -49,7 +49,7 @@ final class TravelItemController extends AbstractController
     {
         if ($day->getTrip() !== $trip) throw $this->createAccessDeniedException();
 
-        $item = $type->createInstance([$day, $status]);
+        $item = $type->createInstance([$trip, $day, $status]);
         $form = $this->createForm($type->getFormType(), $item, ['action' => $request->getUri(), 'trip' => $trip]);;
         $form->handleRequest($request);
 
@@ -79,6 +79,7 @@ final class TravelItemController extends AbstractController
         TravelItemRepository $travelItemRepository,
         TravelItemRepository $itemRepository,
         EntityManagerInterface $entityManager,
+        ItineraryService $itineraryService,
         Trip $trip,
         Day $day,
     ): Response
@@ -90,6 +91,7 @@ final class TravelItemController extends AbstractController
 
         $orderedItemsJson = $request->request->get('ordered_items');
         $orderedItems = json_decode($orderedItemsJson) ?? [];
+        $daysToUpdate = [$day];
 
         $items = $itemRepository->findBy([
             'id' => $orderedItems,
@@ -100,19 +102,70 @@ final class TravelItemController extends AbstractController
         foreach ($items as $item) $itemsById[$item->getId()] = $item;
 
         foreach ($orderedItems as $position => $id) {
-            if (!isset($itemsById[$id])) continue;
+            if (isset($itemsById[$id])) {
+                $itemsById[$id]->setPosition($position);
 
-            $itemsById[$id]->setPosition($position);
+                continue;
+            }
+
+            $newItem = $itemRepository->findOneBy(['id' => $id, 'trip' => $trip]);
+
+            if (!$newItem) continue;
+            if ($dayToUpdate = $newItem->getStartDay()) $daysToUpdate[] = $dayToUpdate;
+
+            $newItem->setPosition($position)
+                ->setStartDay($day);
+
+            if (in_array($newItem->getStatus(), ItemStatus::draft())) {
+                $newItem->setStatus(ItemStatus::PLANNED);
+            }
         }
 
         $entityManager->flush();
 
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
 
-        return $this->render('trip/day/_day_update.html.twig', [
-            'items'      => $travelItemRepository->findItemsForDay($day),
-            'trip'       => $trip,
-            'day'        => $day,
+        return $this->render('trip/day/_batch_day_update.stream.html.twig', [
+            'trip' => $trip,
+            ...$itineraryService->daysWithItems($daysToUpdate),
+        ]);
+    }
+
+    #[isGranted('TRIP_EDIT', 'trip')]
+    #[Route('/travel-item/trip/{trip}/to-idea', name: 'app_travelitem_item_to_idea', methods: ['POST'])]
+    public function itemToIdea(
+        Request $request,
+        TravelItemRepository $itemRepository,
+        EntityManagerInterface $entityManager,
+        TravelItemRepository $travelItemRepository,
+        ItineraryService $itineraryService,
+        Trip $trip,
+    ): Response
+    {
+        if (!$this->isCsrfTokenValid('item_to_idea', $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $itemId = $request->request->get('item');
+        $item = $itemRepository->findOneBy(['id' => $itemId, 'trip' => $trip, 'status' => ItemStatus::committed()]);
+        $daysToUpdate = [];
+
+        if ($item) {
+            $daysToUpdate[] = $item->getStartDay();
+
+            $item->setPosition(null)
+                ->setStatus(ItemStatus::IDEA)
+                ->setStartDay(null);
+        }
+
+        $entityManager->flush();
+
+        $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+
+        return $this->render('trip/day/_item_to_idea.stream.html.twig', [
+            ...$itineraryService->daysWithItems($daysToUpdate),
+            'trip' => $trip,
+            'ideas' => $travelItemRepository->findBy(['trip' => $trip, 'status' => ItemStatus::draft()]),
         ]);
     }
 
@@ -129,7 +182,7 @@ final class TravelItemController extends AbstractController
     {
         if ($day && $day->getTrip() !== $trip) throw $this->createAccessDeniedException();
 
-        $item = $type->createInstance([$day, $status]);
+        $item = $type->createInstance([$trip, $day, $status]);
         $form = $this->createForm($type->getFormType(), $item, ['action' => $request->getUri(), 'trip' => $trip]);
         $form->handleRequest($request);
 

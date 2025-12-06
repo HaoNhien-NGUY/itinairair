@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Day;
 use App\Entity\TravelItem;
 use App\Entity\Trip;
+use App\Enum\ItemStatus;
 use App\Enum\TravelItemType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -33,9 +34,11 @@ class TravelItemRepository extends ServiceEntityRepository
             ->join('sd.trip', 'tr')
             ->join(Day::class, 'd', 'WITH', 'd.trip = tr AND d.position BETWEEN sd.position AND COALESCE(ed.position, sd.position)')
             ->where('tr = :trip')
+            ->andWhere('i.status IN (:statuses)')
             ->orderBy('d.position', 'ASC')
             ->addOrderBy('i.position', 'ASC')
             ->setParameter('trip', $trip)
+            ->setParameter('statuses', ItemStatus::committed())
             ->getQuery()
             ->getScalarResult();
 
@@ -79,8 +82,10 @@ class TravelItemRepository extends ServiceEntityRepository
             ->leftJoin('i.place', 'p')
             ->where(':day_position BETWEEN sd.position AND COALESCE(ed.position, sd.position)')
             ->andWhere('sd.trip = :trip')
+            ->andWhere('i.status IN (:statuses)')
             ->setParameter('day_position', $day->getPosition())
             ->setParameter('trip', $day->getTrip())
+            ->setParameter('statuses', ItemStatus::committed())
 //            ->addOrderBy(
 //                'CASE ' .
 //                'WHEN sd.position < :day_position AND COALESCE(ed.position, sd.position) > :day_position THEN 0 ' . // All-day

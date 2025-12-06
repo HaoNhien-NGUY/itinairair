@@ -28,7 +28,7 @@ class ActivityType extends AbstractType
         $builder
             ->add('name', HiddenType::class)
             ->add('position', HiddenType::class, [
-                'empty_data' => 0,
+                'empty_data' => null,
             ])
             ->add('place', PlaceType::class, [
                 'required' => false,

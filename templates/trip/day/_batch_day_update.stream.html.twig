@@ -1,0 +1,5 @@
+{% for day in days %}
+    <twig:Turbo:Stream:Replace target="#day_{{ day.id }}">
+        {{ include('trip/day.html.twig', { 'trip': trip, 'day': day, 'items': itemsByDayId[day.id]}) }}
+    </twig:Turbo:Stream:Replace>
+{% endfor %}

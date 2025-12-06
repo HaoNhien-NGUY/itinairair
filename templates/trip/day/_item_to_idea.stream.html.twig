@@ -1,0 +1,5 @@
+{% include 'trip/day/_batch_day_update.stream.html.twig' %}
+
+<twig:Turbo:Stream:Replace target="#idea_list">
+    {% include 'trip/idea/_list.html.twig' with {trip, ideas} %}
+</twig:Turbo:Stream:Replace>

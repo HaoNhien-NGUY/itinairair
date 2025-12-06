@@ -1,0 +1,50 @@
+<div id="idea_list" class="space-y-2 rounded-xl [.is-dragging_&]:outline-2 [.is-dragging_&]:outline-dashed [.is-dragging_&]:p-2z p-2 [.is-dragging_&]:outline-indigo-100 idea-container min-h-10" {{ stimulus_controller('draggable', {group: 'itinerary', allowSort: false, isIdea: true}) }}>
+
+    <form action="{{ path('app_travelitem_item_to_idea', {trip: trip.id}) }}" class="hidden" method="POST" {{ stimulus_target('draggable', 'form')}}>
+        <input type="hidden" name="item" {{ stimulus_target('draggable', 'formInput')}}>
+        <input type="hidden" name="_token" value="{{ csrf_token('item_to_idea') }}">
+    </form>
+
+{#    <div class="hidden [.is-dragging_&] [.day-itinerary:not(:has(>_.draggable))_&]:block text-gray-400 text-center py-6">Ajouter</div>#}
+
+{#    If idea-container doesnt have a ghost item, have a div with dashed border #}
+    {% if ideas|default([]) is empty %}
+{#        blabla idee#}
+    {% endif %}
+    {% for item in ideas %}
+        <div id="item_{{ item.id }}"
+             class="draggable [.is-dragging_.day-itinerary_&]:py-3.5 [.day-itinerary_&:not(.is-dragging)]:pt-7 [.is-dragging_&]:last-of-type:!pb-0 [.is-dragging_&]:first-of-type:!pt-0"
+             data-item-id="{{ item.id }}">
+            <div>
+                <div class="relative p-2.5 pl-3.5 [.day-itinerary_&]:min-h-20 border border-indigo-200 [.sortable-chosen_&]:bg-indigo-50 rounded-xl group/item">
+                    <div class="text-sm line-clamp-2">{{ item.place.name }}</div>
+                    {#                                                <a href="{{ item.place.googleMapsURI }}" target="_blank" rel="noopener noreferrer" class="text-sm/snug -mt-0.5 hover:text-gray-700 text-gray-500 line-clamp-1">{{ item.place.address }}</a>#}
+                    {% if item.notes is not empty %}
+                        <div class="mt-3 text-sm flex items-start">
+                            <twig:ux:icon name="wpf:note" class="size-4 mt-0.5 shrink-0 text-gray-400 mr-2" />
+                            <div>
+                                                        <span class="text-gray-600 line-clamp-2">
+                                                            {{ item.notes }}
+                                                        </span>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="absolute handle cursor-grabbing  top-2 -start-3">
+                        <div class="bg-white rounded-md flex justify-center">
+                            <twig:ux:icon name="ic:baseline-drag-indicator" class="size-6 text-indigo-200" />
+                        </div>
+                    </div>
+                </div>
+
+
+                {#            <div class="self-center justify-self-end">#}
+                {#                <form action="{{ path('app_travelitem_delete', {'item': item.id}) }}" method="post">#}
+                {#                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">#}
+                {#                    <button type="submit" class="cursor-pointer text-red-600 hover:text-red-400 underline transition-colors">Delete</button>#}
+                {#                </form>#}
+                {#            </div>#}
+            </div>
+        </div>
+
+    {% endfor %}
+</div>

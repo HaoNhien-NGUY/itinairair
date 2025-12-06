@@ -1,32 +1,70 @@
 import { Controller } from '@hotwired/stimulus';
 import Sortable from "sortablejs";
 
-/*
-* The following line makes this controller "lazy": it won't be downloaded until needed
-* See https://symfony.com/bundles/StimulusBundle/current/index.html#lazy-stimulus-controllers
-*/
-
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
-    static targets = ['form', 'orderedItemsInput'];
+    static targets = ['form', 'formInput', 'newItemInput'];
+
+    static values = {
+        primaryTypes: {type: Array, default: []},
+        group: String,
+        allowPut: {type: Boolean, default: true},
+        allowSort: {type: Boolean, default: true},
+        isIdea: {type: Boolean, default: false},
+    };
+
+    initialize() {
+        this.dragContainer = document.getElementById('drag-container');
+    }
 
     connect() {
-        this.sortable = new Sortable(this.element, {
+        const options = {
             filter: '.no-drag',
             draggable: '.draggable',
-            animation: 150,
+            animation: 250,
             dataIdAttr: 'data-item-id',
             handle: '.handle',
+            sort: this.allowSortValue,
+            swapThreshold: 2,
+            onStart: (event) => {
+                this.dragContainer?.classList.add('is-dragging');
+            },
             onEnd: (event) => {
-                if (event.newIndex === event.oldIndex) return;
-
-                this.orderedItemsInputTarget.value = JSON.stringify(this.sortable.toArray());
-                this.formTarget.requestSubmit();
+                this.dragContainer?.classList.remove('is-dragging');
             }
-        })
+        }
+
+        if (this.allowSortValue) {
+            options.onSort = (event) => {
+                if (event.newIndex === event.oldIndex || event.from !== event.to) return;
+
+                this.persistSort();
+            }
+        }
+
+        if (this.allowPutValue) {
+            options.onAdd = (event) => {
+                const data= this.isIdeaValue ? event.item.dataset.itemId : JSON.stringify(this.sortable.toArray())
+                this.persistSort(data);
+            }
+        }
+
+        if (this.hasGroupValue) {
+            options.group = {
+                name: this.groupValue,
+                put: this.allowPut,
+            }
+        }
+
+        this.sortable = new Sortable(this.element, options);
     }
 
     disconnect() {
         this.sortable.destroy();
+    }
+
+    persistSort(data) {
+        this.formInputTarget.value = data;
+        this.formTarget.requestSubmit();
     }
 }

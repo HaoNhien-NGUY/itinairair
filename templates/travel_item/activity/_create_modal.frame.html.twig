@@ -57,15 +57,18 @@
 
             <div class="flex justify-end mt-6">
 
-                <label>
-                    <select name="{{ field_name(form.status) }}"
-                            class="bg-blue-100 rounded-l-xl pl-2 py-1 custom-select focus:outline-none">
-                        {% for label, value in field_choices(form.status) %}
-                            <option
-                                value="{{ value }}" {{ form.status.vars.value == value ? 'selected' }}>{{ label }}</option>
-                        {% endfor %}
-                    </select>
-                </label>
+                {#  idea creation, so status is set to idea #}
+                {% if form.status|default(false) %}
+                    <label>
+                        <select name="{{ field_name(form.status) }}"
+                                class="bg-blue-100 rounded-l-xl pl-2 py-1 custom-select focus:outline-none">
+                            {% for label, value in field_choices(form.status) %}
+                                <option
+                                    value="{{ value }}" {{ form.status.vars.value == value ? 'selected' }}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                {% endif %}
                 <div>
                     <button type="submit"
                             disabled

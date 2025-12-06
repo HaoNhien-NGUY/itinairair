@@ -49,10 +49,17 @@ class Trip
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $inviteToken = null;
 
+    /**
+     * @var Collection<int, TravelItem>
+     */
+    #[ORM\OneToMany(targetEntity: TravelItem::class, mappedBy: 'trip', orphanRemoval: true)]
+    private Collection $travelItems;
+
     public function __construct()
     {
         $this->days = new ArrayCollection();
         $this->tripMemberships = new ArrayCollection();
+        $this->travelItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -196,6 +203,36 @@ class Trip
     public function setInviteToken(?string $inviteToken): static
     {
         $this->inviteToken = $inviteToken;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TravelItem>
+     */
+    public function getTravelItems(): Collection
+    {
+        return $this->travelItems;
+    }
+
+    public function addTravelItem(TravelItem $travelItem): static
+    {
+        if (!$this->travelItems->contains($travelItem)) {
+            $this->travelItems->add($travelItem);
+            $travelItem->setTrip($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTravelItem(TravelItem $travelItem): static
+    {
+        if ($this->travelItems->removeElement($travelItem)) {
+            // set the owning side to null (unless already changed)
+            if ($travelItem->getTrip() === $this) {
+                $travelItem->setTrip(null);
+            }
+        }
 
         return $this;
     }

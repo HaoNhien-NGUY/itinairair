@@ -27,8 +27,9 @@
                 {% endif %}
             </div>
             <div class="flex items-center">
-                <form action="{{ path('app_travelitem_delete', {'item': item.id}) }}" method="post" data-turbo-frame="_top" onsubmit="return confirm('Supprimer ?');">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">
+                <form action="{{ path('app_travelitem_delete', {'trip': trip.id}) }}" method="post" data-turbo-frame="_top" onsubmit="return confirm('Supprimer ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete-item' ~ trip.id) }}">
+                    <input type="hidden" name="item" value="{{ item.id }}">
                     <button type="submit" class="cursor-pointer text-gray-500 text-sm  hover:bg-gray-200 flex items-center rounded-xl px-2 py-1 transition-colors">
                         <twig:ux:icon name="flowbite:trash-bin-solid" class="size-4 text-gray-400" />
                     </button>

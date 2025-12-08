@@ -1,7 +1,4 @@
-// assets/controllers/google_place_widget_controller.js
-
 import { Controller } from "@hotwired/stimulus";
-import { getComponent } from "@symfony/ux-live-component";
 
 export default class extends Controller {
     static targets = [

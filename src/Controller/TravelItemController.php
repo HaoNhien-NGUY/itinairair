@@ -21,10 +21,13 @@ use Symfony\UX\Turbo\TurboBundle;
 final class TravelItemController extends AbstractController
 {
     #[isGranted('TRIP_EDIT', 'trip')]
-    #[Route('/travel-item/{item}/delete', name: 'app_travelitem_delete', methods: ['POST'])]
-    public function delete(Request $request, TravelItem $item, EntityManagerInterface $entityManager): Response
+    #[Route('/travel-item/trip/{trip}/delete', name: 'app_travelitem_delete', methods: ['POST'])]
+    public function delete(Request $request, Trip $trip, TravelItemRepository $itemRepository, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$item->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete-item'.$trip->getId(), $request->request->get('_token'))) {
+            $itemId = $request->request->get('item');
+            $item = $itemRepository->findOneBy(['id' => $itemId]);
+
             $entityManager->remove($item);
             $entityManager->flush();
 

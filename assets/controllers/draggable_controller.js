@@ -10,7 +10,8 @@ export default class extends Controller {
         group: String,
         allowPut: {type: Boolean, default: true},
         allowSort: {type: Boolean, default: true},
-        isIdea: {type: Boolean, default: false},
+        toIdeas: {type: Boolean, default: false},
+        withHandle: {type: Boolean, default: true},
     };
 
     initialize() {
@@ -23,7 +24,7 @@ export default class extends Controller {
             draggable: '.draggable',
             animation: 250,
             dataIdAttr: 'data-item-id',
-            handle: '.handle',
+            handle: this.withHandleValue ? '.handle' : null,
             sort: this.allowSortValue,
             swapThreshold: 2,
             onStart: (event) => {
@@ -44,7 +45,7 @@ export default class extends Controller {
 
         if (this.allowPutValue) {
             options.onAdd = (event) => {
-                const data= this.isIdeaValue ? event.item.dataset.itemId : JSON.stringify(this.sortable.toArray())
+                const data= this.toIdeasValue ? event.item.dataset.itemId : JSON.stringify(this.sortable.toArray())
                 this.persistSort(data);
             }
         }

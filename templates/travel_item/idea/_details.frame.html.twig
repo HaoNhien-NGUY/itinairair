@@ -1,0 +1,53 @@
+{% extends 'travel_item/idea/_base_show.frame.html.twig' %}
+
+{% block card_css %}outline-2{% endblock %}
+
+{% block open_details %}
+{#    <div class="ml-6">#}
+        <a href="{{ path('app_travelitem_idea_show', {'trip': trip.id, 'item': item.id }) }}"
+           class="p-0.5 text-gray-900 bg-indigo-100 flex items-center justify-items-center absolute top-1.5 right-1.5 hover:bg-indigo-200 transition-colors font-medium rounded-full">
+            <twig:ux:icon name="material-symbols:close" class="size-3.5 text-gray-500" />
+        </a>
+{#    </div>#}
+{% endblock %}
+
+{% block details %}
+
+    {% if item.notes is not empty %}
+        <div class="text-sm my-1 flex items-start">
+            <div>
+                <span class="text-gray-600">
+                    <twig:ux:icon name="wpf:note" class="size-3.5 inline shrink-0 text-gray-400 mr-0.5" />
+                    {{ item.notes }}
+                </span>
+            </div>
+        </div>
+
+    {% endif %}
+
+    {% if item.place.address %}
+        <div class="mt-2">
+            <span class="text-sm text-gray-600">
+                <twig:ux:icon name="ooui:map-pin" class="size-4 shrink-0 inline text-gray-400 mr-0.5" />
+                {{ item.place.address }}
+            </span>
+        </div>
+    {% endif %}
+
+
+    <div class="flex justify-end text-xs space-x-2 mt-1.5">
+        <form action="{{ path('app_travelitem_delete', {'trip': trip.id}) }}" method="post" data-turbo-frame="_top" class="flex items-center">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete-item' ~ trip.id) }}">
+            <input type="hidden" name="item" value="{{ item.id }}">
+            <button type="submit" class="cursor-pointer p-1.5 rounded-full hover:bg-gray-100 transition-colors">
+                <twig:ux:icon name="flowbite:trash-bin-solid" class="size-3.5 text-gray-400" />
+            </button>
+        </form>
+        {% if item.place %}
+            <a href="{{ item.place.googleMapsURI }}" target="_blank" rel="noopener noreferrer"
+               class="px-2 py-0.5 text-indigo-500 text-sm bg-indigo-100 flex items-center hover:bg-indigo-200 focus:ring-4 transition-colors rounded-xl">
+                Maps
+            </a>
+        {% endif %}
+    </div>
+{% endblock %}

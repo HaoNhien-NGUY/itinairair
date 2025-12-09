@@ -74,7 +74,7 @@ final class TripController extends AbstractController
     {
         $accommodations = $accommodationRepository->findAccommodationsByTrip($trip);
         //TODO: join place entity
-        $ideas = $travelItemRepository->findBy(['trip' => $trip, 'status' => ItemStatus::draft()]);
+        $ideas = $travelItemRepository->findBy(['trip' => $trip, 'status' => ItemStatus::draft()], ['id' => 'ASC']);
 
         return $this->render('trip/show.html.twig', [
             'trip'  => $trip,

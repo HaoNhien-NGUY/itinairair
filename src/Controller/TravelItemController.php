@@ -168,7 +168,7 @@ final class TravelItemController extends AbstractController
         return $this->render('trip/day/_item_to_idea.stream.html.twig', [
             ...$itineraryService->daysWithItems($daysToUpdate),
             'trip' => $trip,
-            'ideas' => $travelItemRepository->findBy(['trip' => $trip, 'status' => ItemStatus::draft()]),
+            'ideas' => $travelItemRepository->findBy(['trip' => $trip, 'status' => ItemStatus::draft()],  ['id' => 'ASC']),
         ]);
     }
 

@@ -197,7 +197,7 @@ final class TravelItemController extends AbstractController
             return $this->render('stream/refresh.stream.html.twig');
         }
 
-        return $this->render($type->getTemplate(), [
+        return $this->render($type->getFormTemplate(), [
             'form'       => $form,
             'trip'       => $trip,
             'type'       => $type,

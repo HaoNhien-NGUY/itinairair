@@ -23,7 +23,7 @@ return [
         'path' => './vendor/symfony/ux-live-component/assets/dist/live_controller.js',
     ],
     '@hotwired/stimulus' => [
-        'version' => '3.2.2',
+        'version' => '3.2.1',
     ],
     'vanilla-calendar-pro' => [
         'version' => '3.0.5',
@@ -37,5 +37,8 @@ return [
     ],
     'sortablejs' => [
         'version' => '1.15.6',
+    ],
+    'stimulus-textarea-autogrow' => [
+        'version' => '4.1.0',
     ],
 ];

@@ -28,9 +28,9 @@
             </div>
             {% block details %}
                 {% if item.notes is not empty %}
-                    <div class="mt-1 text-sm">
+                    <div class="mt-1 text-sm flex">
+                        <twig:ux:icon name="wpf:note" class="size-3.5 mt-1 inline shrink-0 text-yellow-500 mr-1.5" />
                         <span class="text-gray-600 line-clamp-1">
-                            <twig:ux:icon name="wpf:note" class="size-3.5 inline shrink-0 text-gray-400 mr-0.5" />
                             {{ item.notes }}
                         </span>
                     </div>

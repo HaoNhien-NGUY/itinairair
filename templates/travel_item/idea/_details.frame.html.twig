@@ -11,13 +11,22 @@
 
 {% block details %}
     <div class="my-1">
-        <twig:TravelItemNoteInlineEdit item="{{ item }}"/>
+{#        <twig:TravelItemNoteInlineEdit item="{{ item }}"/>#}
+
+        <div class="flex w-full">
+            <div class="min-w-4 mr-1">
+                <twig:ux:icon name="wpf:note" class="size-3.5 mt-1 text-yellow-500"/>
+            </div>
+            <div class="w-full">
+                <twig:TravelItemNoteInlineEdit item="{{ item }}"/>
+            </div>
+        </div>
     </div>
 
     {% if item.place.address %}
         <div class="mt-2">
             <span class="text-sm text-gray-600">
-                <twig:ux:icon name="ooui:map-pin" class="size-4 shrink-0 inline text-gray-400 mr-0.5" />
+                <twig:ux:icon name="ooui:map-pin" class="size-4 shrink-0 inline text-indigo-400 mr-0.5" />
                 {{ item.place.address }}
             </span>
         </div>
@@ -33,9 +42,13 @@
             </button>
         </form>
         {% if item.place %}
-            <a href="{{ item.place.googleMapsURI }}" target="_blank" rel="noopener noreferrer"
-               class="px-2 py-0.5 text-indigo-500 text-sm bg-indigo-100 flex items-center hover:bg-indigo-200 focus:ring-4 transition-colors rounded-xl">
+
+            <a href="{{ item.place.googleMapsURI }}"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="py-1 px-3 text-indigo-400 text-sm bg-indigo-50 flex items-center focus:outline-none hover:bg-indigo-100 transition-colors rounded-xl">
                 Maps
+                <twig:ux:icon name="bxs:map" class="size-4 ml-1" />
             </a>
         {% endif %}
     </div>

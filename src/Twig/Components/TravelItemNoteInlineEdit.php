@@ -18,16 +18,17 @@ class TravelItemNoteInlineEdit
     public ?string $notes = null;
 
     #[LiveProp]
-    public TravelItem $item;
+    public ?string $defaultNotes = null;
 
-    #[LiveProp(writable: true)]
-    public bool $isEditing = false;
+    #[LiveProp]
+    public TravelItem $item;
 
     public function __construct(private EntityManagerInterface $entityManager) {}
 
     public function mount(TravelItem $item): void
     {
         $this->item = $item;
+        $this->defaultNotes = $item->getNotes();
         $this->notes = $item->getNotes();
     }
 
@@ -36,19 +37,13 @@ class TravelItemNoteInlineEdit
     {
         $this->item->setNotes($this->notes);
         $this->entityManager->flush();
-        $this->isEditing = false;
-    }
-
-    #[LiveAction]
-    public function enableEdit(): void
-    {
-        $this->isEditing = true;
     }
 
     #[LiveAction]
     public function cancel(): void
     {
-        $this->notes = $this->item->getNotes();
-        $this->isEditing = false;
+        $this->notes = $this->defaultNotes;
+        $this->item->setNotes($this->notes);
+        $this->entityManager->flush();
     }
 }

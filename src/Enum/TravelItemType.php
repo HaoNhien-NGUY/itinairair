@@ -40,7 +40,7 @@ enum TravelItemType: string
         return new ($this->getClass())(...$params);
     }
 
-    public function getTemplate(): string
+    public function getFormTemplate(): string
     {
         return match($this) {
             self::FLIGHT => 'travel_item/flight/_create_modal.frame.html.twig',

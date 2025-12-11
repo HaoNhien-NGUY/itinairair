@@ -58,7 +58,8 @@
                 </div>
             {% endif %}
 
-            <twig:TravelItem:List_item item="{{ item }}" newItem="{{ newItem ?? null }}" position="{{ loop.index }}"/>
+{#            {% include 'travel_item/activity/_base_show.frame.html.twig' with {item, trip, position: loop.index, newItem : newItem ?? null} %}#}
+            <twig:TravelItem:List_item item="{{ item }}" newItem="{{ newItem ?? null }}" trip="{{ trip }}" position="{{ loop.index }}"/>
         </div>
     {% endfor %}
 {#    <span class="hidden [.day-itinerary:not(:has(>_.draggable))_&]:block text-gray-400 text-center py-6">Ajouter</span>#}

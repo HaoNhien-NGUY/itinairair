@@ -1,24 +1,32 @@
 <turbo-frame id="details_item_{{ item.id }}" class="flex-1 [.idea-container_&]:mx-0 relative [.sortable-chosen_&]:bg-indigo-50 flex group/item">
-    <div class="{% block card_css %}outline hover:bg-gray-50{% endblock %} outline-indigo-200  p-2.5 md:py-3 pl-6 rounded-xl w-full">
-        <div class="font-medium text-gray-700 text-base/6 line-clamp-2">{{ item.place.name }}</div>
-        {% block details %}
-            {% if item.notes is not empty %}
-                <div class="mt-2.5 text-sm flex items-start">
-                    <div class="min-w-5 mr-1">
-                        <twig:ux:icon name="wpf:note" class="size-4 mt-0.5 text-yellow-500"/>
-                    </div>
-                    <div>
-                        <span class="text-gray-600 line-clamp-2">
-                            {{ item.notes }}
-                        </span>
-                    </div>
+    <div class="{% block card_css %}outline hover:bg-gray-50{% endblock %} outline-indigo-200 flex flex-col pt-2.5 justify-between p-2 pl-6 rounded-xl w-full">
+        <div class="">
+            <div class="font-medium text-gray-700 text-base/6 line-clamp-2">{{ item.place.name }}</div>
+
+            {% block details %}
+                <div class="flex mt-2 justify-between">
+                    {% if item.notes is not empty %}
+                        <div class="flex w-full">
+                            <div class="min-w-5 mr-1">
+                                <twig:ux:icon name="wpf:note" class="size-4 text-yellow-500"/>
+                            </div>
+                            <div class="w-full pr-5">
+                                <span class="text-gray-600 line-clamp-2 text-sm">{{ item.notes }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+
                 </div>
-            {% endif %}
-        {% endblock %}
 
-
+                <div class="mt-2.5 flex justify-between">
+                    {% if item.startTime %}
+                        <twig:TravelItemTimeInlineEdit item="{{ item }}"/>
+                    {% endif %}
+                </div>
+            {% endblock %}
+        </div>
         {% block open_details %}
-            <a href="{{ path('app_travelitem_activity_details', {'item': item.id, 'trip': trip.id}) }}" class="cursor-pointer absolute w-full h-full top-0 left-0"></a>
+            <a href="{{ path('app_travelitem_activity_details', {'item': item.id, 'trip': trip.id}) }}" class="cursor-pointer z-20 absolute w-full h-full top-0 left-0"></a>
         {% endblock %}
     </div>
 </turbo-frame>

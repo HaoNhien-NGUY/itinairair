@@ -1,36 +1,9 @@
 <turbo-frame id="item_{{ item.id }}" class="itinerary-item">
-    <div class="relative group/item {{ newItem is same as(item) ? 'new-item' }}">
+    <div class="relative group/item md:ml-0 ml-2 {{ newItem is same as(item) ? 'new-item' }}">
         <div class="flex space-x-3">
-{#            <turbo-frame id="details_item_{{ item.id }}" class="flex-1 hover:bg-gray-50 [.idea-container_&]:mx-0 relative p-2.5 md:py-3 pl-6 border border-indigo-200 [.sortable-chosen_&]:bg-indigo-50 rounded-xl group/item">#}
-{#                <div class="font-medium text-gray-700 text-base/6 line-clamp-2">{{ item.place.name }}</div>#}
-{#                {% if item.notes is not empty %}#}
-{#                    <div class="mt-2.5 text-sm flex items-start">#}
-{#                        <div class="min-w-5 mr-1">#}
-{#                            <twig:ux:icon name="wpf:note" class="size-4 mt-0.5 text-yellow-500"/>#}
-{#                        </div>#}
-{#                        <div>#}
-{#                            <span class="text-gray-600 line-clamp-2">#}
-{#                                {{ item.notes }}#}
-{#                            </span>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                {% endif %}#}
-{#                <div class="absolute handle z-30 cursor-grabbing  top-3 -start-3.5">#}
-{#                    <div class="inline-flex relative items-center justify-center w-7 h-7">#}
-{#                        <div class="absolute w-full h-full bg-indigo-300 border-2 border-white rounded-full rounded-br-none transform rotate-45"></div>#}
-
-{#                        <span class="relative text-white font-bold transform ">{{ position }}</span>#}
-{#                    </div>#}
-{#                    <div class="mt-2.5 opacity-0 group-hover/item:[&:not(.sortable-ghost_&)]:opacity-100 transition-opacity bg-white rounded-md flex justify-center">#}
-{#                        <twig:ux:icon name="ic:baseline-drag-indicator" class="size-6 text-indigo-200" />#}
-{#                    </div>#}
-{#                </div>#}
-
-{#                <a href="{{ path('app_travelitem_show', {'item': item.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="cursor-pointer absolute w-full h-full top-0 left-0"></a>#}
-{#            </turbo-frame>#}
             {% include 'travel_item/activity/_base_show.frame.html.twig' with {trip, item, } %}
 
-            <img class="w-38 h-22 rounded-xl [.idea-container_&]:hidden shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
+            <img class="w-40 h-24 rounded-xl [.idea-container_&]:hidden shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
         </div>
 
         <div class="absolute handle z-30 cursor-grabbing  top-3 -start-3.5">

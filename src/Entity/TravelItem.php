@@ -134,7 +134,7 @@ abstract class TravelItem
 
     public function setNotes(?string $notes): static
     {
-        $this->notes = $notes;
+        $this->notes = trim($notes ?? '');
 
         return $this;
     }

@@ -3,15 +3,22 @@
         <div class="">
             <div class="font-medium text-gray-700 text-base/6 line-clamp-2">{{ item.place.name }}</div>
 
+            {% if item.place.type %}
+                <div class="-mt-2">
+                    <span class="text-xs/snug text-gray-500">
+                        {{ item.place.type }}
+                    </span>
+                </div>
+            {% endif %}
             {% block details %}
                 <div class="flex mt-2 justify-between">
                     {% if item.notes is not empty %}
                         <div class="flex w-full">
                             <div class="min-w-5 mr-1">
-                                <twig:ux:icon name="wpf:note" class="size-4 text-yellow-500"/>
+                                <twig:ux:icon name="wpf:note" class="size-4 mt-0.5 text-yellow-500"/>
                             </div>
                             <div class="w-full pr-5">
-                                <span class="text-gray-600 line-clamp-2 text-sm">{{ item.notes }}</span>
+                                <span class="text-gray-600 whitespace-pre-wrap line-clamp-2 text-sm">{{ item.notes }}</span>
                             </div>
                         </div>
                     {% endif %}

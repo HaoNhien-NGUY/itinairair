@@ -34,7 +34,7 @@ final class activityController extends AbstractController
         TravelItem             $item,
     ): Response
     {
-        return $this->render('travel_item/activity/_details_modal.frame.html.twig', [
+        return $this->render('travel_item/activity/_details.frame.html.twig', [
             'item' => $item,
             'trip' => $trip,
         ]);

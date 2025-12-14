@@ -20,7 +20,7 @@
                 {% if item.startTime %}
                     {{ item.startTime|date('H:i') }}{% if item.endTime %}<span class="mx-0.5">-</span>{{ item.endTime|date('H:i') }}{% endif %}
                 {% else %}
-                    <span class="text-sm text-indigo-400">Heure</span>
+                    <span class="text-sm text-indigo-400 pl-1 pr-2">-</span>
                 {% endif %}
             </span>
 		</button>

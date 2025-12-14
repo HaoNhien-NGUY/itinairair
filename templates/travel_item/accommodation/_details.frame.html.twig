@@ -35,13 +35,8 @@
                     </button>
                 </form>
 
-                <a href="{{ item.place.googleMapsURI }}"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="ml-4 py-1 px-3 text-indigo-400 text-sm bg-indigo-100 flex items-center focus:outline-none hover:bg-indigo-200 focus:ring-4 focus:ring-gray-100 transition-colors rounded-xl">
-                    Ouvrir dans Maps
-                    <twig:ux:icon name="bxs:map" class="size-4 ml-1" />
-                </a>
+                <twig:Button:OpenMaps item="{{ item }}" />
+
             </div>
         </div>
     </div>

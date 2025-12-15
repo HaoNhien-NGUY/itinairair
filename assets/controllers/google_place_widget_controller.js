@@ -5,6 +5,9 @@ export default class extends Controller {
         'placeInput',
         'name',
         'address',
+        'city',
+        'country',
+        'countryCode',
         'location',
         'googleMapsURI',
         'photoURI',
@@ -58,6 +61,7 @@ export default class extends Controller {
                 fields: [
                     'displayName',
                     'formattedAddress',
+                    'addressComponents',
                     'location',
                     'googleMapsURI',
                     'primaryTypeDisplayName',
@@ -76,14 +80,15 @@ export default class extends Controller {
     setPlaceComponents(placeData) {
         if (this.hasNameTarget) this.nameTarget.value = placeData.name || "";
         if (this.hasAddressTarget) this.addressTarget.value = placeData.address || "";
-        if (this.hasCityTarget) this.cityTarget.value = placeData.locality || "";
+        if (this.hasCityTarget) this.cityTarget.value = placeData.city || "";
         if (this.hasGoogleMapsURITarget) this.googleMapsURITarget.value = placeData.googleMapsURI || "";
         if (this.hasCountryTarget) this.countryTarget.value = placeData.country || "";
-        if (this.hasPostalCodeTarget) this.postalCodeTarget.value = placeData.postal_code || "";
+        if (this.hasCountryCodeTarget) this.countryCodeTarget.value = placeData.countryCode || "";
         if (this.hasPlaceIdTarget) this.placeIdTarget.value = placeData.placeId || "";
         if (this.hasTypeTarget) this.typeTarget.value = placeData.type || "";
         if (this.hasLocationTarget) this.locationTarget.value = placeData.location || "";
         if (this.hasPhotoURITarget) this.photoURITarget.value = placeData.photoURI || "";
+
         if (this.hasNameDisplayTarget) this.nameDisplayTarget.textContent = placeData.name || "";
         if (this.hasPhotoDisplayTarget) this.photoDisplayTarget.src = placeData.photoURI || "";
         if (this.hasAddressDisplayTarget) this.addressDisplayTarget.textContent = placeData.address || "";
@@ -95,7 +100,12 @@ export default class extends Controller {
     }
 
     formatPlaceData = place => {
+        const { city, country, countryCode } = this.extractCityAndCountry(place.addressComponents);
+
         return {
+            city,
+            country,
+            countryCode,
             name: place.displayName,
             photoURI: place.photos[0]?.getURI({maxHeight: 600, maxWidth: 600}) ?? null,
             address: place.formattedAddress,
@@ -105,5 +115,43 @@ export default class extends Controller {
             placeId: place.id,
             type: place.primaryTypeDisplayName || '',
         };
+    }
+
+    extractCityAndCountry = addressComponents => {
+        let locality = null;
+        let sublocality = null;
+        let adminLevel2 = null;
+
+        const output = {
+            city: '',
+            country: '',
+            countryCode: '',
+        }
+
+        for (const component of addressComponents) {
+            if (component.types.includes('country')) {
+                output.country = component.longText;
+                output.countryCode = component.shortText;
+                continue;
+            }
+
+            if (component.types.includes('locality')) {
+                locality = component.longText;
+                continue;
+            }
+
+            if (component.types.includes('sublocality_level_1')) {
+                sublocality = component.longText;
+                continue;
+            }
+
+            if (component.types.includes('administrative_area_level_2')) {
+                adminLevel2 = component.longText;
+            }
+        }
+
+        output.city = locality || sublocality || adminLevel2 || '';
+
+        return output;
     }
 }

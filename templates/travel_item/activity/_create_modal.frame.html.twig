@@ -1,6 +1,12 @@
 <twig:Modal>
-    {% block title %}<span class="font-medium text-gray-700">Ajouter une activité</span>{% endblock %}
-    <div {{ stimulus_controller('google-place-widget', {primaryTypes: ['food', 'tourist_attraction', 'point_of_interest', 'store', 'cafe']}) }}>
+    {% block title %}<span class="font-medium text-gray-700">Lieu</span>{% endblock %}
+
+    {% set googlePlaceOptions = {primaryTypes: ['food', 'tourist_attraction', 'point_of_interest', 'store', 'cafe']} %}
+    {% if destination|default %}
+        {% set googlePlaceOptions = googlePlaceOptions|merge({'location': destination.place.location}) %}
+    {% endif %}
+
+    <div {{ stimulus_controller('google-place-widget', googlePlaceOptions) }}>
         <div class="bg-indigo-50 rounded-2xl">
             <div class="p-2 pb-0">
                 <gmp-place-autocomplete

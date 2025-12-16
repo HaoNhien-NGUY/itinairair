@@ -35,8 +35,8 @@ class UniqueDestinationRangeValidatorTest extends ConstraintValidatorTestCase
         $d2 = new Destination($trip);
         $d2->setStartDay($this->createDay($trip, 6));
         $d2->setEndDay($this->createDay($trip, 12));
-        $trip->addDestination($d1);
-        $trip->addDestination($d2);
+        $trip->addTravelItem($d1);
+        $trip->addTravelItem($d2);
         $this->validator->validate($d2, new UniqueDestinationRange());
 
         $this->assertNoViolation();
@@ -53,8 +53,8 @@ class UniqueDestinationRangeValidatorTest extends ConstraintValidatorTestCase
         $d2 = new Destination($trip);
         $d2->setStartDay($this->createDay($trip, 6));
         $d2->setEndDay($this->createDay($trip, 12));
-        $trip->addDestination($d1);
-        $trip->addDestination($d2);
+        $trip->addTravelItem($d1);
+        $trip->addTravelItem($d2);
         $this->validator->validate($d2, new UniqueDestinationRange());
 
         $this->buildViolation('Les dates de cette destination chevauchent une autre destination de ce voyage.')
@@ -73,8 +73,8 @@ class UniqueDestinationRangeValidatorTest extends ConstraintValidatorTestCase
         $d2 = new Destination($trip);
         $d2->setStartDay($this->createDay($trip, 1));
         $d2->setEndDay($this->createDay($trip, 7));
-        $trip->addDestination($d1);
-        $trip->addDestination($d2);
+        $trip->addTravelItem($d1);
+        $trip->addTravelItem($d2);
         $this->validator->validate($d2, new UniqueDestinationRange());
 
         $this->buildViolation('Les dates de cette destination chevauchent une autre destination de ce voyage.')
@@ -93,8 +93,8 @@ class UniqueDestinationRangeValidatorTest extends ConstraintValidatorTestCase
         $d2 = new Destination($trip);
         $d2->setStartDay($this->createDay($trip, 3));
         $d2->setEndDay($this->createDay($trip, 5));
-        $trip->addDestination($d1);
-        $trip->addDestination($d2);
+        $trip->addTravelItem($d1);
+        $trip->addTravelItem($d2);
         $this->validator->validate($d2, new UniqueDestinationRange());
 
         $this->buildViolation('Les dates de cette destination chevauchent une autre destination de ce voyage.')

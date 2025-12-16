@@ -24,6 +24,7 @@ export default class extends Controller {
     ];
     static values = {
         primaryTypes: {type: Array, default: []},
+        location: {type: Object, default: {}},
     };
     placeAutocomplete = null;
 
@@ -50,6 +51,12 @@ export default class extends Controller {
 
         this.placeAutocomplete.Dg?.setAttribute('placeholder', 'Rechercher par nom');
         this.placeAutocomplete.includedPrimaryTypes = this.primaryTypesValue;
+        if (Object.keys(this.locationValue).length > 0) {
+            this.placeAutocomplete.locationBias = {
+                center: this.locationValue,
+                radius: 10000,
+            };
+        }
         this.placeAutocomplete.addEventListener('gmp-select', this.handleSelection);
     }
 

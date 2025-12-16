@@ -7,6 +7,7 @@ use App\Entity\TravelItem;
 use App\Entity\Trip;
 use App\Enum\ItemStatus;
 use App\Enum\TravelItemType;
+use App\Repository\DestinationRepository;
 use App\Repository\TravelItemRepository;
 use App\Service\ItineraryService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -42,6 +43,7 @@ final class TravelItemController extends AbstractController
     public function createDayItem(
         Request $request,
         TravelItemRepository $travelItemRepository,
+        DestinationRepository $destinationRepository,
         ItineraryService $itineraryService,
         Trip $trip,
         Day $day,
@@ -68,9 +70,12 @@ final class TravelItemController extends AbstractController
             ]);
         }
 
+        $destination = $destinationRepository->findDestinationByDay($day) ?? null;
+
         return $this->render('travel_item/activity/_create_modal.frame.html.twig', [
-            'form'       => $form,
-            'item'       => $item,
+            'form'        => $form,
+            'item'        => $item,
+            'destination' => $destination,
         ]);
     }
 
@@ -178,6 +183,7 @@ final class TravelItemController extends AbstractController
     public function create(
         Request $request,
         EntityManagerInterface $entityManager,
+        DestinationRepository $destinationRepository,
         Trip $trip,
         ?TravelItemType $type = TravelItemType::ACTIVITY,
         ?Day $day = null,
@@ -197,12 +203,15 @@ final class TravelItemController extends AbstractController
             return $this->render('stream/refresh.stream.html.twig');
         }
 
+        $destination = $day ? ($destinationRepository->findDestinationByDay($day)[0] ?? null) : null;
+
         return $this->render($type->getFormTemplate(), [
             'form'       => $form,
             'trip'       => $trip,
             'type'       => $type,
             'status'     => $status,
             'day'        => $day,
+            'destination' => $destination,
         ]);
     }
 

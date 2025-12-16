@@ -1,7 +1,11 @@
 <twig:Modal>
     {% block title %}<span class="font-medium text-gray-700">Ajouter une accommodation</span>{% endblock %}
 
-    <div  {{ stimulus_controller('google-place-widget', {primaryTypes: ['lodging', 'street_address']}) }}>
+    {% set googlePlaceOptions = {primaryTypes: ['lodging', 'street_address']} %}
+    {% if destination|default %}
+        {% set googlePlaceOptions = googlePlaceOptions|merge({'location': destination.place.location}) %}
+    {% endif %}
+    <div  {{ stimulus_controller('google-place-widget', googlePlaceOptions) }}>
         {{ form_start(form) }}
 
         <div class="space-y-4">

@@ -69,10 +69,30 @@ class TravelItemRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param Trip $trip
+     * @param ItemStatus[]|null $statuses
+     * @return TravelItem[]
+     */
+    public function findItemsForTrip(Trip $trip, ?array $statuses = null): array
+    {
+        return $this->createQueryBuilder('i')
+            ->addSelect('p')
+            ->leftJoin('i.place', 'p')
+            ->where('i.trip = :trip')
+            ->andWhere('i.status IN (:statuses)')
+            ->setParameter('statuses', $statuses ?? ItemStatus::committed())
+            ->setParameter('trip', $trip)
+            ->addOrderBy('i.position', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Retourne les TravelItems pour un jour spécifique, groupés par type.
      * Format: [ 'itinerary' => [...], 'accommodation' => [...], 'flight' => [...] ]
+     * @param ItemStatus[]|null $statuses
      */
-    public function findItemsForDay(Day $day): array
+    public function findItemsForDay(Day $day, ?array $statuses = null): array
     {
         // On récupère directement les entités TravelItem qui correspondent à notre critère
         $items = $this->createQueryBuilder('i')
@@ -85,7 +105,7 @@ class TravelItemRepository extends ServiceEntityRepository
             ->andWhere('i.status IN (:statuses)')
             ->setParameter('day_position', $day->getPosition())
             ->setParameter('trip', $day->getTrip())
-            ->setParameter('statuses', ItemStatus::committed())
+            ->setParameter('statuses', $statuses ?? ItemStatus::committed())
 //            ->addOrderBy(
 //                'CASE ' .
 //                'WHEN sd.position < :day_position AND COALESCE(ed.position, sd.position) > :day_position THEN 0 ' . // All-day

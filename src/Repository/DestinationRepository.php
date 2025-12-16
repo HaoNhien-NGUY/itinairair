@@ -41,9 +41,12 @@ class DestinationRepository extends ServiceEntityRepository
     public function findDestinationByTrip(Trip $trip): array
     {
         return $this->createQueryBuilder('d')
+            ->addSelect('sd', 'ed', 'p')
             ->where('d.trip = :trip')
             ->setParameter('trip', $trip)
             ->join('d.startDay', 'sd')
+            ->join('d.endDay', 'ed')
+            ->leftJoin('d.place', 'p')
             ->orderBy('sd.position', 'ASC')
             ->getQuery()
             ->getResult();

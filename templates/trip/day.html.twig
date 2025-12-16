@@ -60,15 +60,14 @@
                 {{ _self.destination_link(trip, destinationStartDay) }}
             {% endif %}
 
-            {% if not destinationDay and not destinationStartDay %}
+            {% if not (destinationDay or destinationStartDay) %}
                 <a href="{{ path('app_travelitem_create', {trip: trip.id, type: destinationEnum, day: day.id }) }}"
-                   class="hover:underline text-gray-400"
+                   class="text-gray-400 flex items-center hover:text-gray-500 transition-colors"
                    data-turbo-frame="modal"
                 >
-                    {% if destinationEndDay %}
-                        ajouter
-                    {% else %}
-                        Ajouter une destination
+                    <twig:ux:icon name="bx:plus" class="size-3.5"/>
+                    {% if not destinationEndDay %}
+                        <span>&nbsp;Destination</span>
                     {% endif %}
                 </a>
             {% endif %}

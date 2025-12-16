@@ -8,6 +8,7 @@ use App\Repository\TravelItemRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: TravelItemRepository::class)]
 #[ORM\InheritanceType('SINGLE_TABLE')]
@@ -40,7 +41,6 @@ abstract class TravelItem
     // TODO: relation with a future booking entity ?
 
     #[ORM\ManyToOne]
-    #[Assert\GreaterThan(propertyPath: 'startDay')]
     private ?Day $endDay = null;
 
     //TODO: add a duration field to the entity
@@ -66,6 +66,20 @@ abstract class TravelItem
         $this->trip = $trip;
         $this->startDay = $startDay;
         $this->status = $status;
+    }
+
+    #[Assert\Callback]
+    public function validateDates(ExecutionContextInterface $context): void
+    {
+        if (null === $this->startDay || null === $this->endDay) {
+            return;
+        }
+
+        if ($this->endDay->getPosition() <= $this->startDay->getPosition()) {
+            $context->buildViolation('The end day must be strictly after the start day.')
+                ->atPath('endDay')
+                ->addViolation();
+        }
     }
 
     public function getPlace(): ?Place

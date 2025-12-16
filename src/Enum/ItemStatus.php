@@ -11,10 +11,11 @@ enum ItemStatus: string
 
     public static function committed(): array
     {
-        return array_filter(
-            self::cases(),
-            fn(self $status) => $status !== self::IDEA
-        );
+        return [
+            self::PLANNED,
+            self::BOOKING_NEEDED,
+            self::BOOKED
+        ];
     }
 
     public static function draft(): array

@@ -38,6 +38,7 @@
                             <a href="{{ path('app_trip_show', {id: trip.id}) }}" class="bg-white hover:bg-gray-50 rounded-2xl border-2 border-gray-100 p-4">
                                 <div class="text-lg">{{ trip.name }}</div>
                                 <div>
+{# TODO: use trip.days count                                    #}
                                     <span class="text-gray-500 text-sm">{{ trip.startDate|date_xs }} <span class="mx-2">•</span> {{ trip.endDate.diff(trip.startDate).days }} jours</span>
 {#                                <span>{{ trip.endDate.diff(trip.startDate).days }} jours</span>#}
                                 </div>

@@ -9,6 +9,7 @@ use App\Enum\ItemStatus;
 use App\Enum\TripRole;
 use App\Form\TripType;
 use App\Repository\AccommodationRepository;
+use App\Repository\DestinationRepository;
 use App\Repository\FlightRepository;
 use App\Repository\TravelItemRepository;
 use App\Repository\TripMembershipRepository;
@@ -73,8 +74,7 @@ final class TripController extends AbstractController
     ): Response
     {
         $accommodations = $accommodationRepository->findAccommodationsByTrip($trip);
-        //TODO: join place entity
-        $ideas = $travelItemRepository->findBy(['trip' => $trip, 'status' => ItemStatus::draft()], ['id' => 'ASC']);
+        $ideas = $travelItemRepository->findItemsForTrip($trip, [ItemStatus::draft()]);
 
         return $this->render('trip/show.html.twig', [
             'trip'  => $trip,
@@ -83,6 +83,31 @@ final class TripController extends AbstractController
             'flights' => $flightRepository->findFlightsByTrip($trip),
             'statistics' => $tripService->getTripStatistics($trip, $accommodations),
             'ideas' => $ideas,
+        ]);
+    }
+
+    #[isGranted('TRIP_VIEW', 'trip')]
+    #[Route('/{id}/itinerary', name: 'app_trip_itinerary', methods: ['GET'])]
+    public function itinerary(
+        Trip $trip,
+        TravelItemRepository $travelItemRepository,
+        AccommodationRepository $accommodationRepository,
+        DestinationRepository $destinationRepository,
+        FlightRepository $flightRepository,
+        TripService $tripService,
+    ): Response
+    {
+        $accommodations = $accommodationRepository->findAccommodationsByTrip($trip);
+        $ideas = $travelItemRepository->findItemsForTrip($trip, [ItemStatus::draft()]);
+
+        return $this->render('trip/itinerary.html.twig', [
+            'trip'  => $trip,
+            'items' => $travelItemRepository->findItemDayPairsForTrip($trip),
+            'accommodations' => $accommodations,
+            'flights' => $flightRepository->findFlightsByTrip($trip),
+            'statistics' => $tripService->getTripStatistics($trip, $accommodations),
+            'ideas' => $ideas,
+            'destinations' => $destinationRepository->findDestinationByTrip($trip),
         ]);
     }
 

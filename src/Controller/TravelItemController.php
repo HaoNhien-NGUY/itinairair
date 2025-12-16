@@ -70,7 +70,7 @@ final class TravelItemController extends AbstractController
             ]);
         }
 
-        $destination = $destinationRepository->findDestinationByDay($day) ?? null;
+        $destination = $destinationRepository->findDestinationByDay($day)[0] ?? null;
 
         return $this->render('travel_item/activity/_create_modal.frame.html.twig', [
             'form'        => $form,

@@ -28,7 +28,7 @@ class Trip
     /**
      * @var Collection<int, Day>
      */
-    #[ORM\OneToMany(targetEntity: Day::class, mappedBy: 'trip', cascade: ['persist', 'remove'] , orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Day::class, mappedBy: 'trip', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $days;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
@@ -55,11 +55,18 @@ class Trip
     #[ORM\OneToMany(targetEntity: TravelItem::class, mappedBy: 'trip', orphanRemoval: true)]
     private Collection $travelItems;
 
+    /**
+     * @var Collection<int, Destination>
+     */
+    #[ORM\OneToMany(targetEntity: Destination::class, mappedBy: 'trip', orphanRemoval: true)]
+    private Collection $destinations;
+
     public function __construct()
     {
         $this->days = new ArrayCollection();
         $this->tripMemberships = new ArrayCollection();
         $this->travelItems = new ArrayCollection();
+        $this->destinations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -231,6 +238,36 @@ class Trip
             // set the owning side to null (unless already changed)
             if ($travelItem->getTrip() === $this) {
                 $travelItem->setTrip(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Destination>
+     */
+    public function getDestinations(): Collection
+    {
+        return $this->destinations;
+    }
+
+    public function addDestination(Destination $destination): static
+    {
+        if (!$this->destinations->contains($destination)) {
+            $this->destinations->add($destination);
+            $destination->setTrip($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDestination(Destination $destination): static
+    {
+        if ($this->destinations->removeElement($destination)) {
+            // set the owning side to null (unless already changed)
+            if ($destination->getTrip() === $this) {
+                $destination->setTrip(null);
             }
         }
 

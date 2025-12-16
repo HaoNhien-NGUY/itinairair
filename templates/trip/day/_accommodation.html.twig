@@ -14,13 +14,11 @@
 
     {% if not dayWithNight and not flightStartDay|default(false) %}
         <div>
-            <div class="text-purple-700">
-                Quel sera votre destination ?
-            </div>
             <a href="{{ path('app_travelitem_create', {trip: trip.id, type: accommodationEnum, day: day.id }) }}"
                data-turbo-frame="modal"
+               class="text-purple-600 hover:text-purple-900"
             >
-                Ajouter une destination
+                Ajouter un hebergement
             </a>
         </div>
     {% endif %}

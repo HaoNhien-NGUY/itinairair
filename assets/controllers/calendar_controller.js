@@ -7,6 +7,7 @@ export default class extends Controller {
     static targets = ['calendar', 'startDaySelect', 'endDaySelect', 'startDayDisplay', 'endDayDisplay'];
     static values = {
         startDate: {type: String, default: ''},
+        endDate: {type: String, default: ''},
         dayMapping: Object,
         isRange: {type: Boolean, default: false},
         inputMode: {type: Boolean, default: true},
@@ -24,6 +25,7 @@ export default class extends Controller {
         if (this.hasEndDayDisplayTarget) this.endDayElement = this.endDayDisplayTarget.firstElementChild;
 
         const startDate =  this.startDateValue ? new Date(this.startDateValue) : null;
+        const endDate =  this.endDateValue ? new Date(this.endDateValue) : null;
         const options = {
             type: 'default',
             locale: 'fr-FR',
@@ -38,7 +40,7 @@ export default class extends Controller {
             selectionDatesMode: this.isRangeValue ? 'multiple-ranged' : 'single',
             disableAllDates: true,
             dateToday: startDate ?? 'today',
-            selectedDates: [startDate],
+            selectedDates: [startDate, endDate ?? ''],
             selectedWeekends: [],
             onShow: (self) => {
                 if (this.fullWidthValue) self.context.mainElement.style.width = `${this.element.offsetWidth}px`;
@@ -53,6 +55,7 @@ export default class extends Controller {
         };
 
         if (startDate) this.startDayDisplayTarget.innerText = this.formatDate(startDate);
+        if (endDate) this.endDayDisplayTarget.innerText = this.formatDate(endDate);
 
         this.calendar = new Calendar(this.calendarTarget, options);
         this.calendar.init();

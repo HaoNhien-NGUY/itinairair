@@ -1,4 +1,5 @@
 {% set accommodationEnum = enum("App\\Enum\\TravelItemType").ACCOMMODATION.value %}
+{% set destinationEnum = enum("App\\Enum\\TravelItemType").DESTINATION.value %}
 {% set flightEnum = enum("App\\Enum\\TravelItemType").FLIGHT.value %}
 
 {% set flightSameDay = [] %}
@@ -16,10 +17,62 @@
     {% endfor %}
 {% endif %}
 
+{% set destinationStartDay = null %}
+{% set destinationEndDay = null %}
+{% set destinationDay = null %}
+{% for item in items[destinationEnum]|default([]) %}
+    {% if item.startDay is same as(day) %}
+        {% set destinationStartDay = item %}
+    {% elseif item.endDay is same as(day) %}
+        {% set destinationEndDay = item %}
+    {% else %}
+        {% set destinationDay = item %}
+    {% endif %}
+{% endfor %}
+
+{% macro destination_link(trip, item, suffix = false) %}
+    <a href="{{ path('app_travelitem_edit', {trip: trip.id, item: item.id }) }}"
+       class="hover:text-indigo-500 text-indigo-400 font-medium"
+       data-turbo-frame="modal"
+    >
+        {{- item.name -}}
+    </a>
+
+    {%- if suffix -%}
+        <span class="pl-0.5 pr-1 text-indigo-400">,</span>
+    {%- endif -%}
+{% endmacro %}
+
 <div id="day_{{ day.id }}">
-    <div class="flex items-end bg-indigo-100 text-gray-600 mb-4 px-4 py-1">
-        <div class="font-bold text-lg">{{ day.date|date('j/m') }}</div>
-        <div class="ml-2">{{ day.title }}</div>
+    <div class="bg-indigo-100 text-gray-600 mb-4 px-4 py-1 flex justify-between">
+        <div class="flex items-end">
+            <div class="font-bold text-lg">{{ day.date|date('j/m') }}</div>
+            <div class="ml-2">{{ day.title }}</div>
+        </div>
+        <div class="text-sm flex items-center">
+            {% if destinationDay %}
+                {{ _self.destination_link(trip, destinationDay) }}
+            {% endif %}
+            {% if destinationEndDay %}
+                {{ _self.destination_link(trip, destinationEndDay, true) }}
+            {% endif %}
+            {% if destinationStartDay %}
+                {{ _self.destination_link(trip, destinationStartDay) }}
+            {% endif %}
+
+            {% if not destinationDay and not destinationStartDay %}
+                <a href="{{ path('app_travelitem_create', {trip: trip.id, type: destinationEnum, day: day.id }) }}"
+                   class="hover:underline text-gray-400"
+                   data-turbo-frame="modal"
+                >
+                    {% if destinationEndDay %}
+                        ajouter
+                    {% else %}
+                        Ajouter une destination
+                    {% endif %}
+                </a>
+            {% endif %}
+        </div>
     </div>
     <div class="scroll-margin lg:px-10 md:px-8 px-2 pb-4">
         <div>

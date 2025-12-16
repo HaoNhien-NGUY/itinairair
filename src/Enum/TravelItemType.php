@@ -5,10 +5,12 @@ namespace App\Enum;
 
 use App\Entity\Accommodation;
 use App\Entity\Activity;
+use App\Entity\Destination;
 use App\Entity\Flight;
 use App\Entity\TravelItem;
 use App\Form\TravelItem\AccommodationType;
 use App\Form\TravelItem\ActivityType;
+use App\Form\TravelItem\DestinationType;
 use App\Form\TravelItem\FlightType;
 
 enum TravelItemType: string
@@ -16,6 +18,7 @@ enum TravelItemType: string
     case ACCOMMODATION = 'accommodation';
     case FLIGHT = 'flight';
     case ACTIVITY = 'activity';
+    case DESTINATION = 'destination';
 
     public function getFormType(): string
     {
@@ -23,6 +26,7 @@ enum TravelItemType: string
             self::ACCOMMODATION => AccommodationType::class,
             self::FLIGHT => FlightType::class,
             self::ACTIVITY => ActivityType::class,
+            self::DESTINATION => DestinationType::class,
         };
     }
 
@@ -32,6 +36,7 @@ enum TravelItemType: string
             self::ACCOMMODATION => Accommodation::class,
             self::FLIGHT => Flight::class,
             self::ACTIVITY => Activity::class,
+            self::DESTINATION => Destination::class,
         };
     }
 
@@ -46,6 +51,7 @@ enum TravelItemType: string
             self::FLIGHT => 'travel_item/flight/_create_modal.frame.html.twig',
             self::ACCOMMODATION => 'travel_item/accommodation/_create_modal.frame.html.twig',
             self::ACTIVITY => 'travel_item/activity/_create_modal.frame.html.twig',
+            self::DESTINATION => 'travel_item/destination/_create_modal.frame.html.twig',
         };
     }
 
@@ -63,6 +69,7 @@ enum TravelItemType: string
             Accommodation::class => self::ACCOMMODATION,
             Flight::class => self::FLIGHT,
             Activity::class => self::ACTIVITY,
+            Destination::class => self::DESTINATION,
             default => throw new \InvalidArgumentException("Unknown TravelItem class: $className"),
         };
     }

@@ -8,7 +8,6 @@ use App\Repository\TravelItemRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: TravelItemRepository::class)]
 #[ORM\InheritanceType('SINGLE_TABLE')]
@@ -17,6 +16,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
     'accommodation' => Accommodation::class,
     'flight' => Flight::class,
     'activity' => Activity::class,
+    'destination' => Destination::class,
 ])]
 abstract class TravelItem
 {
@@ -83,19 +83,6 @@ abstract class TravelItem
     public function getItemType(): TravelItemType
     {
         return TravelItemType::fromClass(static::class);
-    }
-
-    #[Assert\Callback]
-    public function validateTimes(ExecutionContextInterface $context): void
-    {
-        $startTimeIsNull = $this->startTime === null;
-        $endTimeIsNull = $this->endTime === null;
-
-        if ($startTimeIsNull !== $endTimeIsNull) {
-            $context->buildViolation('Start time and end time must both be set or both be empty.')
-                ->atPath($startTimeIsNull ? 'startTime' : 'endTime')
-                ->addViolation();
-        }
     }
 
     public function getId(): ?int
@@ -166,6 +153,14 @@ abstract class TravelItem
 
     public function setEndDay(?Day $endDay): static
     {
+        if ($endDay
+            && $this->trip
+            && $this->trip !== $endDay->getTrip()) {
+            throw new \InvalidArgumentException('You cannot schedule an item on a day from a different trip!');
+        }
+
+        if ($endDay && !$this->trip) $this->trip = $endDay->getTrip();
+
         $this->endDay = $endDay;
 
         return $this;

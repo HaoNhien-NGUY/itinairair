@@ -40,8 +40,18 @@ class DestinationRepository extends ServiceEntityRepository
      */
     public function findDestinationByTrip(Trip $trip): array
     {
-        return $this->createQueryBuilder('d')
+        $results = $this->createQueryBuilder('d')
             ->addSelect('sd', 'ed', 'p')
+            ->addSelect('(
+        SELECT COUNT(i.id)
+        FROM App\Entity\Accommodation i
+        JOIN i.startDay isd
+        JOIN i.place ip
+        WHERE i.trip = :trip
+        AND isd.position >= sd.position
+        AND (ed.id IS NULL OR isd.position < ed.position)
+        AND ip.country = p.country
+    ) AS acc_count')
             ->where('d.trip = :trip')
             ->setParameter('trip', $trip)
             ->join('d.startDay', 'sd')
@@ -50,6 +60,14 @@ class DestinationRepository extends ServiceEntityRepository
             ->orderBy('sd.position', 'ASC')
             ->getQuery()
             ->getResult();
+
+        return array_map(function($result) {
+            /** @var Destination $dest */
+            $dest = $result[0];
+            $dest->setAccommodationCount($result['acc_count']);
+
+            return $dest;
+        }, $results);
     }
 
     /**

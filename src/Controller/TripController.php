@@ -98,12 +98,9 @@ final class TripController extends AbstractController
         TripService $tripService,
     ): Response
     {
-        $accommodations = $accommodationRepository->findAccommodationsByTrip($trip);
-
         return $this->render('trip/itinerary.html.twig', [
             'trip'  => $trip,
             'items' => $travelItemRepository->findItemDayPairsForTrip($trip),
-            'accommodations' => $accommodations,
             'statistics' => $tripService->getTripStatistics($trip),
             'destinations' => $destinationRepository->findDestinationByTrip($trip),
         ]);

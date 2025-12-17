@@ -12,6 +12,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 #[ORM\Entity(repositoryClass: DestinationRepository::class)]
 class Destination extends TravelItem
 {
+    private int $accommodationCount = 0;
+
     public function __toString(): string
     {
         return $this->getName();
@@ -33,5 +35,17 @@ class Destination extends TravelItem
                 ->atPath('endDay')
                 ->addViolation();
         }
+    }
+
+    public function setAccommodationCount(int $count): self
+    {
+        $this->accommodationCount = $count;
+
+        return $this;
+    }
+
+    public function getAccommodationCount(): ?int
+    {
+        return $this->accommodationCount;
     }
 }

@@ -61,9 +61,13 @@
 						{{ destination.startDay.date|date_short }} - {{ destination.endDay.date|date_short }}
 					</div>
 				</a>
-				<div class="flex items-center">
-
-                    {{ destination.endDay.date.diff(destination.startDay.date).days }} nuits
+				<div class="flex items-center space-x-4">
+                    <div>
+                        {{ destination.accommodationCount }} hotels
+                    </div>
+                    <div>
+                        {{ destination.endDay.date.diff(destination.startDay.date).days }} nuits
+                    </div>
                     <form action="{{ path('app_travelitem_delete', {'trip': trip.id}) }}" method="post" data-turbo-frame="_top" class="flex items-center ml-6" onsubmit="return confirm('Supprimer ?');">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete-item' ~ trip.id) }}">
                         <input type="hidden" name="item" value="{{ destination.id }}">

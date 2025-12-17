@@ -31,46 +31,55 @@
                     </div>
 
                 </div>
-                <div class="text-gray-500 mt-1 text-sm px-2">
+                <div class="text-orange-600 mt-1 text-sm px-2 flex items-center">
                     {{ form_errors(form.startDay) }}
+                    {{ form_errors(form.endDay) }}
                 </div>
 
                 {{ form_widget(form.startDay) }}
                 {{ form_widget(form.endDay) }}
             </div>
+            {% set place = item.place %}
+
 
             <div class="bg-indigo-50 rounded-2xl">
-                <div class="p-2 pb-0">
-                    <gmp-place-autocomplete
-                        id="place-autocomplete"
-                        class="bg-white rounded-xl focus:outline-none focus:ring-0 focus:border-none"
-                        placeholder="Enter a location"
-                        {{ stimulus_target('google-place-widget', 'placeInput') }}>
-                    </gmp-place-autocomplete>
+                <div class="p-2 pb-0" {{ stimulus_controller('hide-toggle') }}>
+                    {% if place %}
+                        <button {{ stimulus_action('hide-toggle', 'toggle')}} type="button" class="text-indigo-600 hover:text-indigo-700 text-sm hover:underline cursor-pointer">Modifier la destination</button>
+                    {% endif %}
+
+                    <div {{ stimulus_target('hide-toggle', 'item') }} class="{{ place ? 'hidden' }} mt-2">
+                        <gmp-place-autocomplete
+                            id="place-autocomplete"
+                            class="bg-white rounded-xl"
+                            placeholder="Enter a location"
+                            {{ stimulus_target('google-place-widget', 'placeInput') }}>
+                        </gmp-place-autocomplete>
+                    </div>
+
                 </div>
 
 
-                {% set item = item ?? null %}
 
                 <div class="p-3 mb-4">
-                    <div {{ stimulus_target('google-place-widget', 'placeHolder') }} class="{{ item ? 'hidden' }}">
+                    <div {{ stimulus_target('google-place-widget', 'placeHolder') }} class="{{ place ? 'hidden' }}">
                         <div class="flex flex-col justify-center items-center">
                             <div class="text-sm" style="color: #6a6ba5">
                                 Selectionner une ville
                             </div>
                         </div>
                     </div>
-                    <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="{{ not item ? 'hidden' }}">
+                    <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="{{ not place ? 'hidden' }}">
                         <div class="">
                             <div class="w-full flex justify-between items-end">
                                 <div>
-                                    <div class="font-medium text-base/5 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}>{{ item ? item.place.name }}</div>
-                                    <div {{ stimulus_target('google-place-widget', 'addressDisplay') }} class="text-sm/snug text-gray-500 line-clamp-1">{{ item ? item.place.address }}</div>
+                                    <div class="font-medium text-base/5 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}>{{ place ? place.name }}</div>
+                                    <div {{ stimulus_target('google-place-widget', 'addressDisplay') }} class="text-sm/snug text-gray-500 line-clamp-1">{{ place ? place.address }}</div>
                                 </div>
 
                                 <div class="">
                                     <a {{ stimulus_target('google-place-widget', 'addressLinkDisplay') }}
-                                        href="{{ item ? item.place.googleMapsURI }}"
+                                        href="{{ place ? place.googleMapsURI }}"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         class="py-0.5 px-2.5 z-30 text-white font-medium text-sm bg-indigo-500 flex items-center focus:outline-none hover:bg-indigo-400 transition-colors rounded-xl">
@@ -91,7 +100,7 @@
                             {{ not item ? 'disabled' }}
                             {{ stimulus_target('google-place-widget', 'submitButton') }}
                             class="bg-blue-100 px-4 py-1 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:hover:bg-blue-200 not-disabled:cursor-pointer rounded-2xl ml-0.5">
-                        Ajouter
+                        {{ place ? 'Modifier' : 'Ajouter' }}
                     </button>
                 </div>
             </div>

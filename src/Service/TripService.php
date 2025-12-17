@@ -3,48 +3,30 @@
 namespace App\Service;
 
 use App\Entity\Trip;
+use App\Repository\DestinationRepository;
 
 class TripService
 {
-    public function __construct() {
+    public function __construct(private DestinationRepository $destinationRepository) {
     }
 
     /**
      * @param Trip $trip
-     * @param array $accommodations
      * @return array
      */
-    public function getTripStatistics(Trip $trip, array $accommodations): array
+    public function getTripStatistics(Trip $trip): array
     {
-        $stats = ['duration' => $trip->getDays()->count()];
-        $countries = [];
-        $cities = [];
+        $countries = $this->destinationRepository->findDestinationCountriesByTrip($trip);
+        $cities = $this->destinationRepository->findDestinationCitiesByTrip($trip);
 
-        foreach ($accommodations as $accommodation) {
-            if ($accommodation->getPlace()) {
-                $address = $accommodation->getPlace()->getAddress();
-            }
+        $stats = [
+            'duration' => $trip->getDays()->count(),
+            'countries' => $countries,
+            'cities' => $cities,
+            'country_count' => count($countries),
+            'city_count' => count($cities),
 
-            if (!empty($address)) {
-                $parts = array_map('trim', explode(',', $address));
-                $count = count($parts);
-
-                if ($count >= 1) {
-                    $country = $parts[$count - 1];
-                    $countries[$country] = true;
-
-                    if ($count >= 2) {
-                        // "..., City, Country"
-                        $city = $parts[$count - 2] . ', ' . $country;
-                        $cities[$city] = true;
-                    }
-                }
-            }
-        }
-
-        $stats['countries'] = array_keys($countries);
-        $stats['country_count'] = count($countries);
-        $stats['city_count'] = count($cities);
+        ];
 
         return $stats;
     }

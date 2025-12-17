@@ -23,7 +23,7 @@ return [
         'path' => './vendor/symfony/ux-live-component/assets/dist/live_controller.js',
     ],
     '@hotwired/stimulus' => [
-        'version' => '3.2.1',
+        'version' => '3.2.2',
     ],
     'vanilla-calendar-pro' => [
         'version' => '3.0.5',

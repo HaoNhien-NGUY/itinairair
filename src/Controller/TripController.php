@@ -69,6 +69,7 @@ final class TripController extends AbstractController
         Trip $trip,
         TravelItemRepository $travelItemRepository,
         AccommodationRepository $accommodationRepository,
+        DestinationRepository $destinationRepository,
         FlightRepository $flightRepository,
         TripService $tripService,
     ): Response
@@ -81,7 +82,7 @@ final class TripController extends AbstractController
             'items' => $travelItemRepository->findItemDayPairsForTrip($trip),
             'accommodations' => $accommodations,
             'flights' => $flightRepository->findFlightsByTrip($trip),
-            'statistics' => $tripService->getTripStatistics($trip, $accommodations),
+            'statistics' => $tripService->getTripStatistics($trip),
             'ideas' => $ideas,
         ]);
     }
@@ -98,15 +99,12 @@ final class TripController extends AbstractController
     ): Response
     {
         $accommodations = $accommodationRepository->findAccommodationsByTrip($trip);
-        $ideas = $travelItemRepository->findItemsForTrip($trip, [ItemStatus::draft()]);
 
         return $this->render('trip/itinerary.html.twig', [
             'trip'  => $trip,
             'items' => $travelItemRepository->findItemDayPairsForTrip($trip),
             'accommodations' => $accommodations,
-            'flights' => $flightRepository->findFlightsByTrip($trip),
-            'statistics' => $tripService->getTripStatistics($trip, $accommodations),
-            'ideas' => $ideas,
+            'statistics' => $tripService->getTripStatistics($trip),
             'destinations' => $destinationRepository->findDestinationByTrip($trip),
         ]);
     }

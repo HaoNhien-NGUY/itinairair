@@ -36,12 +36,12 @@ abstract class TravelItem
     private ?string $notes = null;
 
     #[ORM\ManyToOne]
-    private ?Day $startDay = null;
+    protected ?Day $startDay = null;
 
     // TODO: relation with a future booking entity ?
 
     #[ORM\ManyToOne]
-    private ?Day $endDay = null;
+    protected ?Day $endDay = null;
 
     //TODO: add a duration field to the entity
 
@@ -76,7 +76,7 @@ abstract class TravelItem
         }
 
         if ($this->endDay->getPosition() <= $this->startDay->getPosition()) {
-            $context->buildViolation('The end day must be strictly after the start day.')
+            $context->buildViolation('La date de fin doit etre superieur a la date de debut')
                 ->atPath('endDay')
                 ->addViolation();
         }

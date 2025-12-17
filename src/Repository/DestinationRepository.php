@@ -45,10 +45,44 @@ class DestinationRepository extends ServiceEntityRepository
             ->where('d.trip = :trip')
             ->setParameter('trip', $trip)
             ->join('d.startDay', 'sd')
-            ->join('d.endDay', 'ed')
+            ->leftJoin('d.endDay', 'ed')
             ->leftJoin('d.place', 'p')
             ->orderBy('sd.position', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function findDestinationCountriesByTrip(Trip $trip): array
+    {
+        return $this->createQueryBuilder('d')
+            ->select('p.country')
+            ->where('d.trip = :trip')
+            ->setParameter('trip', $trip)
+            ->leftJoin('d.place', 'p')
+            ->leftJoin('d.startDay', 'sd')
+            ->groupBy('p.country')
+            ->orderBy('MIN(sd.position)', 'ASC')
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function findDestinationCitiesByTrip(Trip $trip): array
+    {
+        return $this->createQueryBuilder('d')
+            ->select('p.city')
+            ->where('d.trip = :trip')
+            ->setParameter('trip', $trip)
+            ->leftJoin('d.place', 'p')
+            ->leftJoin('d.startDay', 'sd')
+            ->groupBy('p.city')
+            ->orderBy('MIN(sd.position)', 'ASC')
+            ->getQuery()
+            ->getSingleColumnResult();
     }
 }

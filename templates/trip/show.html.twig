@@ -22,7 +22,7 @@
 	<div>
 		<div class="container mx-auto">
 			<div class="px-2 lg:px-4 pt-8">
-				<h3 class="text-4xl mb-1">{{ trip.name }}</h3>
+				<h3 id="trip-name" class="text-4xl mb-1">{{ trip.name }}</h3>
 				<div>
 					<span class="text-gray-500">{{ trip.startDate|date_short }} - {{ trip.endDate|date_short }}</span>
 				</div>
@@ -58,9 +58,9 @@
 			<a href="{{ path('app_trip_itinerary', {'id': trip.id}) }}" class="[.itinerary_&,&:hover]:bg-indigo-50 [.itinerary_&,&:hover]:text-indigo-400 px-5 py-1 hover:cursor-pointer text-gray-500 transition-colors rounded-2xl font-medium">
 				Itineraire
 			</a>
-{#			<div class="[.page1_&,&:hover]:bg-indigo-50 [.page1_&,&:hover]:text-indigo-400 px-5 py-1 hover:cursor-pointer text-gray-500 transition-colors rounded-2xl font-medium">#}
-{#				Notes#}
-{#			</div>#}
+            <a href="{{ path('app_trip_itinerary', {'id': trip.id}) }}" class="[.booking_&,&:hover]:bg-indigo-50 [.booking_&,&:hover]:text-indigo-400 px-5 py-1 hover:cursor-pointer text-gray-500 transition-colors rounded-2xl font-medium">
+                Reservation
+            </a>
 		</div>
 
 		<main class="border-t-3 border-indigo-100" style="background-color: #f4f9ff">

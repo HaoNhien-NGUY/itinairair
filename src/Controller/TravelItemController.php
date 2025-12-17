@@ -83,7 +83,6 @@ final class TravelItemController extends AbstractController
     #[Route('/travel-item/trip/{trip}/day/{day}/reorder', name: 'app_travelitem_reorder_day_item', methods: ['POST'])]
     public function reorderDayItem(
         Request $request,
-        TravelItemRepository $travelItemRepository,
         TravelItemRepository $itemRepository,
         EntityManagerInterface $entityManager,
         ItineraryService $itineraryService,
@@ -208,6 +207,7 @@ final class TravelItemController extends AbstractController
         return $this->render($type->getFormTemplate(), [
             'form'       => $form,
             'trip'       => $trip,
+            'item'       => $item,
             'type'       => $type,
             'status'     => $status,
             'day'        => $day,

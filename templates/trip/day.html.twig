@@ -54,13 +54,13 @@
                 {{ _self.destination_link(trip, destinationDay) }}
             {% endif %}
             {% if destinationEndDay %}
-                {{ _self.destination_link(trip, destinationEndDay, true) }}
+                {{ _self.destination_link(trip, destinationEndDay, destinationStartDay ? true : false) }}
             {% endif %}
             {% if destinationStartDay %}
                 {{ _self.destination_link(trip, destinationStartDay) }}
             {% endif %}
 
-            {% if not (destinationDay or destinationStartDay) %}
+            {% if not (destinationDay or destinationStartDay or destinationEndDay) %}
                 <a href="{{ path('app_travelitem_create', {trip: trip.id, type: destinationEnum, day: day.id }) }}"
                    class="text-gray-400 flex items-center hover:text-gray-500 transition-colors"
                    data-turbo-frame="modal"

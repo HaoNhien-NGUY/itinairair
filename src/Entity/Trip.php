@@ -29,6 +29,7 @@ class Trip
      * @var Collection<int, Day>
      */
     #[ORM\OneToMany(targetEntity: Day::class, mappedBy: 'trip', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['position' => 'ASC', 'id' => 'ASC'])]
     private Collection $days;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]

@@ -2,7 +2,7 @@
     <div class="bg-indigo-50 rounded-xl py-2 px-2">
         <div class="flex justify-between">
             <div class="flex items-center">
-                <twig:ux:icon name="material-symbols:hotel" class="size-6 mr-2"/>
+                <twig:ux:icon name="material-symbols:hotel" class="size-5.5 mr-2"/>
                 {{ item.name }}
             </div>
             <div class="flex items-center">
@@ -17,7 +17,7 @@
                     {% endif %}
                 {% endif %}
                 {% if item.notes is not empty %}
-                    <twig:ux:icon name="wpf:note" class="size-4 text-yellow-500 ml-2" />
+                    <twig:ux:icon name="wpf:note" class="size-4 text-gray-400 ml-2" />
                 {% endif %}
                 <div class="ml-6">
                     {% block open_details %}

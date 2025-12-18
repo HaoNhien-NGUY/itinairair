@@ -1,0 +1,83 @@
+{% extends 'trip/show.html.twig' %}
+
+{% block activeTab %}bookings{% endblock %}
+
+
+{% block content %}
+
+	<div class="container mx-auto max-w-7xl py-4 space-y-4 space-x-4 grid grid-cols-1 lg:grid-cols-2">
+        <div class="border border-indigo-200 bg-white rounded-2xl p-4">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="font-semibold">Vols</h3>
+                <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").FLIGHT.value}) }}" class="btn" data-turbo-frame="modal">
+                    Ajouter +
+                </a>
+            </div>
+            <div class="space-y-4 mt-8">
+                {% for flight in flights %}
+                    <div>
+                        <a href="{{ path('app_travelitem_edit', {'item': flight.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="-m-1 p-3 block cursor-pointer hover:bg-gray-200 bg-gray-100 rounded-2xl text-sm">
+                            <div class="font-medium text-indigo-500 mb-1">
+                                {% if flight.flightNumber %}
+                                    {{ flight.flightNumber }}
+                                {% else %}
+                                    Vol
+                                {% endif %}
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-sm">
+                                <div>
+                                    <div>
+                                        <span class="font-semibold">{{ flight.departureAirport.code ?? 'N/A' }}</span>
+                                        <span class="pl-1">{{ flight.departureAirport.terminal ?? '' }}</span>
+                                    </div>
+                                    <div>{{ flight.startTime|date('H:i') }}</div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <span class="font-semibold">{{ flight.arrivalAirport.code ?? 'N/A' }}</span>
+                                        <span class="pl-1">{{ flight.arrivalAirport.terminal ?? '' }}</span>
+                                    </div>
+                                    <div>{{ flight.endTime|date('H:i') }}</div>
+                                </div>
+                            </div>
+                            <div class="text-gray-400 text-sm mt-1">
+                                {{ flight.startDay.date|date('d M') }}
+                            </div>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="text-gray-400 text-sm italic">Aucun vol</div>
+                {% endfor %}
+            </div>
+
+
+        </div>
+        <div class="border border-indigo-200 bg-white rounded-2xl p-4">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="font-semibold mb-3">Hotels et hebergements</h3>
+                <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").ACCOMMODATION.value}) }}" class="btn" data-turbo-frame="modal">
+                    Ajouter +
+                </a>
+            </div>
+            <div class="space-y-4 mt-8">
+                {% for accommodation in accommodations %}
+                    <div>
+                        <a href="{{ path('app_travelitem_edit', {'item': accommodation.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="-m-1 p-3 block cursor-pointer hover:bg-gray-200 bg-gray-100 rounded-2xl">
+                            <h3 class="font-medium text-gray-700">{{ accommodation.name }}</h3>
+                            <div class="text-sm">
+                                <div class="text-gray-500 text-sm">{{ accommodation.place.address }}</div>
+                                <div>{{ accommodation.startDay.date|date_short }} - {{ accommodation.endDay.date|date_short }}</div>
+                            </div>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="text-gray-400 text-sm italic">Aucune reservation</div>
+                {% endfor %}
+            </div>
+
+
+        </div>
+    </div>
+
+
+{% endblock %}

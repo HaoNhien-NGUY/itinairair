@@ -92,9 +92,7 @@ final class TripController extends AbstractController
     public function itinerary(
         Trip $trip,
         TravelItemRepository $travelItemRepository,
-        AccommodationRepository $accommodationRepository,
         DestinationRepository $destinationRepository,
-        FlightRepository $flightRepository,
         TripService $tripService,
     ): Response
     {
@@ -103,6 +101,29 @@ final class TripController extends AbstractController
             'items' => $travelItemRepository->findItemDayPairsForTrip($trip),
             'statistics' => $tripService->getTripStatistics($trip),
             'destinations' => $destinationRepository->findDestinationByTrip($trip),
+        ]);
+    }
+
+    #[isGranted('TRIP_VIEW', 'trip')]
+    #[Route('/{id}/bookings', name: 'app_trip_bookings', methods: ['GET'])]
+    public function bookings(
+        Trip $trip,
+        TravelItemRepository $travelItemRepository,
+        AccommodationRepository $accommodationRepository,
+        DestinationRepository $destinationRepository,
+        FlightRepository $flightRepository,
+        TripService $tripService,
+    ): Response
+    {
+        $accommodations = $accommodationRepository->findAccommodationsByTrip($trip);
+
+        return $this->render('trip/bookings.html.twig', [
+            'trip'  => $trip,
+            'items' => $travelItemRepository->findItemDayPairsForTrip($trip),
+            'statistics' => $tripService->getTripStatistics($trip),
+            'destinations' => $destinationRepository->findDestinationByTrip($trip),
+            'accommodations' => $accommodations,
+            'flights' => $flightRepository->findFlightsByTrip($trip),
         ]);
     }
 

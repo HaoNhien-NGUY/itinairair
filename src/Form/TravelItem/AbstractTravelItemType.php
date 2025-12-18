@@ -24,6 +24,7 @@ class AbstractTravelItemType extends AbstractType
                 'label' => 'Notes',
                 'required' => false,
                 'attr' => [
+                    'data-controller' => 'textarea-autogrow',
                     'placeholder' => 'Ajouter une note, un lien, etc...',
                     'class' => 'focus:outline-none resize-none px-3 py-2 w-full bg-gray-100 rounded-xl',
                     'rows' => 1,

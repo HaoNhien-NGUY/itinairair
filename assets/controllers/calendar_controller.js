@@ -15,6 +15,7 @@ export default class extends Controller {
         autoHide: {type: Boolean, default: false},
         inModal: {type: Boolean, default: false},
         fullWidth: {type: Boolean, default: false},
+        displayWeekDay: {type: Boolean, default: true},
     };
     calendar;
     startDayElement;
@@ -69,11 +70,13 @@ export default class extends Controller {
     }
 
     formatDate(date) {
-        return date.toLocaleDateString('fr-FR', {
-            weekday: 'short',
+        const options = {
             day: 'numeric',
             month: 'short'
-        });
+        }
+        if (this.displayWeekDayValue) options.weekday = 'short';
+
+        return date.toLocaleDateString('fr-FR', options);
     }
 
     handleDateSelection(calendar, selectedDates) {

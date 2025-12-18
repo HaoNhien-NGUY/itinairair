@@ -37,6 +37,7 @@ class TravelItemRepository extends ServiceEntityRepository
             ->andWhere('i.status IN (:statuses)')
             ->orderBy('d.position', 'ASC')
             ->addOrderBy('i.position', 'ASC')
+            ->addOrderBy('sd.position', 'ASC')
             ->setParameter('trip', $trip)
             ->setParameter('statuses', ItemStatus::committed())
             ->getQuery()

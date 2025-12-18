@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="flex justify-end space-x-2 mt-3">
-{#            <div class="flex items-center">#}
+            <div class="flex">
                 <form action="{{ path('app_travelitem_delete', {'trip': trip.id}) }}" method="post" data-turbo-frame="_top" onsubmit="return confirm('Supprimer ?');">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete-item' ~ trip.id) }}">
                     <input type="hidden" name="item" value="{{ item.id }}">
@@ -37,9 +37,15 @@
                     </button>
                 </form>
 
-                <twig:Button:OpenMaps item="{{ item }}" />
 
-{#            </div>#}
+                <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="flex items-center text-gray-400 hover:bg-gray-200 text-sm py-1 px-2.5 rounded-xl">
+                    <twig:ux:icon name="fluent:edit-16-filled" class="size-4" />
+                </a>
+            </div>
+
+
+
+            <twig:Button:OpenMaps item="{{ item }}" />
         </div>
     </div>
 {% endblock %}

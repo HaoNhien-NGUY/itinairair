@@ -3,9 +3,9 @@
 
 
 <div {{ stimulus_controller('draggable', {group: 'itinerary'}) }}
-    class="day-itinerary border-dashed border-indigo-200 rounded-xl min-h-10
+    class="day-itinerary border-dashed border-indigo-100 rounded-xl min-h-12
             [:has(>_.draggable)]:opacity-100
-            [.is-dragging_&:not(:has(>_.draggable))]:border-2"
+            [&:not(:has(>_.draggable))]:border-2"
 >
     <form action="{{ path('app_travelitem_reorder_day_item', {trip: trip.id, day: day.id}) }}" method="POST" {{ stimulus_target('draggable', 'form')}} class="hidden">
         <input type="hidden" name="ordered_items" {{ stimulus_target('draggable', 'formInput')}}>

@@ -91,14 +91,12 @@ final class TripController extends AbstractController
     #[Route('/{id}/itinerary', name: 'app_trip_itinerary', methods: ['GET'])]
     public function itinerary(
         Trip $trip,
-        TravelItemRepository $travelItemRepository,
         DestinationRepository $destinationRepository,
         TripService $tripService,
     ): Response
     {
         return $this->render('trip/itinerary.html.twig', [
             'trip'  => $trip,
-            'items' => $travelItemRepository->findItemDayPairsForTrip($trip),
             'statistics' => $tripService->getTripStatistics($trip),
             'destinations' => $destinationRepository->findDestinationByTrip($trip),
         ]);

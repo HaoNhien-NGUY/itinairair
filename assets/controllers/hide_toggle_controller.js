@@ -9,6 +9,7 @@ export default class extends Controller {
     }
 
     toggle() {
+        console.log('toggle')
         this.itemTargets.forEach((item) => {
             item.classList.toggle(this.class)
         })

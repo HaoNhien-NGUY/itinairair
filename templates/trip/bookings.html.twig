@@ -50,8 +50,8 @@
 
         </div>
         <div class="border border-indigo-200 bg-white rounded-2xl p-4">
-            <div class="flex justify-between items-center mb-3">
-                <h3 class="font-semibold mb-3">Hotels et hebergements</h3>
+            <div class="flex justify-between items-center">
+                <h3 class="font-semibold">Hotels et hebergements</h3>
                 <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").ACCOMMODATION.value}) }}" class="btn" data-turbo-frame="modal">
                     Ajouter +
                 </a>

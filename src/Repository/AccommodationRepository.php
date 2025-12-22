@@ -26,4 +26,14 @@ class AccommodationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function countAccommodationsByTrip(Trip $trip): int
+    {
+        return (int) $this->createQueryBuilder('a')
+            ->select('COUNT(a.id)')
+            ->where('a.trip = :trip')
+            ->setParameter('trip', $trip)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

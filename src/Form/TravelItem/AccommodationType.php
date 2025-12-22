@@ -21,6 +21,10 @@ class AccommodationType extends AbstractType
         /** @var Trip $trip */
         $trip = $options['trip'];
 
+        /** @var Accommodation $acc */
+        $acc = $options['data'];
+        $isEdit = $acc && $acc->getId();
+
         $builder
             ->add('startDay', EntityType::class, [
                 'class' => Day::class,
@@ -35,6 +39,7 @@ class AccommodationType extends AbstractType
                     'class' => 'hidden',
                 ],
                 'choice_label' => fn(Day $day) => $day->getTitle(),
+                'required' => true,
             ])
             ->add('endDay', EntityType::class, [
                 'class' => Day::class,
@@ -49,7 +54,7 @@ class AccommodationType extends AbstractType
                     'class' => 'hidden',
                 ],
                 'choice_label' => fn(Day $day) => $day->getTitle(),
-                'required' => false,
+                'required' => true,
             ])
             ->add('place', PlaceType::class, [
                 'required' => true,

@@ -113,7 +113,9 @@
 
         {% set lastDestination = destinations|last %}
 
-        {{ _self.destintionSeparator(trip, lastDestination and lastDestination.endDay.position < lastTripDay.position ? lastDestination.endDay, true) }}
+        {% set dayGap = lastDestination ? lastTripDay.position - lastDestination.endDay.position : null %}
+
+        {{ _self.destintionSeparator(trip, lastDestination and lastDestination.endDay.position < lastTripDay.position ? lastDestination.endDay, true, dayGap) }}
 
         <div class="flex items-center ml-5">
             <twig:ux:icon name="icons8:finish-flag" class="size-10 text-indigo-300 mr-4 p-2 rounded-full bg-indigo-50"/>

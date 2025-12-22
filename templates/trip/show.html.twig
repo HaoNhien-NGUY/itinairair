@@ -22,41 +22,41 @@
 	<div>
 		<div class="container max-w-7xl mx-auto">
 			<div class="px-2 lg:px-4 pt-8">
-				<h3 id="trip-name" class="text-4xl mb-1">{{ trip.name }}</h3>
+				<h3 id="trip-name" class="text-3xl mb-1">{{ trip.name }}</h3>
 				<div>
-					<span class="text-gray-500">{{ trip.startDate|date_short }} - {{ trip.endDate|date_short }}</span>
+					<a href="{{ path('app_trip_edit', {'trip': trip.id}) }}" data-turbo-frame="modal" class="text-gray-500 hover:text-gray-700">{{ trip.startDate|date_short }} - {{ trip.endDate|date_short }}</a>
 				</div>
-				<div class="flex space-x-1 mt-6">
-					{% for membership in trip.tripMemberships %}
-						<div class="flex items-center">
-							<img src="https://placehold.co/800?text={{ membership.member.email[:1] }}&font=roboto" class="rounded-full size-8" alt="{{ membership.member.email }}">
-						</div>
-					{% endfor %}
-					<a href="{{ path('app_trip_share_link', {trip: trip.id}) }}" data-turbo-frame="modal" class="flex items-center justify-center rounded-full bg-white hover:bg-gray-200 transition-colors size-8">
-						<twig:ux:icon name="flowbite:user-add-solid" class="size-4 text-gray-600"/>
-					</a>
-				</div>
-
-                {% if statistics.countries %}
-                    <div class="mt-4">
-                        <h3 class="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wide">Pays visités</h3>
-                        <div class="flex flex-wrap gap-2">
-                            {% for country in statistics.countries %}
-                                <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">{{ country }}</span>
-                            {% endfor %}
-                        </div>
+                <div class="flex items-center mt-5">
+                    <div class="flex space-x-1">
+                        {% for membership in trip.tripMemberships %}
+                            <div class="flex items-center">
+                                <img src="https://placehold.co/800?text={{ membership.member.email[:1] }}&font=roboto" class="rounded-full size-8" alt="{{ membership.member.email }}">
+                            </div>
+                        {% endfor %}
+                        <a href="{{ path('app_trip_share_link', {trip: trip.id}) }}" data-turbo-frame="modal" class="flex items-center justify-center rounded-full bg-white hover:bg-gray-200 transition-colors size-8">
+                            <twig:ux:icon name="flowbite:user-add-solid" class="size-4 text-gray-600"/>
+                        </a>
+                    </div>
+                    <div class="flex flex-wrap items-center ml-8 lg:ml-10 text-sm text-gray-600">
+                        <twig:ux:icon name="bxs:map" class="size-4.5 mr-1" />
+                        {% for country in statistics.countries %}
+                            {% if not loop.first %}<span class="inline-block mr-1">,</span>{% endif %}
+                            <span class="">{{ country }}</span>
+                        {% else %}
+                            <span class="italic">{{ 'trip.no_destination'|trans }}</span>
+                        {% endfor %}
+                    </div>
                 </div>
-				{% endif %}
 			</div>
 		</div>
 
         {% macro navTabBtn(title, active, path) %}
-            <a href="{{ path }}" class="[&.active,&:hover]:bg-indigo-50 [&.active,&:hover]:text-indigo-500 px-5 py-1 hover:cursor-pointer text-gray-500 transition-colors rounded-2xl font-medium {{ active ? 'active' }}">
+            <a href="{{ path }}" class="[&.active,&:hover]:bg-indigo-50 [&.active,&:hover]:text-indigo-400 [&.active]:font-medium px-5 py-1 hover:cursor-pointer text-gray-500 transition-colors rounded-xl {{ active ? 'active' }}">
                 {{ title }}
             </a>
         {% endmacro %}
 
-		<div class="flex container max-w-7xl mx-auto space-x-2 mt-10 mb-3">
+		<div class="flex container max-w-7xl mx-auto space-x-2 mb-3 mt-10">
             {% set currentRoute = app.request.attributes.get('_route') %}
 
             {{ _self.navTabBtn('Planning', currentRoute == 'app_trip_show', path('app_trip_show', {'id': trip.id})) }}
@@ -64,32 +64,35 @@
             {{ _self.navTabBtn('Reservation', currentRoute == 'app_trip_bookings', path('app_trip_bookings', {'id': trip.id})) }}
 		</div>
 
-		<main class="border-t-3 pt-5 border-indigo-100 bg-indigo-25">
+		<main class="border-t-2 py-5 border-indigo-50 bg-indigo-10">
             {% block content %}
                 <div id="drag-container" class="container max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3">
-                    <div class="lg:col-span-2 rounded-2xl overflow-hidden">
-                        {% set destination = false %}
-                        {% for day in trip.days %}
-                            {{ include('trip/day.html.twig', {day, trip, startDate, items: items[day.id] ?? null}) }}
-                        {% endfor %}
+                    <div class="lg:col-span-2">
+                        <div class="rounded-2xl border-2 border-indigo-200 overflow-hidden">
+                            {% for day in trip.days %}
+{#                                TODO: Object to track destinations ?#}
+{#                                {destination: x, displayed: true}#}
+                                {{ include('trip/day.html.twig', {day, trip, startDate, statistics, items: items[day.id] ?? null}) }}
+                            {% endfor %}
+                        </div>
                     </div>
 
 
                     <div class="max-lg:hidden">
-                        <div class="space-y-4 px-4 pb-20 sticky top-4 h-screen no-scrollbar overflow-y-auto">
-                            <div class="p-2 bg-white border-indigo-100 border rounded-2xl">
+                        <div class="space-y-4 px-4 pb-20 sticky top-4 max-h-screen no-scrollbar overflow-y-auto">
+                            <div class="p-2 bg-white border-indigo-200 border rounded-2xl">
                                 <a href="{{ path('app_trip_bookings', {'id': trip.id}) }}" class=" hover:bg-indigo-50 transition-colors rounded-xl font-medium flex items-center justify-between text-gray-500 py-2 px-3">
-                                    <span class="flex items-center">Hotels et hebergements<twig:ux:icon name="bi:dash-lg" class="mx-2.5 size-5" />{{ accommodations|length }}</span>
+                                    <span class="flex items-center">Hotels et hebergements<twig:ux:icon name="bi:dash-lg" class="mx-2.5 size-4" />{{ accommodationCount }}</span>
                                     <twig:ux:icon name="iconoir:nav-arrow-right" class="size-5" />
                                 </a>
                                 <hr class="border border-indigo-100 my-1.5 mx-6" />
                                 <a href="{{ path('app_trip_bookings', {'id': trip.id}) }}" class=" hover:bg-indigo-50 transition-colors rounded-xl font-medium flex items-center justify-between text-gray-500 py-2 px-3">
-                                    <span class="flex items-center">Deplacements<twig:ux:icon name="bi:dash-lg" class="mx-2.5 size-5" />{{ accommodations|length }}</span>
+                                    <span class="flex items-center">Vols<twig:ux:icon name="bi:dash-lg" class="mx-2.5 size-4" />{{ flightCount }}</span>
                                     <twig:ux:icon name="iconoir:nav-arrow-right" class="size-5" />
                                 </a>
                             </div>
 
-                            <div class="border border-indigo-100 bg-white rounded-2xl py-4">
+                            <div class="border border-indigo-200 bg-white rounded-2xl py-4">
                                 <div class="px-3 mb-3">
                                     <h3 class="font-semibold">A faire</h3>
                                     <p class="text-gray-500 text-sm">Ajouter des idees d'activite</p>

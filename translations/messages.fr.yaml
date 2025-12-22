@@ -1,0 +1,22 @@
+travel_items:
+    status:
+        idea: Idée
+        planned: Planifié
+        booking_needed: À réserver
+        booked: Réservé
+form:
+    placeholder:
+        notes: Ajouter une note, un lien, etc...
+    label:
+        status: Statut
+        notes: Notes
+        choose_a_place: Choisissez un lieu
+        choose_a_stay: Choisissez une accommodation
+trip:
+    my_trip: Mon voyage
+    my_trips: Mes voyages
+    new_trip: Nouveau voyage
+    no_destination: Aucune destination
+common:
+    place: Lieu
+    home: Accueil

@@ -1,5 +1,5 @@
 <twig:Modal>
-    {% block title %}<span class="font-medium text-gray-700">Lieu</span>{% endblock %}
+    {% block title %}<span class="modal-header">Lieu</span>{% endblock %}
 
     {% set googlePlaceOptions = {primaryTypes: ['food', 'tourist_attraction', 'point_of_interest', 'store', 'cafe']} %}
     {% if destination|default %}
@@ -10,12 +10,11 @@
 
     <div {{ stimulus_controller('google-place-widget', googlePlaceOptions) }}>
         <div {{ stimulus_controller('hide-toggle') }}>
-            <div class="bg-indigo-50 border-2 border-indigo-100 rounded-2xl">
+            <div class="border border-indigo-200 bg-indigo-25 shadow-sm rounded-xl">
                 <div {{ stimulus_target('hide-toggle', 'item') }} class="{{ place ? 'hidden' }} p-2 pb-0">
                     <gmp-place-autocomplete
                         id="place-autocomplete"
-                        class="bg-white rounded-xl focus:outline-none focus:ring-0 focus:border-none"
-                        placeholder="Enter a location"
+                        class="bg-white rounded-xl border border-indigo-200 focus:outline-none focus:ring-0"
                         {{ stimulus_target('google-place-widget', 'placeInput') }}>
                     </gmp-place-autocomplete>
                 </div>
@@ -24,10 +23,9 @@
                 <div class="p-3">
                     <div {{ stimulus_target('google-place-widget', 'placeHolder') }} class="{{ place ? 'hidden' }}">
                         <div class="flex flex-col justify-center items-center">
-                            <img src="{{ asset('images/icons/search-place-icon.png') }}" alt="map-marker"
-                                 class="size-8"/>
+                            <img src="{{ asset('images/icons/search-place-icon.png') }}" alt="map-marker" class="size-8"/>
                             <div class="text-sm" style="color: #6a6ba5">
-                                Choisissez un lieu
+                                {{ 'form.label.choose_a_place'|trans }}
                             </div>
                         </div>
                     </div>
@@ -57,6 +55,7 @@
                                         class="py-0.5 px-2.5 z-30 text-white font-medium text-sm bg-indigo-500 flex items-center focus:outline-none hover:bg-indigo-400 transition-colors rounded-xl">
                                         Maps
                                         <twig:ux:icon name="bxs:map" class="size-4 ml-1"/>
+
                                     </a>
                                 </div>
                             </div>
@@ -72,33 +71,20 @@
 
 
         {{ form_start(form) }}
-        <div class="space-y-2">
-            <div class="w-full mt-8">
-                {{ form_widget(form.notes) }}
-            </div>
+        <div class="space-y-2 mt-6">
+            {{ form_row(form.notes) }}
+            {% if form.status is defined %}
+                {{ form_row(form.status) }}
+            {% endif %}
+        </div>
 
-            <div class="flex justify-end mt-6">
-
-                {#  idea creation, so status is set to idea #}
-                {% if form.status|default(false) %}
-                    <label>
-                        <select name="{{ field_name(form.status) }}"
-                                class="bg-blue-100 rounded-l-xl pl-2 py-1 custom-select focus:outline-none">
-                            {% for label, value in field_choices(form.status) %}
-                                <option
-                                    value="{{ value }}" {{ form.status.vars.value == value ? 'selected' }}>{{ label }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                {% endif %}
-                <div>
-                    <button type="submit"
-                        {{ not item ? 'disabled' }}
-                            {{ stimulus_target('google-place-widget', 'submitButton') }}
-                            class="bg-blue-100 px-4 py-1 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:hover:bg-blue-200 not-disabled:cursor-pointer rounded-r-xl ml-0.5">
-                        {{ place ? 'Modifier' : 'Ajouter' }}
-                </div>
-            </div>
+        <div class="mt-8">
+            <button type="submit"
+                {{ not place ? 'disabled' }}
+                {{ stimulus_target('google-place-widget', 'submitButton') }}
+                    class="px-2 block w-full py-2 bg-indigo-600 text-white transition-colors font-medium cursor-pointer not-disabled:hover:bg-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:cursor-pointer rounded-xl">
+                {{ place ? 'Modifier' : 'Ajouter' }}
+            </button>
         </div>
 
         {{ form_end(form) }}

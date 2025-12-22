@@ -36,11 +36,11 @@ abstract class TravelItem
     private ?string $notes = null;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     protected ?Day $startDay = null;
 
-    // TODO: relation with a future booking entity ?
-
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     protected ?Day $endDay = null;
 
     //TODO: add a duration field to the entity

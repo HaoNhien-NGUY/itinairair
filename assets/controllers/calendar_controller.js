@@ -39,7 +39,7 @@ export default class extends Controller {
             enableMonthChangeOnDayClick: false,
             onClickDate: (self) => this.handleDateSelection(self, self.context.selectedDates),
             selectionDatesMode: this.isRangeValue ? 'multiple-ranged' : 'single',
-            disableAllDates: true,
+            disableAllDates: this.hasDayMappingValue,
             dateToday: startDate ?? 'today',
             selectedDates: [startDate, endDate ?? ''],
             selectedWeekends: [],
@@ -84,10 +84,10 @@ export default class extends Controller {
             if (this.hasEndDaySelectTarget) this.endDaySelectTarget.value = '';
             if (this.hasEndDayDisplayTarget) this.endDayDisplayTarget.replaceChildren(this.endDayElement);
             if (this.hasStartDayDisplayTarget) this.startDayDisplayTarget.innerText = this.formatDate(new Date(selectedDates[0]));
-            this.startDaySelectTarget.value = this.dayMappingValue[selectedDates[0]] ?? '';
+            this.startDaySelectTarget.value = this.hasDayMappingValue ? (this.dayMappingValue[selectedDates[0]] ?? '') : selectedDates[0];
         } else if (selectedDates.length === 2 && selectedDates[0] !== undefined && selectedDates[1] !== undefined) {
-            this.startDaySelectTarget.value = this.dayMappingValue[selectedDates[0]] ?? '';
-            this.endDaySelectTarget.value = this.dayMappingValue[selectedDates[1]] ?? '';
+            this.startDaySelectTarget.value = this.hasDayMappingValue ? (this.dayMappingValue[selectedDates[0]] ?? '') : selectedDates[0];
+            this.endDaySelectTarget.value = this.hasDayMappingValue ? (this.dayMappingValue[selectedDates[1]] ?? '') : selectedDates[1];
             if (this.hasStartDayDisplayTarget) this.startDayDisplayTarget.innerText = this.formatDate(new Date(selectedDates[0]));
             if (this.hasEndDayDisplayTarget) this.endDayDisplayTarget.innerText = this.formatDate(new Date(selectedDates[1]));
             calendar.hide();

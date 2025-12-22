@@ -1,0 +1,107 @@
+{% use 'form_div_layout.html.twig' %}
+
+{% block text_row %}
+    <div class="w-full" {% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+
+        {% if help is defined %}
+            <div class="">
+                {{ form_help(form) }}
+            </div>
+        {% endif %}
+
+        <div class="text-sm text-orange-500">
+            {{ form_errors(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block submit_widget %}
+    {% set class = 'px-2 py-0.5 rounded-xl bg-indigo-500 text-white transition-colors font-medium cursor-pointer hover:bg-indigo-400' %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' ' ~ class)|trim}) %}
+
+    <button type="submit" {{ block('button_attributes') }}>
+        {{ label|trans({}, translation_domain) }}
+    </button>
+{% endblock %}
+
+{% block form_label %}
+    {% if label is not same as(false) %}
+        {% set class = 'mb-1 block text-sm text-slate-500 font-medium' %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ class)|trim}) %}
+        <label for="{{ id }}" {% with {attr: label_attr} %}{{ block('attributes') }}{% endwith %}>
+            {{ label|trans({}, translation_domain) }}
+        </label>
+    {% endif %}
+{% endblock %}
+
+{% block text_widget %}
+    {% set icon = attr.icon|default(null) %}
+    {% set class = 'w-full py-3 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm shadow-sm border border-indigo-200 rounded-xl transition duration-300 ease focus:outline-none focus:border-indigo-400 hover:border-indigo-300 focus:shadow' %}
+    {% set class = icon ? class ~ '  pr-3 pl-10' : class %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' ' ~ class)|trim}) %}
+
+    {% if icon %}
+        {% set icon = attr.icon|default(null) %}
+
+        <div class="relative">
+            <twig:ux:icon name="{{ icon }}" class="absolute w-5 h-5 top-3 left-2.5 text-slate-400" />
+            <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}"{% endif %}/>
+        </div>
+
+    {% else %}
+        <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}"{% endif %}/>
+    {% endif %}
+
+{% endblock %}
+
+{% block textarea_widget %}
+    {% set icon = attr.icon|default(null) %}
+    {% set class = 'w-full p-3 resize-none bg-transparent placeholder:text-slate-400 text-slate-600 shadow-sm text-sm border border-indigo-200 rounded-xl transition duration-300 ease focus:outline-none focus:border-indigo-400 hover:border-indigo-300 focus:shadow' %}
+    {% set class = icon ? class ~ '  pr-3 pl-10' : class %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' ' ~ class)|trim}) %}
+
+    <div class="relative">
+        {% if icon %}
+            <twig:ux:icon name="{{ icon }}" class="absolute w-5 h-5 top-3 left-2.5 text-slate-400" />
+        {% endif %}
+        <textarea {{ block('widget_attributes') }} data-controller="textarea-autogrow">
+            {{- value -}}
+        </textarea>
+    </div>
+{% endblock %}
+
+{% block enum_widget %}
+    {% set icon = attr.icon|default(null) %}
+    {% set class = 'w-full p-3 cursor-pointer resize-none bg-transparent placeholder:text-slate-400 shadow-sm text-slate-600 text-sm border border-indigo-200 rounded-xl transition duration-300 ease focus:outline-none focus:border-indigo-400 hover:border-indigo-300 focus:shadow' %}
+    {% set class = icon ? class ~ '  pr-3 pl-10' : class %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ class)|trim}) %}
+
+    {% if icon %}
+        {% set icon = attr.icon|default(null) %}
+    {% endif %}
+
+    <div class="relative">
+        {% if icon %}
+            <twig:ux:icon name="{{ icon }}" class="absolute w-5 h-5 top-3 left-2.5 text-slate-400" />
+        {% endif %}
+        <select {{ block('widget_attributes') }}>
+
+            {% if placeholder is defined and placeholder is not none %}
+                <option value=""{% if required and value is empty %} selected="selected"{% endif %}>
+                    {{ placeholder != '' ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) }}
+                </option>
+            {% endif %}
+
+            {% for choice in choices %}
+                <option value="{{ choice.value }}"
+                    {% if choice.attr %}{% with { attr: choice.attr } %}{{ block('attributes') }}{% endwith %}{% endif %}
+                    {% if choice is selectedchoice(value) %} selected="selected"{% endif %}
+                >
+                    {{ choice.label|trans({}, translation_domain) }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+{% endblock %}

@@ -19,93 +19,103 @@ class TripType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var Trip $trip */
+        $trip = $options['data'];
+        $isEdit = $trip && $trip->getId();
+
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nom du voyage',
+                'label' => $isEdit ? 'Nom' : 'Nommez votre voyage',
                 'attr' => [
                     'placeholder' => 'Ex: Escapade à Paris',
-                    'class' => 'form-control form-control-lg'
+                    'icon' => 'mynaui:tag',
+                    'autocomplete' => 'off',
                 ],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le nom du voyage est obligatoire']),
-                    new Assert\Length([
-                        'min' => 3,
-                        'max' => 100,
-                        'minMessage' => 'Le nom doit faire au moins {{ limit }} caractères',
-                        'maxMessage' => 'Le nom ne peut pas dépasser {{ limit }} caractères'
-                    ])
+                    new Assert\NotBlank(message: 'Le nom du voyage est obligatoire'),
+                    new Assert\Length(min: 3, max: 100, minMessage: 'Le nom doit faire au moins {{ limit }} caractères', maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères')
                 ]
             ])
-
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Décrivez votre voyage, l\'ambiance, les objectifs...',
-                    'class' => 'form-control',
-                    'rows' => 4
+                    'rows' => 2,
+                    'icon' => 'subway:paragraph-2',
                 ],
                 'constraints' => [
-                    new Assert\Length([
-                        'max' => 1000,
-                        'maxMessage' => 'La description ne peut pas dépasser {{ limit }} caractères'
-                    ])
+                    new Assert\Length(max: 1000, maxMessage: 'La description ne peut pas dépasser {{ limit }} caractères')
                 ]
             ])
-
             ->add('startDate', DateType::class, [
                 'label' => 'Date de depart',
-                'required' => false,
+                'required' => true,
                 'widget' => 'single_text',
                 'attr' => [
-                    'class' => 'form-control',
-                    'min' => date('Y-m-d') // Pas de date dans le passé
+                    'data-calendar-target' => 'startDaySelect',
+                    'class' => 'hidden',
                 ],
                 'help' => 'Si vous connaissez déjà la date de début de votre voyage'
             ])
             ->add('endDate', DateType::class, [
                 'label' => 'Date de fin (optionnelle)',
-                'required' => false,
+                'required' => true,
                 'widget' => 'single_text',
                 'attr' => [
-                    'class' => 'form-control',
-                    'min' => date('Y-m-d') // Pas de date dans le passé
+                    'data-calendar-target' => 'endDaySelect',
+                    'class' => 'hidden',
                 ],
                 'help' => 'Si vous connaissez déjà la date de début de votre voyage'
             ])
-
-
-//            ->add('collaborators', TextareaType::class, [
-//                'label' => 'Collaborateurs (emails)',
-//                'required' => false,
-//                'attr' => [
-//                    'class' => 'form-control collaborators-field',
-//                    'placeholder' => 'ami1@email.com, ami2@email.com...',
-//                    'rows' => 2,
-//                    'style' => 'display: none;' // Masqué par défaut
-//                ],
-//                'help' => 'Emails des personnes qui pourront modifier ce voyage (séparés par des virgules)',
-//                'mapped' => false // Pas directement mappé à l'entité
-//            ])
-
-
             ->add('save', SubmitType::class, [
-                'label' => '🚀 Créer mon voyage',
+                'label' => $isEdit ? 'Modifier mon voyage' : 'Créer mon voyage',
                 'attr' => [
-                    'class' => 'btn btn-primary btn-lg w-100 mt-4'
+                    'class' => 'block w-full py-2'
                 ]
             ]);
 
 
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
-            $startDate = $form->get('startDate')->getData();
-            $endDate = $form->get('endDate')->getData();
-            $nbDays = $startDate->diff($endDate)->days;
+            /** @var Trip $trip */
             $trip = $event->getData();
 
-            for ($i = 0; $i <= $nbDays; $i++) {
-                $trip->addDay((new Day())->setPosition($i + 1));
+            if (!$trip) {
+                return;
+            }
+
+            $startDate = $form->get('startDate')->getData();
+            $endDate = $form->get('endDate')->getData();
+            $requiredCount = $startDate->diff($endDate)->days + 1;
+
+            if (!$trip->getStartDate() || !$trip->getEndDate()) {
+                return;
+            }
+
+            $currentDays = $trip->getDays();
+            $currentCount = count($currentDays);
+
+            if ($currentCount > $requiredCount) {
+                $toRemove = [];
+
+                foreach ($currentDays as $day) {
+                    if ($day->getPosition() > $requiredCount) {
+                        $toRemove[] = $day;
+                    }
+                }
+
+                foreach ($toRemove as $day) {
+                    $trip->removeDay($day);
+                }
+            }
+
+            elseif ($currentCount < $requiredCount) {
+                for ($i = $currentCount; $i < $requiredCount; $i++) {
+                    $newDay = new Day();
+                    $newDay->setPosition($i + 1);
+                    $trip->addDay($newDay);
+                }
             }
         });
     }

@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\ByteString;
+use Symfony\UX\Turbo\TurboBundle;
 
 #[Route('/trip')]
 final class TripController extends AbstractController
@@ -37,20 +38,18 @@ final class TripController extends AbstractController
         ]);
     }
 
-    // TODO: create in dialog
     #[Route('/create', name: 'app_trip_create', methods: ['POST', 'GET'])]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
         $trip = new Trip();
-        $form = $this->createForm(TripType::class, $trip);
+        $form = $this->createForm(TripType::class, $trip,['action' => $request->getUri()]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $tripMembership = (new TripMembership())
-                ->setTrip($trip)
-                ->setMember($this->getUser())
-                ->setRole(TripRole::ADMIN);
+            /** @var User $user */
+            $user = $this->getUser();
 
+            $tripMembership = (new TripMembership($trip, $user, TripRole::ADMIN));
             $entityManager->persist($trip);
             $entityManager->persist($tripMembership);
             $entityManager->flush();
@@ -60,6 +59,25 @@ final class TripController extends AbstractController
 
         return $this->render('trip/create.html.twig', [
             'form' => $form,
+            'trip' => $trip,
+        ]);
+    }
+
+    #[Route('/edit/{trip}', name: 'app_trip_edit', methods: ['POST', 'GET'])]
+    public function edit(Request $request, EntityManagerInterface $entityManager, Trip $trip): Response
+    {
+        $form = $this->createForm(TripType::class, $trip,['action' => $request->getUri()]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_trip_show', ['id' => $trip->getId()]);
+        }
+
+        return $this->render('trip/create.html.twig', [
+            'form' => $form,
+            'trip' => $trip,
         ]);
     }
 
@@ -69,19 +87,17 @@ final class TripController extends AbstractController
         Trip $trip,
         TravelItemRepository $travelItemRepository,
         AccommodationRepository $accommodationRepository,
-        DestinationRepository $destinationRepository,
         FlightRepository $flightRepository,
         TripService $tripService,
     ): Response
     {
-        $accommodations = $accommodationRepository->findAccommodationsByTrip($trip);
         $ideas = $travelItemRepository->findItemsForTrip($trip, [ItemStatus::draft()]);
 
         return $this->render('trip/show.html.twig', [
             'trip'  => $trip,
             'items' => $travelItemRepository->findItemDayPairsForTrip($trip),
-            'accommodations' => $accommodations,
-            'flights' => $flightRepository->findFlightsByTrip($trip),
+            'accommodationCount' => $accommodationRepository->countAccommodationsByTrip($trip),
+            'flightCount' => $flightRepository->countFlightsByTrip($trip),
             'statistics' => $tripService->getTripStatistics($trip),
             'ideas' => $ideas,
         ]);

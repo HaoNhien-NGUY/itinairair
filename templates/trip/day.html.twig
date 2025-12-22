@@ -54,21 +54,28 @@
                     <a href="{{ path('app_travelitem_edit', {trip: trip.id, item: destinationStartDay.id }) }}" data-turbo-frame="modal" class="bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-2 py-0.5 rounded-2xl text-sm">
                         {{ destinationStartDay.startDay.date|date_xs }} - {{ destinationStartDay.endDay.date|date_xs }}
                     </a>
-                    <div class="bg-indigo-500 text-white px-2 py-0.5 flex items-center rounded-2xl text-sm">
-                        <twig:ux:icon name="material-symbols:hotel" class="size-4 mr-1.5"/>
+{#                    <div class="bg-indigo-500 text-white px-2 py-0.5 flex items-center rounded-2xl text-sm">#}
+{#                        <twig:ux:icon name="material-symbols:hotel" class="size-4 mr-1.5"/>#}
 {#                        TODO: use repo#}
-                        {{ destinationStartDay.accommodationCount }}
-                    </div>
+{#                        {{ destinationStartDay.accommodationCount }}#}
+{#                    </div>#}
                 </div>
             </div>
             <div class="flex items-center space-x-4">
             </div>
         </div>
+    {% elseif day.position == 1 and statistics|default(false) and  statistics.city_count == 0 %}
+        <div class="flex items-center bg-linear-to-r from-indigo-400 to-indigo-200 p-3 pl-5">
+            <a href="{{ path('app_trip_itinerary', {'id': trip.id}) }}" class="text-white group hover:underline font-medium transition-colors flex items-center">
+                Ajouter votre premiere destination
+                <twig:ux:icon name="iconoir:nav-arrow-right" class="size-5 ml-2 transition-transform group-hover:translate-x-2" />
+            </a>
+        </div>
     {% endif %}
-    <div class="border-x-2 border-indigo-200">
+    <div class="">
         <div class="bg-indigo-50 text-gray-700 px-4 py-1 flex justify-between">
             <div class="flex items-end">
-                <div class="">{{ day.date|date_short }}</div>
+                <div class="text-gray-500 font-medium">{{ day.date|date_short }}</div>
             </div>
             <div class="text-sm flex items-center">
                 {% if destinationDay %}
@@ -96,36 +103,39 @@
         </div>
         <div class="scroll-margin lg:px-10 md:px-8 px-2 pb-4 pt-4 bg-white">
             <div>
+
                 {% if flightEndDay|length > 0 %}
-                    <div class="mb-8">
+                    <div class="mb-4">
                         {% for item in flightEndDay %}
-                            <div class="flex items-center w-full">
-                                <div class="mx-12 size-8">
-                                    {#                        <twig:ux:icon name="entypo:aircraft-landing" class="size-8 text-gray-400" /> #}
+                            <div class="rounded-xl text-sm overflow-hidden relative">
+                                <div class="px-4 py-0.5 bg-indigo-100 flex justify-between items-center">
+                                    <div class="flex items-center font-bold text-gray-700">
+                                        <twig:ux:icon name="entypo:aircraft-landing" class="size-6 mr-3"/>
+                                        {{ item.flightNumber ?? 'TBD' }}
+                                    </div>
                                 </div>
 
-                                <ol class="relative space-y-8 before:absolute before:-ml-px before:h-full before:w-0.5 before:rounded-full before:bg-blue-50">
-                                    <li class="relative -ms-1.5 flex items-start gap-4">
-                                        <span class="size-3 shrink-0 absolute rounded-full bg-blue-200 top-8"></span>
-                                        <span class="size-3"></span>
-
-                                        <div class="mt-6">
-                                            <time class="text-xl text-gray-700">
-                                                {{ item.endTime ? item.endTime|date("H:i") : 'TBD' }}
-                                                <span class="text-base pl-1 text-gray-500">+1</span>
-                                            </time>
-
-                                            <h3 class="text-lg font-bold text-gray-900">
-                                                {{ item.arrivalAirport.code ?? 'TBD' }}
-                                            </h3>
-
-                                            <p class="mt-0.5 text-sm text-gray-700">
-                                                {{ item.name }}
-                                            </p>
+                                <div class="px-4 py-1 bg-indigo-50 flex justify-between items-center text-sm">
+                                    <div class="flex items-center">
+                                        <div>
+                                            <span class="font-semibold">{{ item.departureAirport.code ?? 'TBD' }}</span>
+                                            <span class="pl-1">{{ item.departureAirport.terminal ?? '' }}</span>
                                         </div>
-                                    </li>
-                                </ol>
+                                        <twig:ux:icon name="bi:arrow-right" class="size-3 mx-5"/>
+                                        <div>
+                                            <span class="font-semibold">{{ item.arrivalAirport.code ?? 'TBD' }}</span>
+                                            <span class="pl-1">{{ item.arrivalAirport.terminal ?? '' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center text-gray-600">
+                                        Arrivée
+                                        <twig:ux:icon name="bi:dash-lg" class="mx-2.5 size-4" />
+                                        <span class="font-medium text-indigo-600">{{ item.endTime ? item.endTime|date("H:i") : 'TBD' }}</span>
+                                    </div>
+                                </div>
 
+                                <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="cursor-pointer z-20 absolute w-full h-full top-0 left-0">
+                                </a>
                             </div>
                         {% endfor %}
                     </div>
@@ -137,8 +147,8 @@
                     <div class="space-y-6 mb-5">
 
                         {% for item in flightSameDay %}
-                            <div class="rounded-2xl overflow-hidden">
-                                <div class="px-4 py-0.5 bg-indigo-100 flex items-center">
+                            <div class="rounded-2xl text-sm overflow-hidden relative">
+                                <div class="px-4 py-0.5 bg-indigo-100 flex items-center font-bold text-gray-700">
                                     <twig:ux:icon name="entypo:aircraft-take-off" class="size-6 text-gray-700 mr-3"/>
                                     {{ item.flightNumber ?? 'TBD' }}
                                 </div>
@@ -157,7 +167,7 @@
                                             <span class="pl-1">{{ item.departureAirport.terminal ?? '' }}</span>
                                         </div>
                                         <div class="col-span-1 row-start-2">
-                                            <twig:ux:icon name="bi:arrow-right" class="size-4 mr-5"/>
+                                            <twig:ux:icon name="bi:arrow-right" class="size-3 mr-5"/>
                                         </div>
                                         <div class="col-span-1 row-start-2">
                                             <span class="font-semibold">{{ item.arrivalAirport.code ?? 'TBD' }}</span>
@@ -165,6 +175,9 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="cursor-pointer z-20 absolute w-full h-full top-0 left-0">
+                                </a>
                             </div>
                         {% endfor %}
                     </div>
@@ -184,32 +197,36 @@
                 {% if flightStartDay|length > 0 %}
                     <div class="mt-6">
                         {% for item in flightStartDay %}
-                            <div class="flex w-full">
-                                <div class="mx-12">
-                                    <twig:ux:icon name="entypo:aircraft-take-off" class="size-8 text-gray-400"/>
+
+                            <div class="rounded-xl text-sm overflow-hidden relative">
+                                <div class="px-4 py-0.5 bg-indigo-100 flex justify-between items-center">
+                                    <div class="flex items-center font-bold text-gray-700">
+                                        <twig:ux:icon name="entypo:aircraft-take-off" class="size-6 mr-3"/>
+                                        {{ item.flightNumber ?? 'TBD' }}
+                                    </div>
                                 </div>
 
-                                <ol class="relative space-y-8 w-full before:absolute before:-ml-px before:h-full before:w-0.5 before:rounded-full before:bg-blue-50">
-
-                                    <li class="relative -ms-1.5 flex items-start gap-4">
-                                        <span class="size-3 shrink-0 rounded-full bg-blue-200"></span>
-                                        <div class="w-full mb-8 relative -top-1.5">
-
-                                            <time class="text-xl text-gray-700">
-                                                {{ item.startTime ? item.startTime|date("H:i") : 'TBD' }}
-                                            </time>
-
-                                            <h3 class="text-lg font-bold text-gray-900">
-                                                {{ item.departureAirport.code ?? 'TBD' }}
-                                            </h3>
-
-                                            <p class="mt-0.5 text-sm text-gray-700">
-                                                {{ item.name }}
-                                            </p>
+                                <div class="px-4 py-1 bg-indigo-50 flex justify-between items-center text-sm">
+                                    <div class="flex items-center">
+                                        <div>
+                                            <span class="font-semibold">{{ item.departureAirport.code ?? 'TBD' }}</span>
+                                            <span class="pl-1">{{ item.departureAirport.terminal ?? '' }}</span>
                                         </div>
+                                        <twig:ux:icon name="bi:arrow-right" class="size-3 mx-5"/>
+                                        <div>
+                                            <span class="font-semibold">{{ item.arrivalAirport.code ?? 'TBD' }}</span>
+                                            <span class="pl-1">{{ item.arrivalAirport.terminal ?? '' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center text-gray-600">
+                                        Départ
+                                        <twig:ux:icon name="bi:dash-lg" class="mx-2.5 size-4" />
+                                        <span class="font-medium text-indigo-600">{{ item.endTime ? item.startTime|date("H:i") : 'TBD' }}</span>
+                                    </div>
+                                </div>
 
-                                    </li>
-                                </ol>
+                                <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="cursor-pointer z-20 absolute w-full h-full top-0 left-0">
+                                </a>
                             </div>
                         {% endfor %}
                     </div>

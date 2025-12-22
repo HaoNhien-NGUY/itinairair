@@ -2,7 +2,10 @@
 
 namespace App\Enum;
 
-enum ItemStatus: string
+use Symfony\Contracts\Translation\TranslatableInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+enum ItemStatus: string implements TranslatableInterface
 {
     case IDEA = 'idea';
     case PLANNED = 'planned';
@@ -21,5 +24,11 @@ enum ItemStatus: string
     public static function draft(): array
     {
         return [self::IDEA];
+    }
+
+    public function trans(TranslatorInterface $translator, ?string $locale = null): string
+    {
+        return $translator->trans('travel_items.status.' . $this->value, locale: $locale);
+
     }
 }

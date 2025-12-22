@@ -21,13 +21,12 @@ class AbstractTravelItemType extends AbstractType
     {
         $builder
             ->add('notes', TextareaType::class, [
-                'label' => 'Notes',
+                'label' => 'form.label.notes',
                 'required' => false,
                 'attr' => [
-                    'data-controller' => 'textarea-autogrow',
-                    'placeholder' => 'Ajouter une note, un lien, etc...',
-                    'class' => 'focus:outline-none resize-none px-3 py-2 w-full bg-gray-100 rounded-xl',
+                    'placeholder' => 'form.placeholder.notes',
                     'rows' => 1,
+                    'icon' => 'subway:paragraph-2',
                 ],
                 'constraints' => [
                     new Assert\Length([
@@ -39,6 +38,9 @@ class AbstractTravelItemType extends AbstractType
             ->add('status', EnumType::class, [
                 'class' => ItemStatus::class,
                 'required' => false,
+                'placeholder' => null,
+                'label' => 'form.label.status',
+                'attr' => ['icon' => 'mdi:list-status'],
             ]);
 
 

@@ -20,6 +20,7 @@ class Trip
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -40,6 +41,8 @@ class Trip
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     #[Assert\GreaterThan(propertyPath: 'startDate')]
     private ?\DateTime $endDate = null;
+
+    //TODO: assert callback, if endDate is set, check that it is after startDate, diff no more than 90 days
 
     /**
      * @var Collection<int, TripMembership>

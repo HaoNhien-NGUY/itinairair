@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Flight;
+use App\Entity\Trip;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,30 +17,17 @@ class FlightRepository extends ServiceEntityRepository
         parent::__construct($registry, Flight::class);
     }
 
-    //    /**
-    //     * @return Flight[] Returns an array of Flight objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('f.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
 
-    //    public function findOneBySomeField($value): ?Flight
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function countFlightsByTrip(Trip $trip): int
+    {
+        return (int) $this->createQueryBuilder('f')
+            ->select('COUNT(f.id)')
+            ->where('f.trip = :trip')
+            ->setParameter('trip', $trip)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     public function findFlightsByTrip(\App\Entity\Trip $trip): array
     {
         return $this->createQueryBuilder('f')

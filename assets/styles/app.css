@@ -33,6 +33,10 @@ gmp-place-autocomplete {
     background-color: #F5F7FF;
 }
 
+.bg-indigo-10 {
+    background-color: #fcfcff;
+}
+
 .card-shadow {
     box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px 0, rgba(0, 0, 0, 0.06) 0 1px 2px 0;
 }
@@ -62,6 +66,10 @@ gmp-place-autocomplete {
                 background-color: var(--color-gray-400);
             }
         }
+    }
+
+    .modal-header {
+        @apply font-medium text-gray-500;
     }
 }
 

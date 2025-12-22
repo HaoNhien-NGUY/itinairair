@@ -17,3 +17,12 @@ addEventListener("turbo:before-frame-render", (event) => {
         };
     }
 });
+
+addEventListener("turbo:frame-missing", (event) => {
+    const { response, visit } = event.detail;
+
+    if (response.redirected) {
+        event.preventDefault();
+        visit(response);
+    }
+});

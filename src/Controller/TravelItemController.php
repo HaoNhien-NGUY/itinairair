@@ -234,7 +234,6 @@ final class TravelItemController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
             $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
             return $this->render('stream/refresh.stream.html.twig');
         }

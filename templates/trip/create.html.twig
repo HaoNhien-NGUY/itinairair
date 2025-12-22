@@ -1,13 +1,70 @@
-{% extends 'base_with_navbar.html.twig' %}
+<twig:Modal>
+    {% block title %}<span class="modal-header">{{ trip.id ? 'trip.my_trip'|trans : 'trip.new_trip'|trans }}</span>{% endblock %}
 
-{% block title %}Hello TripController!{% endblock %}
 
-{% block body %}
+    <turbo-frame id="trip-form">
+        {% set startDate = trip.startDate ? trip.startDate|date('Y-m-d') : null %}
+        {% set endDate = trip.endDate ? trip.endDate|date('Y-m-d') : null %}
 
-    <div class="border-2 border-b-pink-300 rounded-2xl">
-        <turbo-frame id="trip-data" target="_top">
-            {{ form(form) }}
-        </turbo-frame>
+        {{ form_start(form) }}
 
-    </div>
-{% endblock %}
+        <div {{ stimulus_controller('calendar', {startDate, endDate, fullWidth: true, inModal: true, isRange: true}) }} class="mb-8">
+            <div {{ stimulus_target('calendar', 'calendar') }} class="border border-indigo-200 rounded-xl p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50">
+                <div class="flex justify-center">
+                    <twig:ux:icon name="mage:calendar-2" class="size-6 mr-2 text-gray-700" />
+                    Dates
+                </div>
+                <div class="flex items-center text-blue-500 font-medium">
+                    <div>
+                        <div {{ stimulus_target('calendar', 'startDayDisplay') }}>
+                            <span class="text-gray-400">Début</span>
+                        </div>
+                    </div>
+                    <div class="mx-2">
+                        -
+                    </div>
+                    <div>
+                        <div {{ stimulus_target('calendar', 'endDayDisplay') }}>
+                            <span class="text-gray-400">Fin</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {{ form_widget(form.startDate) }}
+            {{ form_widget(form.endDate) }}
+            {% if trip.id %}
+                <div>
+                    <p class="flex items-start px-2 mt-2 text-xs text-slate-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-1.5">
+                            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd"></path>
+                        </svg>
+                        Si la durée du voyage est réduite, les derniers jours et leurs activités seront supprimés.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+        <div class="space-y-4 {{ trip.id ? '-mt-4' }}">
+
+
+            {{ form_row(form.name) }}
+            {{ form_row(form.description) }}
+        </div>
+
+        <div class="mt-8">
+            {{ form_row(form.save) }}
+        </div>
+
+        {{ form_end(form) }}
+
+        {% if trip.id %}
+            <hr class="my-4 border-gray-200">
+            <form action="{{ path('app_trip_delete', {'id': trip.id}) }}" method="post" class="" onsubmit="return confirm('Supprimer ?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trip.id) }}">
+                <button type="submit" class="cursor-pointer w-full p-2 rounded-xl hover:bg-red-50 font-medium text-red-300 text-center text-sm transition-colors">
+                    Supprimer
+                </button>
+            </form>
+        {% endif %}
+    </turbo-frame>
+</twig:Modal>

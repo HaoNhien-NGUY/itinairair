@@ -3,6 +3,48 @@
 {% block title %}Hello TripController!{% endblock %}
 {% block body_style %}min-h-screen flex flex-col{% endblock %}
 
+{% macro trip_card(trip, today, countriesByTrip, status = null) %}
+    {% set class = {
+        ongoing: 'from-indigo-400 to-indigo-200',
+        coming: 'from-gray-500 to-gray-200',
+    } %}
+    <a href="{{ path('app_trip_show', {id: trip.id}) }}"
+       class="bg-white shadow hover:shadow-lg transition duration-200 rounded-2xl overflow-hidden block">
+        {% if status %}
+            <div class="text-white text-sm bg-linear-to-r flex items-center {{ class[status]|default }} font-medium px-4 py-1">
+                {{ ('trip.status.' ~ status)|trans }}
+                <span class="font-normal ml-4">{{ 'trip.x_remaining_days'|trans({days: trip.endDate.diff(today).days}) }}</span>
+            </div>
+        {% endif %}
+        <div class="p-4">
+            <div class="text-lg">{{ trip.name }}</div>
+            <div class="flex items-center">
+                <span class="text-gray-500 text-sm">{{ trip.startDate|date_xs }} {{ trip.startDate|date('Y')}} - {{ trip.endDate|date_xs }}
+                    <span class="mx-1">•</span> {{ 'common.x_days'|trans({days: trip.durationInDays}) }}
+                </span>
+                <div class="flex flex-wrap items-center ml-4 text-sm text-gray-500">
+                    <twig:ux:icon name="bxs:map" class="size-4.5 mr-1" />
+                    {% for country in countriesByTrip[trip.id]|default([]) %}
+                        {% if not loop.first %}<span class="inline-block mr-1">,</span>{% endif %}
+                        <span class="">{{ country }}</span>
+                    {% else %}
+                        <span class="italic">{{ 'trip.no_destination'|trans }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="flex space-x-1 mt-3">
+                {% for membership in trip.tripMemberships %}
+                    <div class="flex items-center">
+                        <img
+                            src="https://placehold.co/800?text={{ membership.member.email[:1] }}&font=roboto"
+                            class="rounded-full size-8" alt="{{ membership.member.email }}">
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </a>
+{% endmacro %}
+
 {% block body %}
     <div class="container max-w-2xl mx-auto mt-10 space-y-6">
         <div class="rounded-3xlbordershadowborder-indigo-200p-6">
@@ -47,49 +89,18 @@
             <div class="mb-6 flex justify-start">
                 <a href="{{ path('app_trip_create') }}"
                    data-turbo-frame="modal"
-                   class="bg-indigo-500 hover:bg-indigo-400 transition-colors text-white text-sm font-medium py-1.5 px-4 flex items-center rounded-xl">
+                   class="bg-indigo-500 hover:bg-indigo-400 transition-colors text-white text-sm font-medium py-1 px-4 flex items-center rounded-xl">
                     <twig:ux:icon name="bx:plus" class="size-4 mr-2 text-white"/>
                     {{ 'trip.create'|trans }}
                 </a>
             </div>
+
             <div class="space-y-6">
                 {% if trips.ongoing %}
                     <div class="mt-6">
                         <div class="space-y-6">
                         {% for trip in trips.ongoing %}
-                            <a href="{{ path('app_trip_show', {id: trip.id}) }}"
-                               class="bg-white shadow hover:bg-gray-50 hover:shadow-lg transition duration-300 rounded-2xl overflow-hidden border border-indigo-200 block">
-                                <div class="text-white text-sm bg-linear-to-r flex items-center from-indigo-400 to-indigo-200 font-medium px-4 py-1">
-                                    {{ 'trip.status.ongoing'|trans }}
-                                    <span class="font-normal ml-4">{{ 'trip.x_remaining_days'|trans({days: trip.endDate.diff(today).days}) }}</span>
-                                </div>
-                                <div class="p-4">
-                                    <div class="text-lg">{{ trip.name }}</div>
-                                    <div class="flex items-center">
-                                        <span class="text-gray-500 text-sm">{{ trip.startDate|date_xs }} {{ trip.startDate|date('Y')}} - {{ trip.endDate|date_xs }}
-                                            <span class="mx-1">•</span> {{ 'common.x_days'|trans({days: trip.durationInDays}) }}
-                                        </span>
-                                        <div class="flex flex-wrap items-center ml-4 text-sm text-gray-500">
-                                            <twig:ux:icon name="bxs:map" class="size-4.5 mr-1" />
-                                            {% for country in countriesByTrip[trip.id]|default([]) %}
-                                                {% if not loop.first %}<span class="inline-block mr-1">,</span>{% endif %}
-                                                <span class="">{{ country }}</span>
-                                            {% else %}
-                                                <span class="italic">{{ 'trip.no_destination'|trans }}</span>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                    <div class="flex space-x-1 mt-3">
-                                        {% for membership in trip.tripMemberships %}
-                                            <div class="flex items-center">
-                                                <img
-                                                    src="https://placehold.co/800?text={{ membership.member.email[:1] }}&font=roboto"
-                                                    class="rounded-full size-8" alt="{{ membership.member.email }}">
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </a>
+                            {{ _self.trip_card(trip, today, countriesByTrip, 'ongoing') }}
                         {% endfor %}
                         </div>
                     </div>
@@ -98,40 +109,7 @@
                 {% if trips.coming %}
                     <div class="space-y-4">
                         {% for trip in trips.coming %}
-                            <a href="{{ path('app_trip_show', {id: trip.id}) }}"
-                               class="bg-white shadow hover:bg-gray-50 hover:shadow-lg transition duration-300 rounded-2xl overflow-hidden border border-indigo-200 block">
-                                <div class="text-white text-sm bg-linear-to-r flex items-center from-gray-500 to-gray-200 font-medium px-4 py-1">
-                                    {{ 'trip.status.coming'|trans }}
-                                    <span class="font-normal ml-4">{{ 'trip.coming_x_days'|trans({days: trip.endDate.diff(today).days}) }}</span>
-                                </div>
-                                <div class="p-4">
-                                    <div class="text-lg">{{ trip.name }}</div>
-                                    <div class="flex items-center">
-                                        <span
-                                            class="text-gray-500 text-sm">{{ trip.startDate|date_xs }} {{ trip.startDate|date('Y') }} - {{ trip.endDate|date_xs }}
-                                        <span class="mx-2">•</span> {{ 'common.x_days'|trans({days: trip.durationInDays}) }}</span>
-
-                                        <div class="flex flex-wrap items-center ml-4 text-sm text-gray-500">
-                                            <twig:ux:icon name="bxs:map" class="size-4.5 mr-1" />
-                                            {% for country in countriesByTrip[trip.id]|default([]) %}
-                                                {% if not loop.first %}<span class="inline-block mr-1">,</span>{% endif %}
-                                                <span class="">{{ country }}</span>
-                                            {% else %}
-                                                <span class="italic">{{ 'trip.no_destination'|trans }}</span>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                    <div class="flex space-x-1 mt-3">
-                                        {% for membership in trip.tripMemberships %}
-                                            <div class="flex items-center">
-                                                <img
-                                                    src="https://placehold.co/800?text={{ membership.member.email[:1] }}&font=roboto"
-                                                    class="rounded-full size-8" alt="{{ membership.member.email }}">
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </a>
+                            {{ _self.trip_card(trip, today, countriesByTrip, 'coming') }}
                         {% endfor %}
                     </div>
                 {% endif %}
@@ -142,41 +120,11 @@
                     <h3 class="mb-2 text-gray-600 font-mediumy">{{ 'trip.status.past'|trans }}</h3>
                     <div class="space-y-4">
                         {% for trip in trips.past %}
-                            <a href="{{ path('app_trip_show', {id: trip.id}) }}"
-                               class="bg-white shadow hover:bg-gray-50 hover:shadow-lg transition duration-300 rounded-2xl overflow-hidden border border-indigo-200 block p-4">
-                                <div class="text-lg">{{ trip.name }}</div>
-                                <div class="flex items-center">
-                                        <span
-                                            class="text-gray-500 text-sm">{{ trip.startDate|date_xs }} {{ trip.startDate|date('Y') }} - {{ trip.endDate|date_xs }}
-                                        <span class="mx-2">•</span> {{ 'common.x_days'|trans({days: trip.durationInDays}) }}</span>
-
-                                    <div class="flex flex-wrap items-center ml-4 text-sm text-gray-500">
-                                        <twig:ux:icon name="bxs:map" class="size-4.5 mr-1" />
-                                        {% for country in countriesByTrip[trip.id]|default([]) %}
-                                            {% if not loop.first %}<span class="inline-block mr-1">,</span>{% endif %}
-                                            <span class="">{{ country }}</span>
-                                        {% else %}
-                                            <span class="italic">{{ 'trip.no_destination'|trans }}</span>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                <div class="flex space-x-1 mt-3">
-                                    {% for membership in trip.tripMemberships %}
-                                        <div class="flex items-center">
-                                            <img
-                                                src="https://placehold.co/800?text={{ membership.member.email[:1] }}&font=roboto"
-                                                class="rounded-full size-8" alt="{{ membership.member.email }}">
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </a>
+                            {{ _self.trip_card(trip, today, countriesByTrip) }}
                         {% endfor %}
                     </div>
                 </div>
             {% endif %}
-
-
-
         </div>
     </div>
 {% endblock %}

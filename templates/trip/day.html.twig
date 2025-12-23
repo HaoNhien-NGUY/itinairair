@@ -55,14 +55,10 @@
                         {{ destinationStartDay.startDay.date|date_xs }} - {{ destinationStartDay.endDay.date|date_xs }}
                     </a>
 
-                    <div class="bg-indigo-500 text-white px-2 py-0.5 flex items-center rounded-2xl text-sm">
-                        {{ 'common.x_days'|trans({days: destinationStartDay.getDurationInDays}) }}
-                    </div>
-                    <div class="bg-indigo-500 text-white px-2 py-0.5 flex items-center rounded-2xl text-sm">
+                    <a href="{{ path('app_trip_bookings', {'id': trip.id}) }}" class="bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-2 py-0.5 flex items-center rounded-2xl text-sm">
                         <twig:ux:icon name="material-symbols:hotel" class="size-4 mr-1.5"/>
-{#                        TODO: use repo#}
                         {{ destinationStartDay.accommodationCount }}
-                    </div>
+                    </a>
                 </div>
             </div>
             <div class="flex items-center space-x-4">
@@ -91,18 +87,6 @@
                 {% if destinationStartDay %}
                     {{ _self.destination_link(trip, destinationStartDay) }}
                 {% endif %}
-
-{#                {% if not (destinationDay or destinationStartDay or destinationEndDay) %}#}
-{#                    <a href="{{ path('app_travelitem_create', {trip: trip.id, type: destinationEnum, day: day.id }) }}"#}
-{#                       class="text-gray-400 flex items-center hover:text-gray-500 transition-colors"#}
-{#                       data-turbo-frame="modal"#}
-{#                    >#}
-{#                        <twig:ux:icon name="bx:plus" class="size-3.5"/>#}
-{#                        {% if not destinationEndDay %}#}
-{#                            <span>&nbsp;Destination</span>#}
-{#                        {% endif %}#}
-{#                    </a>#}
-{#                {% endif %}#}
             </div>
         </div>
         <div class="scroll-margin lg:px-10 md:px-8 px-2 pb-4 pt-4 bg-white">

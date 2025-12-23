@@ -97,6 +97,7 @@ final class TripController extends AbstractController
         TravelItemRepository $travelItemRepository,
         AccommodationRepository $accommodationRepository,
         FlightRepository $flightRepository,
+        DestinationRepository $destinationRepository,
         TripService $tripService,
     ): Response
     {
@@ -105,6 +106,7 @@ final class TripController extends AbstractController
         return $this->render('trip/show.html.twig', [
             'trip'  => $trip,
             'items' => $travelItemRepository->findItemDayPairsForTrip($trip),
+            'destinations' => $destinationRepository->findDestinationByTrip($trip),
             'accommodationCount' => $accommodationRepository->countAccommodationsByTrip($trip),
             'flightCount' => $flightRepository->countFlightsByTrip($trip),
             'statistics' => $tripService->getTripStatistics($trip),

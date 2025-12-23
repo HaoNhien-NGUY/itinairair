@@ -33,6 +33,7 @@ trip:
     new_trip: Nouveau voyage
     no_destination: Aucune destination
 common:
+    logout: Déconnexion
     place: Lieu
     home: Accueil
     days: >-

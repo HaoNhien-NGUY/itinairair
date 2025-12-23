@@ -1,6 +1,7 @@
 {% extends 'base_with_navbar.html.twig' %}
 
 {% block title %}Hello TripController!{% endblock %}
+{% block body_style %}min-h-screen flex flex-col{% endblock %}
 
 {% block body %}
     <div class="container max-w-2xl mx-auto mt-10 space-y-6">
@@ -39,7 +40,7 @@
             </div>
         </div>
     </div>
-    <div class="border-t-2 py-8 mt-4 border-indigo-50 bg-indigo-10  ">
+    <div class="border-t-2 py-8 mt-4 border-indigo-50 bg-indigo-10 grow">
         {% set today = date('today') %}
 
         <div class="container max-w-2xl mx-auto">

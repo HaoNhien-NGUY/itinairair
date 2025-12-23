@@ -227,4 +227,15 @@ abstract class TravelItem
 
         return $this;
     }
+
+
+    public function getDurationInDays($nightCount = false): int
+    {
+        if (!$this->startDay || !$this->endDay) {
+            return 0;
+        }
+
+        return $this->endDay->getPosition() - $this->startDay->getPosition() + ($nightCount ? 0 : 1);
+    }
+
 }

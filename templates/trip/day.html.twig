@@ -54,11 +54,15 @@
                     <a href="{{ path('app_travelitem_edit', {trip: trip.id, item: destinationStartDay.id }) }}" data-turbo-frame="modal" class="bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-2 py-0.5 rounded-2xl text-sm">
                         {{ destinationStartDay.startDay.date|date_xs }} - {{ destinationStartDay.endDay.date|date_xs }}
                     </a>
-{#                    <div class="bg-indigo-500 text-white px-2 py-0.5 flex items-center rounded-2xl text-sm">#}
-{#                        <twig:ux:icon name="material-symbols:hotel" class="size-4 mr-1.5"/>#}
+
+                    <div class="bg-indigo-500 text-white px-2 py-0.5 flex items-center rounded-2xl text-sm">
+                        {{ 'common.x_days'|trans({days: destinationStartDay.getDurationInDays}) }}
+                    </div>
+                    <div class="bg-indigo-500 text-white px-2 py-0.5 flex items-center rounded-2xl text-sm">
+                        <twig:ux:icon name="material-symbols:hotel" class="size-4 mr-1.5"/>
 {#                        TODO: use repo#}
-{#                        {{ destinationStartDay.accommodationCount }}#}
-{#                    </div>#}
+                        {{ destinationStartDay.accommodationCount }}
+                    </div>
                 </div>
             </div>
             <div class="flex items-center space-x-4">

@@ -3,12 +3,15 @@
 namespace App\Validator;
 
 use App\Entity\Destination;
+use App\Repository\DestinationRepository;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class UniqueDestinationRangeValidator extends ConstraintValidator
 {
+    public function __construct(private readonly DestinationRepository $destinationRepository) {}
+
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof UniqueDestinationRange) {
@@ -34,27 +37,17 @@ class UniqueDestinationRangeValidator extends ConstraintValidator
         $startPos = $startDay->getPosition();
         $endPos = $endDay->getPosition();
 
-        foreach ($trip->getDestinations() as $existingDestination) {
-            if ($existingDestination === $value) {
-                continue;
-            }
+        $overlappingCount = $this->destinationRepository->countOverlappingDestinations(
+            $trip,
+            $startPos,
+            $endPos,
+            $value
+        );
 
-            $existingStartDay = $existingDestination->getStartDay();
-            $existingEndDay = $existingDestination->getEndDay();
-
-            if ($existingStartDay === null || $existingEndDay === null) {
-                continue;
-            }
-
-            $existingStartPos = $existingStartDay->getPosition();
-            $existingEndPos = $existingEndDay->getPosition();
-
-            if (max($startPos, $existingStartPos) < min($endPos, $existingEndPos)) {
-                $this->context->buildViolation($constraint->message)
-                    ->atPath('startDay')
-                    ->addViolation();
-                return;
-            }
+        if ($overlappingCount > 0) {
+            $this->context->buildViolation($constraint->message)
+                ->atPath('startDay')
+                ->addViolation();
         }
     }
 }

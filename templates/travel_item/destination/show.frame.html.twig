@@ -66,7 +66,7 @@
             </form>
 
 
-            <div class="bg-white border border-indigo-100 flex justify-between rounded-3xl p-5">
+            <div class="bg-white border border-indigo-200 shadow flex justify-between rounded-3xl p-5">
                 <a href="{{ path('app_travelitem_edit', {trip: trip.id, item: destination.id }) }}" class="hover:underline" data-turbo-frame="modal">
                     <div>
                         <span class="text-gray-700 font-medium">{{ destination.place.city }}</span><span class="text-sm text-gray-500">, {{ destination.place.country }}</span>
@@ -81,11 +81,11 @@
                         <span class="text-gray-500">hotels</span>
                     </div>
                     <div class="flex items-center space-x-1">
-                        <button type="submit" form="{{ formName }}" name="direction" value="down" class="group" {{ destination.endDay.position - destination.startDay.position <= 1  ? 'disabled'}}>
+                        <button type="submit" form="{{ formName }}" name="direction" value="down" class="group" {{ destination.getDurationInDays(true) <= 1  ? 'disabled'}}>
                             <twig:ux:icon name="bx:minus" class="size-6 rounded-lg p-1 group-enabled:cursor-pointer group-enabled:hover:bg-gray-100 group-disabled:text-gray-300 text-gray-500"/>
                         </button>
                         <div class="flex flex-col items-center text-sm">
-                            <span class="font-medium">{{ destination.endDay.position - destination.startDay.position }}</span>
+                            <span class="font-medium">{{ destination.getDurationInDays(true) }}</span>
                             <span class="text-gray-500">nuits</span>
                         </div>
                         <button type="submit" form="{{ formName }}" name="direction" value="up" class="group" {{ limitDay - destination.endDay.position <= 0  ? 'disabled'}}>

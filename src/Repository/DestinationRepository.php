@@ -90,7 +90,7 @@ class DestinationRepository extends ServiceEntityRepository
 
     /**
      * @param Trip[] $trips
-     * @return string[]
+     * @return array<int, string[]>
      */
     public function findDestinationCountriesByTrips(array $trips): array
     {
@@ -116,7 +116,7 @@ class DestinationRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return string[]
+     * @return array{countries: string[], cities: string[]}
      */
     public function findDestinationByUser(UserInterface $user): array
     {
@@ -154,5 +154,26 @@ class DestinationRepository extends ServiceEntityRepository
             ->orderBy('MIN(sd.position)', 'ASC')
             ->getQuery()
             ->getSingleColumnResult();
+    }
+
+    public function countOverlappingDestinations(Trip $trip, int $startPos, int $endPos, ?Destination $excludeDestination = null): int
+    {
+        $qb = $this->createQueryBuilder('d')
+            ->select('COUNT(d.id)')
+            ->join('d.startDay', 'sd')
+            ->join('d.endDay', 'ed')
+            ->where('d.trip = :trip')
+            ->andWhere('sd.position < :endPos')
+            ->andWhere('ed.position > :startPos')
+            ->setParameter('trip', $trip)
+            ->setParameter('startPos', $startPos)
+            ->setParameter('endPos', $endPos);
+
+        if ($excludeDestination && $excludeDestination->getId()) {
+            $qb->andWhere('d.id != :excludeId')
+                ->setParameter('excludeId', $excludeDestination->getId());
+        }
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 }

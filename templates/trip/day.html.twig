@@ -65,9 +65,9 @@
             </div>
         </div>
     {% elseif day.position == 1 and statistics|default(false) and  statistics.city_count == 0 %}
-        <div class="flex items-center bg-linear-to-r from-indigo-400 to-indigo-200 p-3 pl-5">
-            <a href="{{ path('app_trip_itinerary', {'id': trip.id}) }}" class="text-white group hover:underline font-medium transition-colors flex items-center">
-                Ajouter votre premiere destination
+        <div class="flex items-center bg-indigo-400">
+            <a href="{{ path('app_trip_itinerary', {'id': trip.id}) }}" class="text-white p-5 group hover:underline font-medium transition-colors flex items-center">
+                {{ 'trip.no_destination_yet'|trans }}
                 <twig:ux:icon name="iconoir:nav-arrow-right" class="size-5 ml-2 transition-transform group-hover:translate-x-2" />
             </a>
         </div>
@@ -116,7 +116,7 @@
                                         </div>
                                     </div>
                                     <div class="flex items-center text-gray-600">
-                                        Arrivée
+                                        {{ 'common.arrival'|trans }}
                                         <twig:ux:icon name="bi:dash-lg" class="mx-2.5 size-4" />
                                         <span class="font-medium text-indigo-600">{{ item.endTime ? item.endTime|date("H:i") : 'TBD' }}</span>
                                     </div>
@@ -207,7 +207,7 @@
                                         </div>
                                     </div>
                                     <div class="flex items-center text-gray-600">
-                                        Départ
+                                        {{ 'common.departure'|trans }}
                                         <twig:ux:icon name="bi:dash-lg" class="mx-2.5 size-4" />
                                         <span class="font-medium text-indigo-600">{{ item.endTime ? item.startTime|date("H:i") : 'TBD' }}</span>
                                     </div>

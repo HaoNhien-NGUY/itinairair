@@ -64,15 +64,15 @@
 </div>
 <div class="mt-6 flex space-x-2">
     <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id, position: lastItem ? lastItem.position + 1 : 0 }) }}"
-       class="flex flex-2 items-center text-indigo-400 border border-indigo-200 rounded-3xl px-4 py-2 hover:bg-indigo-50 transition-colors"
+       class="flex flex-2 items-center text-indigo-400 border font-medium border-indigo-200 text-sm rounded-xl px-4 py-2 hover:bg-indigo-50 transition-colors"
        data-turbo-frame="modal">
         <twig:ux:icon name="bx:plus" class="size-4 mr-2 text-indigo-400"/>
-        Ajouter un lieu
+        {{ 'trip.place.add'|trans }}
     </a>
 
     <a href="{{ path('app_travelitem_create', {trip: trip.id, type: accommodationEnum, day: day.id }) }}"
        data-turbo-frame="modal"
-       class="text-indigo-400 border border-indigo-200 flex items-center rounded-3xl px-4 py-2 hover:bg-indigo-50 transition-colors"
+       class="text-indigo-300 border border-indigo-200 flex items-center rounded-2xl px-4 py-2 hover:bg-indigo-50 transition-colors"
     >
         <twig:ux:icon name="material-symbols:hotel" class="size-5"/>
     </a>

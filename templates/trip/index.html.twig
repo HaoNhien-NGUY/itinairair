@@ -9,7 +9,7 @@
         coming: 'from-gray-500 to-gray-200',
     } %}
     <a href="{{ path('app_trip_show', {id: trip.id}) }}"
-       class="bg-white shadow hover:shadow-lg transition duration-200 rounded-2xl overflow-hidden block">
+       class="bg-white shadow border border-indigo-100 hover:shadow-lg transition duration-200 rounded-2xl overflow-hidden block">
         {% if status %}
             <div class="text-white text-sm bg-linear-to-r flex items-center {{ class[status]|default }} font-medium px-4 py-1">
                 {{ ('trip.status.' ~ status)|trans }}
@@ -61,21 +61,21 @@
                         <twig:ux:icon name="iconoir:map" class="size-6 text-indigo-400 mr-3"/>
                         <div class="font-medium">
                             <span class="">{{ memberships|length }}</span>
-                            <span class="block -mt-1 text-sm text-gray-500">voyages</span>
+                            <span class="block -mt-1 text-sm text-gray-500">{{ 'common.trips'|trans({count:memberships|length})|lower }}</span>
                         </div>
                     </div>
                     <div class="rounded-xl bg-indigo-50 flex items-center p-2 col-span-1">
                         <twig:ux:icon name="bi:passport" class="size-6 text-indigo-400 mr-3"/>
                         <div class="font-medium">
                             <span class="">{{ statistics.countries|length }}</span>
-                            <span class="block -mt-1 text-sm text-gray-500">pays</span>
+                            <span class="block -mt-1 text-sm text-gray-500">{{ 'common.countries'|trans({count: statistics.countries|length})|lower }}</span>
                         </div>
                     </div>
                     <div class="rounded-xl bg-indigo-50 flex items-center p-2 col-span-1">
                         <twig:ux:icon name="iconoir:city" class="size-6 text-indigo-400 mr-3"/>
                         <div class="font-medium">
                             <span class="">{{ statistics.cities|length }}</span>
-                            <span class="block -mt-1 text-sm text-gray-500">villes</span>
+                            <span class="block -mt-1 text-sm text-gray-500">{{ 'common.cities'|trans({count: statistics.cities|length})|lower }}</span>
                         </div>
                     </div>
                 </div>
@@ -86,10 +86,10 @@
         {% set today = date('today') %}
 
         <div class="container max-w-2xl mx-auto">
-            <div class="mb-6 flex justify-start">
+            <div class="mb-6 flex justify-center">
                 <a href="{{ path('app_trip_create') }}"
                    data-turbo-frame="modal"
-                   class="bg-indigo-500 hover:bg-indigo-400 transition-colors text-white text-sm font-medium py-1 px-4 flex items-center rounded-xl">
+                   class="bg-indigo-400 hover:bg-indigo-300 transition-colors text-white text-sm font-medium py-1 px-4 flex items-center rounded-full">
                     <twig:ux:icon name="bx:plus" class="size-4 mr-2 text-white"/>
                     {{ 'trip.create'|trans }}
                 </a>
@@ -117,7 +117,7 @@
 
             {% if trips.past %}
                 <div class="mt-12">
-                    <h3 class="mb-2 text-gray-600 font-mediumy">{{ 'trip.status.past'|trans }}</h3>
+                    <h3 class="mb-2 text-gray-400">{{ 'trip.status.past'|trans }}</h3>
                     <div class="space-y-4">
                         {% for trip in trips.past %}
                             {{ _self.trip_card(trip, today, countriesByTrip) }}

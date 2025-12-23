@@ -1,24 +1,24 @@
 {% macro destintionSeparator(trip, day = null, isExtremy = false, gap = null) %}
     <div class="flex items-center">
         <div class="flex items-center group w-12 justify-end">
-            <div class="relative flex items-center {{ day and isExtremy ? 'h-14' : 'h-9 '}}">
-                <div class=" before:absolute before:left-1/2 before:top-0 before:bottom-0 before:border-l-2 before:border-dashed before:border-indigo-200 before:-translate-x-1/2"></div>
+            <div class="relative flex items-center {{ day and isExtremy ? 'h-16' : 'h-10 '}}">
+                <div class=" before:absolute before:left-1/2 before:top-0 before:bottom-0 before:border-l-2 before:border-dashed before:border-gray-300 before:-translate-x-1/2"></div>
                 {% if day %}
                     <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").DESTINATION.value, day: day.id }) }}"
                        class="relative hover:bg-indigo-50 bg-white outline-2 outline-indigo-100 rounded-lg"
                        data-turbo-frame="modal">
                         <div>
-                            <twig:ux:icon name="bx:plus" class="size-5 text-indigo-300"/>
+                            <twig:ux:icon name="bx:plus" class="size-5.5 text-gray-400"/>
                         </div>
                     </a>
                 {% else %}
-                    <div class="size-5"></div>
+                    <div class="size-5.5"></div>
                 {% endif %}
             </div>
         </div>
         {% if gap %}
-            <div class="ml-3 text-sm text-gray-400">
-                {{ gap }} nuits
+            <div class="ml-3 text-sm font-medium text-gray-400">
+                {{ gap }} {{ 'common.nights'|trans({count: gap})|lower }}
             </div>
         {% endif %}
     </div>
@@ -26,15 +26,15 @@
 
 <turbo-frame id="itinerary">
     <div class="container mx-auto max-w-2xl py-12">
-        <div class="flex items-center ml-4.5">
-            <twig:ux:icon name="material-symbols:home-outline" class="size-10 text-indigo-400 mr-4 p-1.5 rounded-full bg-indigo-100"/>
+        <div class="flex items-center ml-4">
+            <twig:ux:icon name="material-symbols:home-outline" class="size-10 text-gray-400 mr-4 p-2 rounded-full bg-gray-200"/>
 
             <div>
-                <span class="text-indigo-500 font-medium">Debut du voyage</span>
+                <span class="text-gray-600 font-medium">{{ 'trip.start'|trans }}</span>
                 <div class="text-sm text-gray-500 -mt-1">
                     {{ trip.startDate|date_short|capitalize }}
                     <span class="px-1">•</span>
-                    {{ trip.endDate.diff(trip.startDate).days }} jours
+                    {{ 'common.x_days'|trans({days: trip.durationInDays}) }}
                 </div>
             </div>
         </div>
@@ -66,7 +66,7 @@
             </form>
 
 
-            <div class="bg-white border border-indigo-200 shadow flex justify-between rounded-3xl p-5">
+            <div class="bg-white border border-indigo-100 shadow-md flex justify-between rounded-3xl p-5">
                 <a href="{{ path('app_travelitem_edit', {trip: trip.id, item: destination.id }) }}" class="hover:underline" data-turbo-frame="modal">
                     <div>
                         <span class="text-gray-700 font-medium">{{ destination.place.city }}</span><span class="text-sm text-gray-500">, {{ destination.place.country }}</span>
@@ -75,18 +75,19 @@
                         {{ destination.startDay.date|date_short }} - {{ destination.endDay.date|date_short }}
                     </div>
                 </a>
+                {% set nightCount = destination.getDurationInDays(true) %}
                 <div class="flex items-center space-x-8">
                     <div class="flex flex-col items-center text-sm">
                         <span class="font-medium">{{ destination.accommodationCount }}</span>
-                        <span class="text-gray-500">hotels</span>
+                        <span class="text-gray-500">{{ 'common.accommodations'|trans({count: destination.accommodationCount})|lower }}</span>
                     </div>
                     <div class="flex items-center space-x-1">
-                        <button type="submit" form="{{ formName }}" name="direction" value="down" class="group" {{ destination.getDurationInDays(true) <= 1  ? 'disabled'}}>
+                        <button type="submit" form="{{ formName }}" name="direction" value="down" class="group" {{ nightCount <= 1  ? 'disabled'}}>
                             <twig:ux:icon name="bx:minus" class="size-6 rounded-lg p-1 group-enabled:cursor-pointer group-enabled:hover:bg-gray-100 group-disabled:text-gray-300 text-gray-500"/>
                         </button>
                         <div class="flex flex-col items-center text-sm">
-                            <span class="font-medium">{{ destination.getDurationInDays(true) }}</span>
-                            <span class="text-gray-500">nuits</span>
+                            <span class="font-medium">{{ nightCount }}</span>
+                            <span class="text-gray-500">{{ 'common.nights'|trans({count: nightCount})|lower }}</span>
                         </div>
                         <button type="submit" form="{{ formName }}" name="direction" value="up" class="group" {{ limitDay - destination.endDay.position <= 0  ? 'disabled'}}>
                             <twig:ux:icon name="bx:plus" class="size-6 rounded-lg p-1 group-enabled:cursor-pointer group-enabled:hover:bg-gray-100 group-disabled:text-gray-300 text-gray-500"/>
@@ -106,7 +107,7 @@
                 {{ _self.destintionSeparator(trip, firstTripDay, true) }}
 
                 <div class="ml-5 text-gray-500">
-                    Ajouter votre premiere destination
+                    {{ 'trip.add_a_step'|trans }}
                 </div>
             </div>
         {% endfor %}
@@ -118,9 +119,9 @@
         {{ _self.destintionSeparator(trip, lastDestination and lastDestination.endDay.position < lastTripDay.position ? lastDestination.endDay, true, dayGap) }}
 
         <div class="flex items-center ml-5">
-            <twig:ux:icon name="icons8:finish-flag" class="size-10 text-indigo-300 mr-4 p-2 rounded-full bg-indigo-50"/>
+            <twig:ux:icon name="icons8:finish-flag" class="size-10 text-gray-400 mr-4 p-2.5 rounded-full bg-gray-200"/>
             <div>
-                <div class="text-sm text-gray-600">
+                <div class="text-sm text-gray-500">
                     {{ trip.endDate|date_short|capitalize }}
                 </div>
             </div>

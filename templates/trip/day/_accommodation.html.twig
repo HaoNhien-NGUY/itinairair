@@ -1,25 +1,11 @@
-{% set dayWithNight = false %}
-
 <div id="day_{{ day.id }}_accommodation" class="space-y-2 mb-2">
     {% if items[accommodationEnum] is defined %}
         {% for item in items[accommodationEnum] %}
             {% set isStartDay = item.startDay is same as(day) %}
             {% set isEndDay = item.endDay is same as(day) %}
-            {% set dayWithNight = dayWithNight or isStartDay or not isEndDay %}
             <div>
                 {{ include('travel_item/accommodation/_show.frame.html.twig') }}
             </div>
         {% endfor %}
-    {% endif %}
-
-    {% if not dayWithNight and not flightStartDay|default(false) %}
-{#        <div>#}
-{#            <a href="{{ path('app_travelitem_create', {trip: trip.id, type: accommodationEnum, day: day.id }) }}"#}
-{#               data-turbo-frame="modal"#}
-{#               class="text-purple-600 hover:text-purple-900"#}
-{#            >#}
-{#                Ajouter un hebergement#}
-{#            </a>#}
-{#        </div>#}
     {% endif %}
 </div>

@@ -1,5 +1,5 @@
 <twig:Modal>
-    {% block title %}<span class="modal-header">Destination</span>{% endblock %}
+    {% block title %}<span class="modal-header">{{ 'common.destination'|trans }}</span>{% endblock %}
 
     <div  {{ stimulus_controller('google-place-widget', {primaryTypes: ['locality', 'administrative_area_level_2', 'sublocality_level_1']}) }}>
         {{ form_start(form) }}
@@ -17,7 +17,7 @@
                     <div class="flex items-center text-blue-500 font-medium">
                         <div>
                             <div {{ stimulus_target('calendar', 'startDayDisplay') }}>
-                                <span class="text-gray-400">Arrivée</span>
+                                <span class="text-gray-400">{{ 'common.arrival'|trans }}</span>
                             </div>
                         </div>
                         <div class="mx-2">
@@ -25,7 +25,7 @@
                         </div>
                         <div>
                             <div {{ stimulus_target('calendar', 'endDayDisplay') }}>
-                                <span class="text-gray-400">Départ</span>
+                                <span class="text-gray-400">{{ 'common.departure'|trans }}</span>
                             </div>
                         </div>
                     </div>
@@ -42,12 +42,12 @@
             {% set place = item.place %}
 
 
-            <div {{ stimulus_controller('hide-toggle') }} class="border border-indigo-200 bg-indigo-25 rounded-xl">
+            <div {{ stimulus_controller('hide-toggle') }} class="border shadow-sm border-indigo-200 bg-indigo-25 rounded-xl">
 
                 <div {{ stimulus_target('hide-toggle', 'item') }} class="{{ place ? 'hidden' }} p-2 pb-0">
                     <gmp-place-autocomplete
                         id="place-autocomplete"
-                        class="rounded-xl focus:outline-none focus:ring-0 focus:border-none"
+                        class="bg-white rounded-xl border border-indigo-200 focus:outline-none focus:ring-0"
                         {{ stimulus_target('google-place-widget', 'placeInput') }}>
                     </gmp-place-autocomplete>
                 </div>
@@ -59,7 +59,7 @@
                     <div {{ stimulus_target('google-place-widget', 'placeHolder') }} class="{{ place ? 'hidden' }}">
                         <div class="flex flex-col justify-center items-center">
                             <div class="text-sm" style="color: #6a6ba5">
-                                Selectionner une ville
+                                {{ 'trip.place.select_a_city'|trans }}
                             </div>
                         </div>
                     </div>
@@ -75,8 +75,8 @@
 
                             <div class="flex justify-end gap-2">
                                 {% if place %}
-                                    <button {{ stimulus_action('hide-toggle', 'toggle') }} type="button" class="text-indigo-600 hover:bg-indigo-100 px-2 font-medium rounded-xl text-sm cursor-pointer">
-                                        Modifier
+                                    <button {{ stimulus_action('hide-toggle', 'toggle') }} type="button" class="text-indigo-400 hover:bg-indigo-100 px-2 font-medium rounded-xl text-sm cursor-pointer">
+                                        {{ 'common.modify'|trans }}
                                     </button>
                                 {% endif %}
                                 <a {{ stimulus_target('google-place-widget', 'addressLinkDisplay') }}
@@ -100,7 +100,7 @@
                             {{ not item ? 'disabled' }}
                             {{ stimulus_target('google-place-widget', 'submitButton') }}
                             class="px-2 block w-full py-2 bg-indigo-600 text-white transition-colors font-medium cursor-pointer not-disabled:hover:bg-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:cursor-pointer rounded-xl">
-                        {{ place ? 'Modifier' : 'Ajouter' }}
+                        {{ place ? 'common.modify'|trans : 'common.add'|trans }}
                     </button>
                 </div>
             </div>

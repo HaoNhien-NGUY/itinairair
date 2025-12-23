@@ -36,8 +36,6 @@ class Trip
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $startDate = null;
 
-//    TODO: maybe remove endDate and replace it with nbDays. In the form if a endDate is given, calculate the number of days in PRE_SUBMIT, maybe create a twig filter to get the endDate from a trip
-//    ask user if endDate is set, if not ask an estimated nb of days
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     #[Assert\GreaterThan(propertyPath: 'startDate')]
     private ?\DateTime $endDate = null;
@@ -147,6 +145,17 @@ class Trip
         $this->endDate = $endDate;
 
         return $this;
+    }
+
+    public function getDurationInDays(): int
+    {
+        if (!$this->startDate || !$this->endDate) {
+            return 0;
+        }
+
+        $diff = $this->startDate->diff($this->endDate);
+
+        return (int) $diff->days + 1;
     }
 
     /**

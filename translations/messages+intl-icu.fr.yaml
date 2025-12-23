@@ -1,0 +1,48 @@
+travel_items:
+    status:
+        idea: Idée
+        planned: Planifié
+        booking_needed: À réserver
+        booked: Réservé
+form:
+    placeholder:
+        notes: Ajouter une note, un lien, etc...
+    label:
+        status: Statut
+        notes: Notes
+        choose_a_place: Choisissez un lieu
+        choose_a_stay: Choisissez une accommodation
+trip:
+    create: Ajouter un voyage
+    status:
+        ongoing: En cours
+        coming: À venir
+        past: Passés
+    x_remaining_days: >-
+        {days, plural,
+            one   {1 jour restant}
+            other {# jours restant}
+        }
+    coming_x_days: >-
+        {days, plural,
+            one   {Dans # jour}
+            other {Dans # jours}
+        }
+    my_trip: Mon voyage
+    my_trips: Mes voyages
+    new_trip: Nouveau voyage
+    no_destination: Aucune destination
+common:
+    place: Lieu
+    home: Accueil
+    days: >-
+        {days, plural,
+            one   {jour}
+            other {jours}
+        }
+    x_days: >-
+        {days, plural,
+            =0    {Aucun jour}
+            one   {1 jour}
+            other {# jours}
+        }

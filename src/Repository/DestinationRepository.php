@@ -7,6 +7,7 @@ use App\Entity\Destination;
 use App\Entity\Trip;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Destination>
@@ -61,7 +62,7 @@ class DestinationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
 
-        return array_map(function($result) {
+        return array_map(function ($result) {
             /** @var Destination $dest */
             $dest = $result[0];
             $dest->setAccommodationCount($result['acc_count']);
@@ -85,6 +86,57 @@ class DestinationRepository extends ServiceEntityRepository
             ->orderBy('MIN(sd.position)', 'ASC')
             ->getQuery()
             ->getSingleColumnResult();
+    }
+
+    /**
+     * @param Trip[] $trips
+     * @return string[]
+     */
+    public function findDestinationCountriesByTrips(array $trips): array
+    {
+        $result = $this->createQueryBuilder('d')
+            ->select('IDENTITY(d.trip) AS trip_id, p.country')
+            ->where('d.trip in (:trips)')
+            ->setParameter('trips', $trips)
+            ->join('d.trip', 't')
+            ->leftJoin('d.place', 'p')
+            ->leftJoin('d.startDay', 'sd')
+            ->groupBy('p.country', 'd.trip')
+            ->orderBy('MIN(sd.position)', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        $output = [];
+
+        foreach ($result as $row) {
+            $output[$row['trip_id']][] = $row['country'];
+        }
+
+        return $output;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function findDestinationByUser(UserInterface $user): array
+    {
+        $results = $this->createQueryBuilder('d')
+            ->select('p.country', 'p.city')
+            ->leftJoin('d.trip', 't')
+            ->leftJoin('d.place', 'p')
+            ->leftJoin('d.startDay', 'sd')
+            ->join('t.tripMemberships', 'tm')
+            ->where('tm.member = :user')
+            ->setParameter('user', $user)
+            ->groupBy('p.country', 'p.city')
+            ->orderBy('MIN(sd.position)', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        return [
+            'countries' => array_unique(array_column($results, 'country')),
+            'cities'    => array_unique(array_column($results, 'city')),
+        ];
     }
 
     /**

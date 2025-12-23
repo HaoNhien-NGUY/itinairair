@@ -28,13 +28,22 @@ use Symfony\UX\Turbo\TurboBundle;
 final class TripController extends AbstractController
 {
     #[Route('/', name: 'app_trip')]
-    public function index(TripMembershipRepository $tripMembershipRepository, TripRepository $tripRepository): Response
+    public function index(
+        TripRepository $tripRepository,
+        TripMembershipRepository $membershipRepository,
+        DestinationRepository $destinationRepository,
+    ): Response
     {
         $user = $this->getUser();
-        $memberships = $tripMembershipRepository->findBy(['member' => $user]);
+        $memberships = $membershipRepository->findBy(['member' => $user]);
+        $trips = $tripRepository->findByUser($user);
+        $countriesByTrip = $destinationRepository->findDestinationCountriesByTrips($trips['ids']);
 
         return $this->render('trip/index.html.twig', [
             'memberships' => $memberships,
+            'statistics'  => $destinationRepository->findDestinationByUser($user),
+            'trips'       => $trips,
+            'countriesByTrip' => $countriesByTrip,
         ]);
     }
 

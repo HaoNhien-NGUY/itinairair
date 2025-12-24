@@ -38,7 +38,7 @@
 
 {% block text_widget %}
     {% set icon = attr.icon|default(null) %}
-    {% set class = 'w-full py-3 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm shadow-sm border border-indigo-200 rounded-xl transition duration-300 ease focus:outline-none focus:border-indigo-400 hover:border-indigo-300 focus:shadow' %}
+    {% set class = 'form-input' %}
     {% set class = icon ? class ~ '  pr-3 pl-10' : class %}
     {% set attr = attr|merge({'class': (attr.class|default('') ~ ' ' ~ class)|trim}) %}
 
@@ -58,7 +58,7 @@
 
 {% block textarea_widget %}
     {% set icon = attr.icon|default(null) %}
-    {% set class = 'w-full p-3 resize-none bg-transparent placeholder:text-slate-400 text-slate-600 shadow-sm text-sm border border-indigo-200 rounded-xl transition duration-300 ease focus:outline-none focus:border-indigo-400 hover:border-indigo-300 focus:shadow' %}
+    {% set class = 'form-input' %}
     {% set class = icon ? class ~ '  pr-3 pl-10' : class %}
     {% set attr = attr|merge({'class': (attr.class|default('') ~ ' ' ~ class)|trim}) %}
 
@@ -74,7 +74,7 @@
 
 {% block enum_widget %}
     {% set icon = attr.icon|default(null) %}
-    {% set class = 'w-full p-3 cursor-pointer resize-none bg-transparent placeholder:text-slate-400 shadow-sm text-slate-600 text-sm border border-indigo-200 rounded-xl transition duration-300 ease focus:outline-none focus:border-indigo-400 hover:border-indigo-300 focus:shadow' %}
+    {% set class = 'form-input' %}
     {% set class = icon ? class ~ '  pr-3 pl-10' : class %}
     {% set attr = attr|merge({'class': (attr.class|default('') ~ class)|trim}) %}
 

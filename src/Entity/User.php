@@ -9,10 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_USER_DISCRIMINATOR', columns: ['username', 'discriminator'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -44,6 +46,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: TripMembership::class, mappedBy: 'member', orphanRemoval: true)]
     private Collection $tripMemberships;
+
+    #[ORM\Column(length: 22)]
+    #[Assert\Length(
+        min: 3,
+        max: 22,
+        minMessage: 'validation.error.username.minLength',
+        maxMessage: 'validation.error.username.maxLength'
+    )]
+    #[Assert\NotBlank]
+    private ?string $username = null;
+
+    #[ORM\Column(length: 5)]
+    private ?string $discriminator = null;
 
     public function __construct()
     {
@@ -171,5 +186,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): static
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function getDiscriminator(): ?string
+    {
+        return $this->discriminator;
+    }
+
+    public function setDiscriminator(string $discriminator): static
+    {
+        $this->discriminator = $discriminator;
+
+        return $this;
+    }
+
+    public function getUserTag(): string
+    {
+        return $this->username . '#' . $this->discriminator;
     }
 }

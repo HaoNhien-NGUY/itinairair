@@ -1,98 +1,41 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_with_navbar.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}MyTravel - {{ 'form.security.connection'|trans }}{% endblock %}
 
 {% block body %}
+    <div class="rounded-4xl max-w-screen-xl bg-indigo-25 mx-auto px-2 mt-4 py-12 lg:px-8">
+        <div class="max-w-sm py-8 border-indigo-200 rounded-4xl mx-auto">
+            <h2 class="text-center text-2xl/9 text-indigo-600 font-bold tracking-tight ">{{ 'form.security.connection'|trans }}</h2>
+            <div class="mt-8 px-4 lg:px-8">
+                <form method="post">
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
 
-    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <div class="bg-zinc-600 mx-auto px-4 lg:px-8 py-9 rounded-xl">
-            <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-                <img src="{{ asset('icons/airplane.svg') }}" alt="Airplane" class="mx-auto h-20 w-auto">
-
-                <h2 class="mt-8 text-center text-2xl/9 font-bold tracking-tight text-white">Sign in to your account</h2>
-            </div>
-
-            <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form method="POST" class="space-y-6">
-                    <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
-                           value="{{ csrf_token('authenticate') }}">
-                    <div>
-                        <label for="username" class="block text-sm/6 font-medium text-gray-100">Email address</label>
-                        <div class="mt-2">
-                            <input id="username" type="email" value="{{ last_username }}" name="_username" required
-                                   autocomplete="email"
-                                   class="block w-full rounded-md bg-white/70 px-3 py-1.5 text-base text-gray-700 outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"/>
+                    <div class="space-y-3.5">
+                        <div>
+                            <label for="username" class="mb-1 block text-sm text-slate-500 font-medium">{{ 'form.security.email'|trans }}</label>
+                            <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-input bg-indigo-10 px-4 py-2" autocomplete="email" required autofocus>
+                        </div>
+                        <div>
+                            <label for="password" class="mb-1 block text-sm text-slate-500 font-medium">{{ 'form.security.password'|trans }}</label>
+                            <input type="password" name="_password" id="password" class="form-input bg-indigo-10 px-4 py-2" autocomplete="current-password" required>
                         </div>
                     </div>
+                    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <label for="password" class="block text-sm/6 font-medium text-gray-100">Password</label>
-                            <div class="text-sm">
-                                <a href="#" class="font-semibold text-indigo-200 hover:text-indigo-100">Forgot
-                                    password?</a>
-                            </div>
-                        </div>
-                        <div class="mt-2">
-                            <input id="password" type="password" name="_password" required
-                                   autocomplete="current-password"
-                                   class="block w-full rounded-md bg-white/70 px-3 py-1.5 text-base text-gray-700 outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"/>
-                        </div>
-                    </div>
-
-
-                    <div class="checkbox mb-3">
-                        <input type="checkbox" name="_remember_me" id="_remember_me">
-                        <label for="_remember_me">Remember me</label>
-                    </div>
-
-                    <div>
-                        <button type="submit"
-                                class="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                            Sign in
-                        </button>
-                    </div>
+                    <button class="btn mt-8 px-4 w-full" type="submit">
+                        {{ 'form.security.login'|trans }}
+                    </button>
                 </form>
 
 
-                <p class="mt-10 text-center text-sm/6 text-gray-100">
-                    Not a member?
-                    <a href="{{ path('app_register') }}" class="font-semibold text-indigo-200 hover:text-indigo-100">Register</a>
+                <p class="mt-10 text-center text-sm/6 text-gray-500">
+                        {{ 'form.security.not_account_yet'|trans }}
+                    <a href="{{ path('app_register') }}" class="font-semibold ml-1 text-gray-500 hover:text-gray-600">{{ 'form.security.register'|trans }}</a>
                 </p>
             </div>
+
         </div>
     </div>
-{#
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
-
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-            </div>
-        {% endif %}
-
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="username">Email</label>
-        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
-        <label for="password">Password</label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
-
-        #}{#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
-
-            <div class="checkbox mb-3">
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-                <label for="_remember_me">Remember me</label>
-            </div>
-        #}{#
-
-        <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
-        </button>
-    </form>#}
 {% endblock %}

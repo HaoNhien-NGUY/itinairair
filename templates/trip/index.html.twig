@@ -9,7 +9,7 @@
         coming: 'from-gray-500 to-gray-200',
     } %}
     <a href="{{ path('app_trip_show', {id: trip.id}) }}"
-       class="bg-white shadow border border-indigo-100 hover:shadow-lg transition duration-200 rounded-2xl overflow-hidden block">
+       class="bg-white shadow border border-indigo-50 hover:shadow-lg transition duration-200 rounded-2xl overflow-hidden block">
         {% if status %}
             <div class="text-white text-sm bg-linear-to-r flex items-center {{ class[status]|default }} font-medium px-4 py-1">
                 {{ ('trip.status.' ~ status)|trans }}
@@ -49,9 +49,9 @@
     <div class="container max-w-2xl mx-auto mt-10 space-y-6">
         <div class="rounded-3xlbordershadowborder-indigo-200p-6">
             <div class="flex flex-col items-center">
-                <img src="https://placehold.co/800?text={{ app.user.email[:1] }}&font=roboto" alt="airplane" class="rounded-full size-14 mr-4" />
-                <div class="text-center text-lg mt-2">
-                    {{ app.user.email }}
+                <img src="https://placehold.co/800?text={{ app.user.username[:1] }}&font=roboto" alt="airplane" class="rounded-full size-14" />
+                <div class="text-center text-lg font-medium mt-2">
+                    {{ app.user.username }}
                 </div>
             </div>
 
@@ -118,7 +118,7 @@
             {% if trips.past %}
                 <div class="mt-12">
                     <h3 class="mb-2 text-gray-400">{{ 'trip.status.past'|trans }}</h3>
-                    <div class="space-y-4">
+                    <div class="space-y-6">
                         {% for trip in trips.past %}
                             {{ _self.trip_card(trip, today, countriesByTrip) }}
                         {% endfor %}

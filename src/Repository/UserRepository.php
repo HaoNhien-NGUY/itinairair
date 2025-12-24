@@ -33,6 +33,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * @param string $username
+     * @return array<string>
+     */
+    public function findDiscriminatorsByUsername(string $username): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u.discriminator')
+            ->where('u.username = :username')
+            ->setParameter('username', $username)
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
+
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

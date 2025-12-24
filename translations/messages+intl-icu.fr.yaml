@@ -5,6 +5,15 @@ travel_items:
         booking_needed: À réserver
         booked: Réservé
 form:
+    security:
+        registration: Inscription
+        connection: Connexion
+        email: Email
+        password: Mot de passe
+        login: Se connecter
+        not_account_yet: Vous n'avez pas encore de compte ?
+        account_already: Vous avez déjà un compte ?
+        register: S'inscrire
     placeholder:
         notes: Ajouter une note, un lien, etc...
     label:
@@ -12,6 +21,11 @@ form:
         notes: Notes
         choose_a_place: Choisissez un lieu
         choose_a_stay: Choisissez un hébergement
+validation:
+    error:
+        username:
+            min_length: Votre nom d'utilisateur doit comporter au moins {{ limit }} caractères.
+            max_length: Votre nom d'utilisateur ne peut pas dépasser {{ limit }} caractères.
 trip:
     start: Debut du voyage
     add_a_step: Ajouter une étape
@@ -47,6 +61,8 @@ trip:
     new_trip: Nouveau voyage
     no_destination: Aucune destination
 common:
+    username: Nom d'utilisateur
+    login: Connexion
     destination: Destination
     add: Ajouter
     modify: Modifier

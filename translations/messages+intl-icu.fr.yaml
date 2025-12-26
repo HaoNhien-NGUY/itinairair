@@ -46,20 +46,30 @@ trip:
         ongoing: En cours
         coming: À venir
         past: Passés
-    x_remaining_days: >-
-        {days, plural,
-            one   {1 jour restant}
-            other {# jours restant}
-        }
-    coming_x_days: >-
-        {days, plural,
-            one   {Dans # jour}
-            other {Dans # jours}
-        }
+        days_message:
+            ongoing: >-
+                {days, plural, one {1 jour restant} other {# jours restant}}
+            coming: >-
+                {days, plural, one {Dans # jour} other {Dans # jours}}
     my_trip: Mon voyage
     my_trips: Mes voyages
     new_trip: Nouveau voyage
     no_destination: Aucune destination
+landing:
+    title_1: Planifiez vos voyages
+    title_2: simplement
+    subtitle: Une solution simple pour gérer vos itinéraires quotidiens, vos réservations de vols et d'hôtels. Fini la dispersion, place à l'organisation.
+    cta: Planifier mon prochain voyage
+    features:
+        one:
+            title: Réservations Centralisées
+            subtitle: Hôtels, vols. Stockez vos numéros de confirmation et détails au même endroit.
+        two:
+            title: Planning visuel
+            subtitle: Glissez et déposez vos activités. Créez l'itinéraire parfait pour optimiser vos journées sans courir.
+        three:
+            title: Multi-Destinations
+            subtitle: Road trip en vue ? Gérez plusieurs étapes et destinations au sein d'un seul voyage.
 common:
     username: Nom d'utilisateur
     login: Connexion

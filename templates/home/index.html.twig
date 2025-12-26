@@ -1,17 +1,81 @@
 {% extends 'base_with_navbar.html.twig' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Tripira{% endblock %}
 
 {% block body %}
-    <div class="max-w-4xl mt-10 mx-auto space-y-6">
-        <div class="p-5 rounded-lg ignore border-gray-200 relative bg-neutral-200">
-            <a href="{{ path('app_trip_create') }}" data-turbo-frame="modal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">creer nouveau voyage</a>
+    <section class="relative pt-12 pb-20 lg:pt-24 lg:pb-32 overflow-hidden">
+        <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl font-black tracking-tight text-gray-900 sm:text-7xl mb-6">
+                {{ 'landing.title_1'|trans }}<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">{{ 'landing.title_2'|trans|lower }}.</span>
+{#                                <span class="text-indigo-600 underline decoration-wavy decoration-yellow-400 decoration-4">sans prise de tête.</span>#}
+
+            </h1>
+            <p class="mt-6 text-lg text-gray-500 max-w-2xl mx-auto mb-10">
+                {{ 'landing.subtitle'|trans }}
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-16">
+                <a href="{{ path('app_trip') }}" class="px-8 py-4 text-lg font-medium text-white bg-indigo-500 rounded-full hover:bg-indigo-400 transition shadow-xl shadow-indigo-500/20">
+                    {{ 'landing.cta'|trans }} 🚀
+                </a>
+            </div>
+
+
+            <div class="relative max-w-5xl mx-auto rounded-2xl shadow-2xl border border-gray-200 overflow-hidden bg-gray-50">
+                <div class="bg-white p-2 border-b border-gray-200 flex gap-2">
+                    <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                </div>
+                <div class="bg-indigo-10 aspect-video flex items-center pt-2 justify-center text-gray-300">
+                    <img src="{{ asset('images/hero-banner.png') }}"/>
+                </div>
+            </div>
         </div>
-        <a href="{{ path('app_trip') }}" class="inline-flex items-center justify-center p-5 text-base font-medium text-gray-500 rounded-lg bg-gray-50 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white">
-            <span class="w-full">Voir mes voyages</span>
-            <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-            </svg>
-        </a>
-    </div>
+    </section>
+
+
+
+    <section class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-yellow-50 p-8 rounded-3xl border-2 border-yellow-200 hover:-translate-y-2 transition duration-300">
+                    <div class="text-4xl mb-4">🏨</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ 'landing.features.one.title'|trans }}</h3>
+                    <p class="text-gray-700">
+                        {{ 'landing.features.one.subtitle'|trans }}
+                    </p>
+                </div>
+
+                <div class="bg-blue-50 p-8 rounded-3xl border-2 border-blue-200 hover:-translate-y-2 transition duration-300">
+                    <div class="text-4xl mb-4">🗓️</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ 'landing.features.two.title'|trans }}</h3>
+                    <p class="text-gray-700">
+                        {{ 'landing.features.two.subtitle'|trans }}
+                    </p>
+                </div>
+
+                <div class="bg-pink-50 p-8 rounded-3xl border-2 border-pink-200 hover:-translate-y-2 transition duration-300">
+                    <div class="text-4xl mb-4">🌍</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ 'landing.features.three.title'|trans }}</h3>
+                    <p class="text-gray-700">
+                        {{ 'landing.features.three.subtitle'|trans }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-50 border-t border-gray-200 py-10 text-center text-sm">
+        <p class="text-gray-600 font-medium">
+        <p class="mt-2">Développé par <span class="text-indigo-400 font-medium">Hao-Nhien NGUYEN</span>.</p>
+
+        <div class="flex text-slate-400 font-medium justify-center mt-6 gap-6">
+            <a href="#" target="_blank" class="hover:text-slate-500 transition">LinkedIn</a>
+            <a href="https://github.com/HaoNhien-NGUY" target="_blank" class="hover:text-slate-500 transition">GitHub</a>
+            <a href="mailto:haonhien.nguy@gmail.com" class="hover:text-slate-500 transition">Me contacter</a>
+        </div>
+    </footer>
 {% endblock %}

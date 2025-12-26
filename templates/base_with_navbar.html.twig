@@ -3,7 +3,7 @@
 {% block navbar %}
     <nav class="flex items-center relative justify-between bg-white max-w-screen-xl mx-auto px-5 py-2 w-full">
         <div>
-            <a href="{{ path('app_home') }}" class="text-indigo-700 text-lg font-bold cursor-pointer">MyTravel</a>
+            <a href="{{ path('app_home') }}" class="text-indigo-700 text-2xl font-bold cursor-pointer">Tripira</a>
         </div>
 
         <div class="flex items-center gap-5">
@@ -25,29 +25,31 @@
                             fill="#0346F2"></path>
                     </svg>
                 </div>
-                <li class="text-sm p-3 ">
-                    <a href="{{ path('app_home') }}" class="hover:text-indigo-400">{{ 'common.home'|trans }}</a>
+                <li class="p-3 text-gray-600">
+                    <a href="{{ path('app_home') }}" class="hover:text-indigo-500">{{ 'common.home'|trans }}</a>
                 </li>
-                <li class="text-sm p-3 ">
-                    <a href="{{ path('app_trip') }}" class="hover:text-indigo-400">{{ 'trip.my_trips'|trans }}</a>
+                <li class="p-3 text-gray-600">
+                    <a href="{{ path('app_trip') }}" class="hover:text-indigo-500">{{ 'trip.my_trips'|trans }}</a>
                 </li>
             </ul>
             <div class="flex gap-3 group items-center" data-turbo-prefetch="false">
                 {% if app.user %}
                     <div data-controller="dropdown" class="relative">
-                        <button type="button"
-                                style="background: url('https://placehold.co/40?text={{ app.user.username[:1] }}&font=roboto')"
-                                class="h-10 w-10 my-1 bg-cover bg-center group focus:ring-2 user cursor-pointer relative ring-indigo-600/30 rounded-full"
-                                data-action="dropdown#toggle click@window->dropdown#hide"></button>
+                        <div class="flex items-center">
+                            <button type="button"
+                                    style="background-image: url('https://placehold.co/40?text={{ app.user.username[:1] }}&font=roboto')"
+                                    class="h-10 w-10 bg-cover bg-center group focus:ring-2 user cursor-pointer relative ring-indigo-600/30 rounded-full"
+                                    data-action="dropdown#toggle click@window->dropdown#hide"></button>
+                        </div>
                         <div
                             data-dropdown-target="menu"
-                            class="hidden transition transform origin-top-right absolute mt-1 right-0 border border-indigo-100 shadow-lg rounded-xl w-56"
+                            class="hidden transition transform origin-top-right absolute mt-2 right-0 border border-indigo-100 shadow-lg rounded-xl w-56 z-50 bg-white"
                             data-transition-enter-from="opacity-0 scale-95"
                             data-transition-enter-to="opacity-100 scale-100"
                             data-transition-leave-from="opacity-100 scale-100"
                             data-transition-leave-to="opacity-0 scale-95"
                         >
-                            <a href="{{ path('app_trip_create') }}" data-turbo-frame="modal" data-action="dropdown#toggle" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 block px-4 py-2 text-sm">{{ 'trip.create'|trans }}</a>
+                            <a href="{{ path('app_trip_create') }}" data-turbo-frame="modal" data-action="dropdown#toggle" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 block px-4 py-2 text-sm">{{ 'trip.new_trip'|trans }}</a>
                             <a href="{{ path('app_logout') }}" data-action="dropdown#toggle" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 block px-4 py-2 text-sm">{{ 'common.logout'|trans }}</a>
                         </div>
                     </div>

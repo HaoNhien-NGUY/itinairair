@@ -1,19 +1,19 @@
 {% extends 'base_with_navbar.html.twig' %}
 
-{% block title %}Hello TripController!{% endblock %}
+{% block title %}{{ 'trip.my_trips'|trans }}{% endblock %}
 {% block body_style %}min-h-screen flex flex-col{% endblock %}
 
 {% macro trip_card(trip, today, countriesByTrip, status = null) %}
     {% set class = {
-        ongoing: 'from-indigo-400 to-indigo-200',
-        coming: 'from-gray-500 to-gray-200',
+        ongoing: 'from-indigo-400to-indigo-200 bg-indigo-500',
+        coming: 'from-gray-500to-gray-200 bg-gray-400',
     } %}
     <a href="{{ path('app_trip_show', {id: trip.id}) }}"
-       class="bg-white shadow border border-indigo-50 hover:shadow-lg transition duration-200 rounded-2xl overflow-hidden block">
+       class="bg-white border border-gray-200 hover:shadow-lg transition duration-200 rounded-2xl overflow-hidden block">
         {% if status %}
             <div class="text-white text-sm bg-linear-to-r flex items-center {{ class[status]|default }} font-medium px-4 py-1">
                 {{ ('trip.status.' ~ status)|trans }}
-                <span class="font-normal ml-4">{{ 'trip.x_remaining_days'|trans({days: trip.endDate.diff(today).days}) }}</span>
+                <span class="font-normal ml-4">{{ ('trip.status.days_message.' ~ status)|trans({days: trip.endDate.diff(today).days})|lower }}</span>
             </div>
         {% endif %}
         <div class="p-4">
@@ -22,13 +22,13 @@
                 <span class="text-gray-500 text-sm">{{ trip.startDate|date_xs }} {{ trip.startDate|date('Y')}} - {{ trip.endDate|date_xs }}
                     <span class="mx-1">•</span> {{ 'common.x_days'|trans({days: trip.durationInDays}) }}
                 </span>
-                <div class="flex flex-wrap items-center ml-4 text-sm text-gray-500">
+                <div class="flex flex-wrap items-center ml-6 text-sm text-gray-500">
                     <twig:ux:icon name="bxs:map" class="size-4.5 mr-1" />
                     {% for country in countriesByTrip[trip.id]|default([]) %}
                         {% if not loop.first %}<span class="inline-block mr-1">,</span>{% endif %}
                         <span class="">{{ country }}</span>
                     {% else %}
-                        <span class="italic">{{ 'trip.no_destination'|trans }}</span>
+                        <span class="">-</span>
                     {% endfor %}
                 </div>
             </div>
@@ -46,7 +46,7 @@
 {% endmacro %}
 
 {% block body %}
-    <div class="container max-w-2xl mx-auto mt-10 space-y-6">
+    <div class="container max-w-3xl mx-auto mt-10 space-y-6">
         <div class="rounded-3xlbordershadowborder-indigo-200p-6">
             <div class="flex flex-col items-center">
                 <img src="https://placehold.co/800?text={{ app.user.username[:1] }}&font=roboto" alt="airplane" class="rounded-full size-14" />
@@ -57,21 +57,21 @@
 
             <div class="mt-10">
                 <div class="grid grid-cols-3 gap-4">
-                    <div class="rounded-xl bg-indigo-50 flex items-center p-2 col-span-1">
+                    <div class="rounded-xl bg-indigo-50 border-2 border-indigo-100 flex items-center p-2 col-span-1">
                         <twig:ux:icon name="iconoir:map" class="size-6 text-indigo-400 mr-3"/>
                         <div class="font-medium">
                             <span class="">{{ memberships|length }}</span>
                             <span class="block -mt-1 text-sm text-gray-500">{{ 'common.trips'|trans({count:memberships|length})|lower }}</span>
                         </div>
                     </div>
-                    <div class="rounded-xl bg-indigo-50 flex items-center p-2 col-span-1">
+                    <div class="rounded-xl bg-indigo-50 border-2 border-indigo-100 flex items-center p-2 col-span-1">
                         <twig:ux:icon name="bi:passport" class="size-6 text-indigo-400 mr-3"/>
                         <div class="font-medium">
                             <span class="">{{ statistics.countries|length }}</span>
                             <span class="block -mt-1 text-sm text-gray-500">{{ 'common.countries'|trans({count: statistics.countries|length})|lower }}</span>
                         </div>
                     </div>
-                    <div class="rounded-xl bg-indigo-50 flex items-center p-2 col-span-1">
+                    <div class="rounded-xl bg-indigo-50 border-2 border-indigo-100 flex items-center p-2 col-span-1">
                         <twig:ux:icon name="iconoir:city" class="size-6 text-indigo-400 mr-3"/>
                         <div class="font-medium">
                             <span class="">{{ statistics.cities|length }}</span>
@@ -85,13 +85,14 @@
     <div class="border-t-2 py-8 mt-4 border-indigo-50 bg-indigo-10 grow">
         {% set today = date('today') %}
 
-        <div class="container max-w-2xl mx-auto">
-            <div class="mb-6 flex justify-center">
+        <div class="container max-w-3xl mx-auto">
+            <div class="mb-8 flex justify-between items-end">
+                <h2 class="text-3xl font-medium text-gray-600">{{ 'trip.my_trips'|trans }}</h2>
                 <a href="{{ path('app_trip_create') }}"
                    data-turbo-frame="modal"
-                   class="bg-indigo-400 hover:bg-indigo-300 transition-colors text-white text-sm font-medium py-1 px-4 flex items-center rounded-full">
+                   class="bg-indigo-500 hover:bg-indigo-400 transition-colors text-white text-sm font-medium py-1 px-4 flex items-center rounded-full">
                     <twig:ux:icon name="bx:plus" class="size-4 mr-2 text-white"/>
-                    {{ 'trip.create'|trans }}
+                    {{ 'trip.new_trip'|trans }}
                 </a>
             </div>
 
@@ -107,7 +108,7 @@
                 {% endif %}
 
                 {% if trips.coming %}
-                    <div class="space-y-4">
+                    <div class="space-y-6">
                         {% for trip in trips.coming %}
                             {{ _self.trip_card(trip, today, countriesByTrip, 'coming') }}
                         {% endfor %}
@@ -116,13 +117,11 @@
             </div>
 
             {% if trips.past %}
-                <div class="mt-12">
-                    <h3 class="mb-2 text-gray-400">{{ 'trip.status.past'|trans }}</h3>
-                    <div class="space-y-6">
-                        {% for trip in trips.past %}
-                            {{ _self.trip_card(trip, today, countriesByTrip) }}
-                        {% endfor %}
-                    </div>
+                <hr class="border-gray-200 my-8" />
+                <div class="space-y-6">
+                    {% for trip in trips.past %}
+                        {{ _self.trip_card(trip, today, countriesByTrip) }}
+                    {% endfor %}
                 </div>
             {% endif %}
         </div>

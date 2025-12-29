@@ -11,7 +11,6 @@ class Flight extends TravelItem
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $flightNumber = null;
 
-//https://gemini.google.com/app/fcb2380a6730ca51
     #[ORM\Column(type: 'json')]
     private array $departureAirport = [];
 

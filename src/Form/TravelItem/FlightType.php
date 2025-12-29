@@ -39,6 +39,7 @@ class FlightType extends AbstractType
             ])
             ->add('startDay', EntityType::class, [
                 'class' => Day::class,
+                'placeholder' => '',
                 'query_builder' => function (DayRepository $dayRepository) use ($trip) {
                     return $dayRepository->createQueryBuilder('d')
                         ->where('d.trip = :trip')
@@ -53,6 +54,8 @@ class FlightType extends AbstractType
             ])
             ->add('endDay', EntityType::class, [
                 'class' => Day::class,
+                'placeholder' => '',
+                'required' => false,
                 'query_builder' => function (DayRepository $dayRepository) use ($trip) {
                     return $dayRepository->createQueryBuilder('d')
                         ->where('d.trip = :trip')

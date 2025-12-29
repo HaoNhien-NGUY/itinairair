@@ -19,6 +19,7 @@
 	{% set startDate = trip.startDate %}
 	{% set statusPlanned = enum('App\\Enum\\ItemStatus').PLANNED.value %}
 	{% set statusIdea = enum('App\\Enum\\ItemStatus').IDEA.value %}
+    {% set destinationEnum = enum("App\\Enum\\TravelItemType").DESTINATION.value %}
 
     <div class="container max-w-7xl mx-auto">
         <div class="px-2 lg:px-4 pt-8">
@@ -69,9 +70,54 @@
             <div id="drag-container" class="container max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3">
                 <div class="lg:col-span-2">
                     <div class="rounded-2xl border-2 border-indigo-200 overflow-hidden">
+                        {% set displayEmptyRange = true %}
                         {% for day in trip.days %}
-{#                                TODO: Object to track destinations ?#}
-{#                                {destination: x, displayed: true}#}
+
+                            {% set destinationStartDay = null %}
+                            {% set destinationEndDay = null %}
+                            {% set destinationDay = null %}
+                            {% for item in items[day.id][destinationEnum]|default([]) %}
+                                {% if item.startDay is same as(day) %}
+                                    {% set destinationStartDay = item %}
+                                {% elseif item.endDay is same as(day) %}
+                                    {% set destinationEndDay = item %}
+                                {% else %}
+                                    {% set destinationDay = item %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if destinationStartDay %}
+                                <div class="flex justify-between bg-linear-to-r from-indigo-400 to-indigo-200 p-3 pl-5">
+                                    <div>
+                                        <div>
+                                            <span class="text-white font-extrabold text-2xl">{{ destinationStartDay.place.city }}</span>
+                                        </div>
+                                        <div class="mt-1.5 space-x-2 flex items-center">
+                                            <a href="{{ path('app_travelitem_edit', {trip: trip.id, item: destinationStartDay.id }) }}" data-turbo-frame="modal" class="bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-2 py-0.5 rounded-2xl text-sm">
+                                                {{ destinationStartDay.startDay.date|date_xs }} - {{ destinationStartDay.endDay.date|date_xs }}
+                                            </a>
+
+                                            <a href="{{ path('app_trip_bookings', {'id': trip.id}) }}" class="bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-2 py-0.5 flex items-center rounded-2xl text-sm">
+                                                <twig:ux:icon name="material-symbols:hotel" class="size-4 mr-1.5"/>
+                                                {{ destinationStartDay.accommodationCount }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-4">
+                                    </div>
+                                </div>
+                                {% set displayEmptyRange = true %}
+                            {% elseif not destinationDay and not destinationEndDay and displayEmptyRange %}
+                                {% set emptyTrip = day.position == 1 and statistics|default(false) and  statistics.city_count == 0 %}
+                                <div class="flex items-center {{ emptyTrip ? 'bg-indigo-400' : 'bg-gray-400' }} ">
+                                    <a href="{{ path('app_trip_itinerary', {'id': trip.id}) }}" class="text-white p-5 group hover:underline font-medium transition-colors flex items-center">
+                                        {{ emptyTrip ? 'trip.no_destination_yet'|trans : 'trip.add_a_step'|trans }}
+                                        <twig:ux:icon name="iconoir:nav-arrow-right" class="size-5 ml-2 transition-transform group-hover:translate-x-2" />
+                                    </a>
+                                </div>
+                                {% set displayEmptyRange = false %}
+                            {% endif %}
+
                             {{ include('trip/day.html.twig', {day, trip, startDate, statistics, items: items[day.id] ?? null}) }}
                         {% endfor %}
                     </div>

@@ -1,7 +1,7 @@
 {% macro destintionSeparator(trip, day = null, isExtremy = false, gap = null) %}
     <div class="flex items-center">
         <div class="flex items-center group w-12 justify-end">
-            <div class="relative flex items-center {{ day and isExtremy ? 'h-16' : 'h-10 '}}">
+            <div class="relative flex items-center {{ day and isExtremy ? 'h-16' : 'h-12 '}}">
                 <div class=" before:absolute before:left-1/2 before:top-0 before:bottom-0 before:border-l-2 before:border-dashed before:border-gray-300 before:-translate-x-1/2"></div>
                 {% if day %}
                     <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").DESTINATION.value, day: day.id }) }}"

@@ -17,22 +17,10 @@
     {% endfor %}
 {% endif %}
 
-{% set destinationStartDay = null %}
-{% set destinationEndDay = null %}
-{% set destinationDay = null %}
-{% for item in items[destinationEnum]|default([]) %}
-    {% if item.startDay is same as(day) %}
-        {% set destinationStartDay = item %}
-    {% elseif item.endDay is same as(day) %}
-        {% set destinationEndDay = item %}
-    {% else %}
-        {% set destinationDay = item %}
-    {% endif %}
-{% endfor %}
 
 {% macro destination_link(trip, item, suffix = false) %}
     <a href="{{ path('app_travelitem_edit', {trip: trip.id, item: item.id }) }}"
-       class="hover:text-indigo-500 text-gray-500"
+       class="hover:text-indigo-500 text-xs text-gray-500"
        data-turbo-frame="modal"
     >
         {{- item.name -}}
@@ -44,34 +32,6 @@
 {% endmacro %}
 
 <div id="day_{{ day.id }}">
-    {% if destinationStartDay %}
-        <div class="flex justify-between bg-linear-to-r from-indigo-400 to-indigo-200 p-3 pl-5">
-            <div>
-                <div>
-                    <span class="text-white font-extrabold text-2xl">{{ destinationStartDay.place.city }}</span>
-                </div>
-                <div class="mt-1.5 space-x-2 flex items-center">
-                    <a href="{{ path('app_travelitem_edit', {trip: trip.id, item: destinationStartDay.id }) }}" data-turbo-frame="modal" class="bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-2 py-0.5 rounded-2xl text-sm">
-                        {{ destinationStartDay.startDay.date|date_xs }} - {{ destinationStartDay.endDay.date|date_xs }}
-                    </a>
-
-                    <a href="{{ path('app_trip_bookings', {'id': trip.id}) }}" class="bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-2 py-0.5 flex items-center rounded-2xl text-sm">
-                        <twig:ux:icon name="material-symbols:hotel" class="size-4 mr-1.5"/>
-                        {{ destinationStartDay.accommodationCount }}
-                    </a>
-                </div>
-            </div>
-            <div class="flex items-center space-x-4">
-            </div>
-        </div>
-    {% elseif day.position == 1 and statistics|default(false) and  statistics.city_count == 0 %}
-        <div class="flex items-center bg-indigo-400">
-            <a href="{{ path('app_trip_itinerary', {'id': trip.id}) }}" class="text-white p-5 group hover:underline font-medium transition-colors flex items-center">
-                {{ 'trip.no_destination_yet'|trans }}
-                <twig:ux:icon name="iconoir:nav-arrow-right" class="size-5 ml-2 transition-transform group-hover:translate-x-2" />
-            </a>
-        </div>
-    {% endif %}
     <div class="">
         <div class="bg-indigo-50 text-gray-700 px-4 py-1 flex justify-between">
             <div class="flex items-end">

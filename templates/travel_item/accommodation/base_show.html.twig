@@ -17,9 +17,9 @@
                     {% set isEndDay = isEndDay|default(item.endDay is same as(day)) %}
 
                     {% if isStartDay %}
-                        <span class="inline-flex items-center rounded-lg px-2 py-1 text-xs text-gray-600">{{ 'common.arrival'|trans }}</span>
+                        <span class="inline-flex items-center rounded-lg px-2 py-1 text-sm text-gray-600">{{ 'common.arrival'|trans }}</span>
                     {% elseif isEndDay %}
-                        <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-gray-400">{{ 'common.departure'|trans }}</span>
+                        <span class="inline-flex items-center rounded-md px-2 py-1 text-sm text-gray-600">{{ 'common.departure'|trans }}</span>
                     {% endif %}
                 {% endif %}
                 {% if item.notes is not empty %}

@@ -1,9 +1,15 @@
 <turbo-frame id="day_{{ day.id ?? '' }}_accommodation_{{ item.id}}">
     <div class="bg-indigo-50 rounded-xl py-2 px-2">
         <div class="flex justify-between">
-            <div class="flex items-center text-sm">
+            <div class="flex items-center text-gray-700">
                 <twig:ux:icon name="material-symbols:hotel" class="size-5 mr-2"/>
                 {{ item.name }}
+                <twig:ux:icon name="bi:dash-lg" class="size-3 text-gray-500 mx-3"/>
+                {% set totalDays = item.endDay.position - item.startDay.position + 1 %}
+                {% set currentDay =  day.position - item.startDay.position + 1 %}
+                <div class="text-gray-500 text-sm">
+                    {{ currentDay }} / {{ totalDays }}
+                </div>
             </div>
             <div class="flex items-center">
                 {% if day %}
@@ -11,7 +17,7 @@
                     {% set isEndDay = isEndDay|default(item.endDay is same as(day)) %}
 
                     {% if isStartDay %}
-                        <span class="inline-flex items-center rounded-lg px-2 py-1 text-xs font-medium text-blue-500">{{ 'common.arrival'|trans }}</span>
+                        <span class="inline-flex items-center rounded-lg px-2 py-1 text-xs text-gray-600">{{ 'common.arrival'|trans }}</span>
                     {% elseif isEndDay %}
                         <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-gray-400">{{ 'common.departure'|trans }}</span>
                     {% endif %}

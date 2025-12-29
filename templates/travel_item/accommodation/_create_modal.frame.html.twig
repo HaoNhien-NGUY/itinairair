@@ -46,7 +46,7 @@
             {% set place = item.place %}
 
             <div {{ stimulus_controller('hide-toggle') }}>
-                <div class="bg-indigo-25 border border-indigo-200 shadow-sm rounded-xl">
+                <div class="bg-indigo-25 border border-indigo-200 rounded-2xl">
                     <div {{ stimulus_target('hide-toggle', 'item') }} class="{{ place ? 'hidden' }} p-2 pb-0">
                         <gmp-place-autocomplete
                             id="place-autocomplete"
@@ -122,5 +122,15 @@
             </div>
         </div>
         {{ form_end(form) }}
+        {% if item.id %}
+            <hr class="my-4 border-gray-200">
+            <form action="{{ path('app_travelitem_delete', {'trip': trip.id}) }}" method="post" class="" onsubmit="return confirm('Supprimer ?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete-item' ~ trip.id) }}">
+                <input type="hidden" name="item" value="{{ item.id }}">
+                <button type="submit" class="cursor-pointer w-full p-2 rounded-xl hover:bg-red-50 font-medium text-red-300 text-center text-sm transition-colors">
+                    {{ 'common.delete'|trans }}
+                </button>
+            </form>
+        {% endif %}
     </div>
 </twig:Modal>

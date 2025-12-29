@@ -34,7 +34,8 @@ class FlightType extends AbstractType
         $builder
             ->add('flightNumber', TextType::class, [
                 'required' => false,
-                'label'    => 'Numero du vol'
+                'label'    => 'transport.airplane.flight_number',
+                'attr' => ['placeholder' => 'ex: AF012', 'maxLength' => 4],
             ])
             ->add('startDay', EntityType::class, [
                 'class' => Day::class,
@@ -44,7 +45,6 @@ class FlightType extends AbstractType
                         ->setParameter('trip', $trip)
                         ->orderBy('d.position', 'ASC');
                 },
-                'data' => null,
                 'attr' => [
                     'data-calendar-target' => 'startDaySelect',
                     'class' => 'hidden'
@@ -59,9 +59,8 @@ class FlightType extends AbstractType
                         ->setParameter('trip', $trip)
                         ->orderBy('d.position', 'ASC');
                 },
-                'data' => null,
                 'attr' => [
-                    'data-calendar-target' => 'startDaySelect', // startDay because we are using 2 separate calendars
+                    'data-calendar-target' => 'startDaySelect',
                     'class' => 'hidden'
                 ],
                 'choice_label' => fn(Day $day) => $day->getPosition(),
@@ -90,11 +89,13 @@ class FlightType extends AbstractType
                 'input'  => 'datetime',
                 'widget' => 'single_text',
                 'required' => false,
+                'attr' => ['class' => 'form-input py-1.5'],
             ])
             ->add('endTime', TimeType::class, [
                 'input'  => 'datetime',
                 'widget' => 'single_text',
                 'required' => false,
+                'attr' => ['class' => 'form-input py-1.5'],
             ]);
 
 

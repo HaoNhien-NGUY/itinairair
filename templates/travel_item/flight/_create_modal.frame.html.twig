@@ -1,3 +1,6 @@
 <twig:Modal>
-    {{ include('travel_item/flight/_create.html.twig') }}
+    {% block title %}<span class="modal-header">{{ 'common.flight'|trans }}</span>{% endblock %}
+    <turbo-frame id="flight-form">
+        {{ include('travel_item/flight/_create.html.twig') }}
+    </turbo-frame>
 </twig:Modal>

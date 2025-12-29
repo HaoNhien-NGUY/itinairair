@@ -26,6 +26,11 @@ validation:
         username:
             min_length: Votre nom d'utilisateur doit comporter au moins {{ limit }} caractères.
             max_length: Votre nom d'utilisateur ne peut pas dépasser {{ limit }} caractères.
+transport:
+    airplane:
+        flight_number: Numero du vol
+    train: Train
+    bus: Bus
 trip:
     start: Debut du voyage
     add_a_step: Ajouter une étape
@@ -71,6 +76,10 @@ landing:
             title: Multi-Destinations
             subtitle: Road trip en vue ? Gérez plusieurs étapes et destinations au sein d'un seul voyage.
 common:
+    delete: Supprimer
+    flight: Vol
+    no_flight: Aucun vol
+    no_booking: Aucune réservation
     username: Nom d'utilisateur
     login: Connexion
     destination: Destination

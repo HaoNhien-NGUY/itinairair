@@ -56,8 +56,16 @@ gmp-place-autocomplete {
         @apply w-full p-3 resize-none placeholder:text-slate-400 shadow-sm text-slate-600 text-sm border border-indigo-200 rounded-xl hover:border-indigo-300 ease-in transition duration-300 focus:outline-none focus:border-indigo-400 focus:shadow;
     }
 
+    .form-label {
+        @apply mb-1 block text-sm text-slate-500 font-medium;
+    }
+
     .modal-header {
         @apply font-medium text-gray-500;
+    }
+
+    .pill {
+        @apply inline-flex items-center py-0.5 px-1.5 rounded-full text-sm font-medium bg-indigo-50 text-indigo-500;
     }
 }
 

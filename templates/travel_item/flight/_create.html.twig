@@ -1,48 +1,47 @@
 <div class="">
-    {{ form_start(form, {'attr': {'data-turbo-frame': '_top'}}) }}
+    {{ form_start(form) }}
     {% set dayMapping = trip.dayMapping %}
 
     {% set startDate = item.startDay ? item.startDay.date|date('Y-m-d') : null %}
     {% set endDate = item.endDay ? item.endDay.date|date('Y-m-d') : (startDate ?? null) %}
-
     <div class="mb-4">
         <div class="mb-3">
-            {{ form_label(form.flightNumber) }}
-            {{ form_widget(form.flightNumber, {'attr': {'class': 'w-full bg-gray-100 pl-1 rounded-lg h-8 flex items-center'}}) }}
+            {{ form_row(form.flightNumber) }}
         </div>
 
         <div class="mb-3 grid grid-cols-2 space-x-3">
             <div class="col-span-1">
-                <h3>Depart</h3>
+                    <h3 class="form-label">{{ 'common.departure'|trans }}</h3>
                 <div class="grid grid-cols-2 space-x-1">
                     <div {{  stimulus_controller('calendar', {dayMapping: dayMapping, startDate: startDate, isRange: false, autoHide: true, inputMode: true, inModal: true, displayWeekDay: false}) }}
                         {{ stimulus_target('calendar', 'calendar') }}
                         class="col-span-1"
                     >
                         {{ form_widget(form.startDay) }}
-                        <div class="bg-gray-100 pl-2 rounded-lg h-8 flex items-center cursor-pointer">
+                        <div class="form-input cursor-pointer py-1.5">
                             <div {{ stimulus_target('calendar', 'startDayDisplay') }}><span class="italic text-gray-500 text-sm">Date</span></div>
                         </div>
                     </div>
                     <div class="col-span-1">
-                        {{ form_widget(form.startTime, {'attr': {'class': 'bg-gray-100 px-3 py-2 rounded-lg h-8'}}) }}
+                        {{ form_widget(form.startTime) }}
                     </div>
                 </div>
             </div>
             <div class="col-span-1">
-                <h3>Arriver</h3>
+                <h3 class="form-label">{{ 'common.arrival'|trans }}</h3>
                 <div class="grid grid-cols-2 space-x-1">
                     <div {{  stimulus_controller('calendar', {dayMapping: dayMapping, startDate: endDate, isRange: false, autoHide: true, inputMode: true, inModal: true, displayWeekDay: false}) }}
                         {{ stimulus_target('calendar', 'calendar') }}
                         class="col-span-1"
                     >
-                        {{ form_widget(form.endDay) }}
-                        <div class="bg-gray-100 pl-2 rounded-lg h-8 flex items-center cursor-pointer">
+
+                            {{ form_widget(form.endDay) }}
+                        <div class="form-input cursor-pointer py-1.5">
                             <div {{ stimulus_target('calendar', 'startDayDisplay') }}><span class="italic text-gray-500 text-sm">Date</span></div>
                         </div>
                     </div>
                     <div class="col-span-1">
-                        {{ form_widget(form.endTime, {'attr': {'class': 'bg-gray-100 px-3 py-2 rounded-lg h-8'}}) }}
+                        {{ form_widget(form.endTime) }}
                     </div>
                 </div>
             </div>
@@ -50,48 +49,45 @@
 
         <div class="mb-3 grid grid-cols-2 space-x-3">
             <div class="col-span-1">
-                <div class="grid grid-cols-2 space-x-1">
-                    {{ form_widget(form.departureAirportCode, {'attr': {'class': 'col-span-1 bg-gray-100 pl-1 rounded-lg h-8 flex items-center'}}) }}
-                    {{ form_widget(form.departureTerminal, {'attr': {'class': 'col-span-1 bg-gray-100 pl-1 rounded-lg h-8 flex items-center'}}) }}
+                <div class="grid grid-cols-2 gap-1">
+                    {{ form_widget(form.departureAirportCode, {'attr': {'class': 'col-span-1 py-1.5'}}) }}
+                    {{ form_widget(form.departureTerminal, {'attr': {'class': 'col-span-1 py-1.5'}}) }}
                 </div>
             </div>
             <div class="col-span-1">
                 <div class="grid grid-cols-2 space-x-1">
-                    {{ form_widget(form.arrivalAirportCode, {'attr': {'class': 'col-span-1 bg-gray-100 pl-1 rounded-lg h-8 flex items-center'}}) }}
-                    {{ form_widget(form.arrivalTerminal, {'attr': {'class': 'col-span-1 bg-gray-100 pl-1 rounded-lg h-8 flex items-center'}}) }}
+                    {{ form_widget(form.arrivalAirportCode, {'attr': {'class': 'col-span-1 py-1.5'}}) }}
+                    {{ form_widget(form.arrivalTerminal, {'attr': {'class': 'col-span-1 py-1.5'}}) }}
                 </div>
             </div>
         </div>
 
 
 
-
-        <div class="mt-6">
-            {{ form_widget(form.notes) }}
+        <div class="space-y-2 mt-6">
+            {{ form_row(form.notes) }}
+            {% if form.status is defined %}
+                {{ form_row(form.status) }}
+            {% endif %}
         </div>
     </div>
-
-
-
-    <div class="flex justify-end mt-6">
-
-        <label>
-            <select name="{{ field_name(form.status) }}"
-                    class="bg-blue-100 rounded-l-2xl pl-2 py-1 custom-select focus:outline-none">
-                {% for label, value in field_choices(form.status) %}
-                    <option
-                        value="{{ value }}" {{ form.status.vars.value == value ? 'selected' }}>{{ label }}</option>
-                {% endfor %}
-            </select>
-        </label>
-        <div>
-            <button type="submit"
-                    class="bg-blue-100 px-4 py-1 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:hover:bg-blue-200 not-disabled:cursor-pointer rounded-r-2xl ml-0.5">
-                {{ item.id ? 'Modifier' : 'Ajouter' }}
-            </button>
-        </div>
+    <div class="mt-8">
+        <button type="submit"
+                class="px-2 block w-full py-2 bg-indigo-600 text-white transition-colors font-medium cursor-pointer not-disabled:hover:bg-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:cursor-pointer rounded-xl">
+            {{ item.id ? 'common.modify'|trans : 'common.add'|trans }}
+        </button>
     </div>
     {{ form_end(form) }}
+    {% if item.id %}
+        <hr class="my-4 border-gray-200">
+        <form action="{{ path('app_travelitem_delete', {'trip': trip.id}) }}" method="post" class="" onsubmit="return confirm('Supprimer ?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete-item' ~ trip.id) }}">
+            <input type="hidden" name="item" value="{{ item.id }}">
+            <button type="submit" class="cursor-pointer w-full p-2 rounded-xl hover:bg-red-50 font-medium text-red-300 text-center text-sm transition-colors">
+                {{ 'common.delete'|trans }}
+            </button>
+        </form>
+    {% endif %}
 
 </div>
 

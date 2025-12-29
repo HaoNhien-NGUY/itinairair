@@ -7,7 +7,7 @@
             <div class="flex justify-between items-center mb-3">
                 <h3 class="font-semibold">Vols</h3>
                 <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").FLIGHT.value}) }}" class="btn" data-turbo-frame="modal">
-                    Ajouter +
+                    {{ 'common.add'|trans }} +
                 </a>
             </div>
             <div class="space-y-4 mt-8">
@@ -18,7 +18,7 @@
                                 {% if flight.flightNumber %}
                                     {{ flight.flightNumber }}
                                 {% else %}
-                                    Vol
+                                    {{ 'common.flight'|trans }}
                                 {% endif %}
                             </div>
                             <div class="grid grid-cols-2 gap-2 text-sm">
@@ -28,6 +28,9 @@
                                         <span class="pl-1">{{ flight.departureAirport.terminal ?? '' }}</span>
                                     </div>
                                     <div>{{ flight.startTime|date('H:i') }}</div>
+                                    <div class="text-gray-400 text-sm mt-1">
+                                        {{ flight.startDay.date|date('d M') }}
+                                    </div>
                                 </div>
                                 <div>
                                     <div>
@@ -35,15 +38,15 @@
                                         <span class="pl-1">{{ flight.arrivalAirport.terminal ?? '' }}</span>
                                     </div>
                                     <div>{{ flight.endTime|date('H:i') }}</div>
+                                    <div class="text-gray-400 text-sm mt-1">
+                                        {{ flight.endDay ? flight.endDay.date|date('d M') : '' }}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="text-gray-400 text-sm mt-1">
-                                {{ flight.startDay.date|date('d M') }}
                             </div>
                         </a>
                     </div>
                 {% else %}
-                    <div class="text-gray-400 text-sm italic">Aucun vol</div>
+                    <div class="text-gray-400 text-sm italic">{{ 'common.no_flight'|trans }}</div>
                 {% endfor %}
             </div>
 
@@ -51,7 +54,7 @@
         </div>
         <div class="border border-indigo-200 bg-white rounded-2xl p-4">
             <div class="flex justify-between items-center">
-                <h3 class="font-semibold">Hotels et hebergements</h3>
+                <h3 class="font-semibold">{{ 'common.hotels_and_accommodations'|trans }}</h3>
                 <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").ACCOMMODATION.value}) }}" class="btn" data-turbo-frame="modal">
                     Ajouter +
                 </a>
@@ -68,7 +71,7 @@
                         </a>
                     </div>
                 {% else %}
-                    <div class="text-gray-400 text-sm italic">Aucune reservation</div>
+                    <div class="text-gray-400 text-sm italic">{{ 'common.no_booking'|trans }}</div>
                 {% endfor %}
             </div>
 

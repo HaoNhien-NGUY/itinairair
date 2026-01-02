@@ -41,7 +41,7 @@ trip:
     idea_box:
         title: Boîte à idées
         subtitle: Musées, restos... ajoutez tout ce qui vous fait envie.
-        add_idea: Suggérer une idée
+        add_idea: Suggérer un lieu
     page:
         schedule: Planning
         itinerary: Itineraire
@@ -76,6 +76,7 @@ landing:
             title: Multi-Destinations
             subtitle: Road trip en vue ? Gérez plusieurs étapes et destinations au sein d'un seul voyage.
 common:
+    title: Titre
     delete: Supprimer
     flight: Vol
     no_flight: Aucun vol

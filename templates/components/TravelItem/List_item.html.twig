@@ -1,20 +1,7 @@
 <turbo-frame id="item_{{ item.id }}" class="itinerary-item">
-    <div class="relative group/item md:ml-0 ml-2 {{ newItem is same as(item) ? 'new-item' }}">
-        <div class="flex space-x-3">
-            {% include 'travel_item/activity/_base_show.frame.html.twig' with {trip, item, } %}
-
-            <img class="w-40 h-24 rounded-xl [.idea-container_&]:hidden shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
-        </div>
-
-        <div class="absolute handle z-30 cursor-grabbing  top-3 -start-3.5">
-            <div class="inline-flex relative items-center justify-center w-7 h-7">
-                <div class="absolute w-full h-full bg-indigo-300 border-2 border-white rounded-full rounded-br-none transform rotate-45"></div>
-
-                <span class="relative text-white font-bold transform ">{{ position }}</span>
-            </div>
-            <div class="mt-2.5 opacity-0 group-hover/item:[&:not(.sortable-ghost_&)]:opacity-100 transition-opacity bg-white rounded-md flex justify-center">
-                <twig:ux:icon name="ic:baseline-drag-indicator" class="size-6 text-indigo-200" />
-            </div>
-        </div>
-    </div>
+    {% if item.itemType is same as enum('App\\Enum\\TravelItemType').ACTIVITY %}
+        {% include 'travel_item/activity/_itinerary.html.twig' with {trip, item, position, newItem: newItem ?? null} %}
+    {% elseif item.itemType is same as enum('App\\Enum\\TravelItemType').NOTE %}
+        {% include 'travel_item/note/_itinerary.html.twig' with {trip, item, position, newItem: newItem ?? null} %}
+    {% endif %}
 </turbo-frame>

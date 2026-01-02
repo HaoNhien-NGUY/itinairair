@@ -1,0 +1,21 @@
+<div class="relative group/item md:ml-0 ml-2 {{ newItem is same as(item) ? 'new-item' }}">
+    <div class="flex-1 [.idea-container_&]:mx-0 relative [.sortable-chosen_&]:bg-indigo-50 flex group/item">
+        <div class="{% block card_css %}outline hover:bg-gray-50{% endblock %} outline-indigo-200 min-h-12 flex flex-col pt-2.5 justify-between p-2 pl-6 rounded-xl w-full">
+            <div class="">
+                {% if item.name %}
+                    <div class="font-medium text-gray-700 text-base/6 line-clamp-2 mb-2">{{ item.name }}</div>
+                {% endif %}
+                <div class="text-gray-600">{{ item.notes }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="absolute handle z-30 cursor-grabbing  top-1 -start-3.5">
+        <div class="inline-flex relative items-center justify-center w-7 h-7">
+            <twig:ux:icon name="wpf:note" class="size-5 text-indigo-300 bg-white"/>
+        </div>
+        <div class="-mt-1 opacity-0 group-hover/item:[&:not(.sortable-ghost_&)]:opacity-100 transition-opacity bg-white rounded-md flex justify-center">
+            <twig:ux:icon name="ic:baseline-drag-indicator" class="size-6 text-indigo-200" />
+        </div>
+    </div>
+    <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="cursor-pointer z-20 absolute w-full h-full top-0 left-0"></a>
+</div>

@@ -2,24 +2,21 @@
      data-item-id="{{ item.id }}">
     <turbo-frame id="item_{{ item.id }}}">
         <div class="relative text-sm p-2 pl-5 [.day-itinerary_&]:min-h-20 outline-indigo-200 [.sortable-chosen_&]:bg-indigo-50 rounded-xl group/item {% block card_css %}outline hover:bg-gray-50{% endblock %}">
-
-
             {% block open_details %}
                 <a href="{{ path('app_travelitem_idea_details', {'item': item.id, 'trip': trip.id}) }}" class="cursor-pointer absolute w-full h-full top-0 left-0">
                 </a>
             {% endblock %}
             <div class="">
-                <div class="line-clamp-2 font-medium text-gray-700">{{ item.place.name }}</div>
+                <div class="line-clamp-2 font-medium text-gray-700">{{ item.name }}</div>
             </div>
 
-            {% if item.place.type %}
+            {% if item.place.type|default %}
                 <div class="flex justify-between">
                     <span class="bg-indigo-50z px-1.5py-0.5 rounded-lg text-xs text-gray-500">
                         {{ item.place.type }}
                     </span>
                 </div>
             {% endif %}
-
 
             <div class="absolute handle cursor-grabbing top-2 -start-3">
                 <div class="bg-white rounded-md flex justify-center">
@@ -37,6 +34,5 @@
                 {% endif %}
             {% endblock %}
         </div>
-
     </turbo-frame>
 </div>

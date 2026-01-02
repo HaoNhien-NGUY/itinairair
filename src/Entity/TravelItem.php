@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
     'flight' => Flight::class,
     'activity' => Activity::class,
     'destination' => Destination::class,
+    'note' => Note::class,
 ])]
 abstract class TravelItem
 {
@@ -42,8 +43,6 @@ abstract class TravelItem
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     protected ?Day $endDay = null;
-
-    //TODO: add a duration field to the entity
 
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTime $startTime = null;

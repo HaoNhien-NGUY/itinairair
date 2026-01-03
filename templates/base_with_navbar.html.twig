@@ -37,7 +37,7 @@
                     <div data-controller="dropdown" class="relative">
                         <div class="flex items-center">
                             <button type="button"
-                                    style="background-image: url('https://placehold.co/40?text={{ app.user.username[:1] }}&font=roboto')"
+                                    style="background-image: url({{ app.user.displayAvatar }})"
                                     class="h-10 w-10 bg-cover bg-center group focus:ring-2 user cursor-pointer relative ring-indigo-600/30 rounded-full"
                                     data-action="dropdown#toggle click@window->dropdown#hide"></button>
                         </div>

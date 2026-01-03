@@ -17,6 +17,15 @@ html {
     transform-origin: top center;
 }
 
+.discord-button {
+    background-color: #5a68eb;
+    transition: background-color 0.1s ease-in-out;
+
+    &:hover {
+        background-color: #4d59d4;
+    }
+}
+
 @keyframes show {
     100% {
         opacity: 1;

@@ -1,0 +1,8 @@
+auth:
+    discord:
+        label: Connexion avec Discord
+        canceled: La connexion avec Discord a été annulée.
+        no_email: Votre compte Discord n'a pas d'adresse email.
+    google:
+        label: Connexion avec Google
+or_with_email: ou par email

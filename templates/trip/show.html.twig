@@ -41,7 +41,7 @@
                 <div class="flex space-x-1">
                     {% for membership in trip.tripMemberships %}
                         <div class="flex items-center">
-                            <img src="https://placehold.co/800?text={{ membership.member.username[:1] }}&font=roboto" class="rounded-full size-8" title="{{ membership.member.username }}" alt="{{ membership.member.email }}">
+                            <img src="{{ membership.member.displayAvatar }}" class="rounded-full size-8" title="{{ membership.member.username }}" alt="{{ membership.member.email }}">
                         </div>
                     {% endfor %}
                     <a href="{{ path('app_trip_share_link', {trip: trip.id}) }}" data-turbo-frame="modal" class="flex items-center justify-center rounded-full bg-white hover:bg-gray-200 transition-colors size-8">

@@ -35,7 +35,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?string $password = null;
 
     #[ORM\Column]
@@ -59,6 +59,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 5)]
     private ?string $discriminator = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatarUrl = null;
 
     public function __construct()
     {
@@ -122,7 +125,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(?string $password): static
     {
         $this->password = $password;
 
@@ -135,7 +138,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __serialize(): array
     {
         $data = (array) $this;
-        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
+
+        if ($this->password) {
+            $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
+        }
 
         return $data;
     }
@@ -215,5 +221,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserTag(): string
     {
         return $this->username . '#' . $this->discriminator;
+    }
+
+    public function getAvatarUrl(): ?string
+    {
+        return $this->avatarUrl;
+    }
+
+    public function setAvatarUrl(?string $avatarUrl): static
+    {
+        $this->avatarUrl = $avatarUrl;
+
+        return $this;
+    }
+
+    public function getDisplayAvatar(): string
+    {
+        if ($this->avatarUrl) {
+            return $this->avatarUrl;
+        }
+
+        return sprintf('https://placehold.co/40?text=%s&font=roboto', $this->username[0]);
     }
 }

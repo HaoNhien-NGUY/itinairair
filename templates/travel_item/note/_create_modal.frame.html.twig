@@ -3,9 +3,9 @@
 
     <div>
         {{ form_start(form) }}
-        <div class="space-y-2">
+        <div class="space-y-4">
             {{ form_row(form.name) }}
-            {{ form_row(form.notes) }}
+            {{ form_widget(form.notes, {attr: {rows: 3}}) }}
         </div>
 
         <div class="mt-8">
@@ -15,5 +15,15 @@
         </div>
 
         {{ form_end(form) }}
+        {% if item.id %}
+            <hr class="my-4 border-gray-200">
+            <form action="{{ path('app_travelitem_delete', {'trip': trip.id}) }}" method="post" class="" onsubmit="return confirm('Supprimer ?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete-item' ~ trip.id) }}">
+                <input type="hidden" name="item" value="{{ item.id }}">
+                <button type="submit" class="cursor-pointer w-full p-2 rounded-xl hover:bg-red-50 font-medium text-red-300 text-center text-sm transition-colors">
+                    {{ 'common.delete'|trans }}
+                </button>
+            </form>
+        {% endif %}
     </div>
 </twig:Modal>

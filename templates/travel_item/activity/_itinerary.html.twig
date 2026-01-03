@@ -2,10 +2,10 @@
     <div class="flex space-x-3">
         {% include 'travel_item/activity/_base_show.frame.html.twig' with {trip, item, } %}
 
-        <img class="w-40 h-24 rounded-xl [.idea-container_&]:hidden shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
+        <img class="w-40 h-24 rounded-xl [.idea-container_&]:hidden handle cursor-grabbing shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
     </div>
 
-    <div class="absolute handle z-30 cursor-grabbing  top-3 -start-3.5">
+    <div class="absolute handle z-30 cursor-grabbing -ml-6 pl-6 top-3 -start-3.5">
         <div class="inline-flex relative items-center justify-center w-7 h-7">
             <div class="absolute w-full h-full bg-indigo-300 border-2 border-white rounded-full rounded-br-none transform rotate-45"></div>
 

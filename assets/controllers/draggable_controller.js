@@ -26,7 +26,8 @@ export default class extends Controller {
             dataIdAttr: 'data-item-id',
             handle: this.withHandleValue ? '.handle' : null,
             sort: this.allowSortValue,
-            swapThreshold: 2,
+            // swapThreshold: 0.70,
+            emptyInsertThreshold: 60,
             onStart: (event) => {
                 this.dragContainer?.classList.add('is-dragging');
             },

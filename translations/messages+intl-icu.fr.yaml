@@ -45,7 +45,7 @@ trip:
     page:
         schedule: Planning
         itinerary: Itineraire
-        reservation: Reservation
+        reservation: Réservations
     create: Ajouter un voyage
     status:
         ongoing: En cours
@@ -92,7 +92,7 @@ common:
         {count, plural, =0 {Nuit} one {Nuit} other {Nuits}}
     arrival: Arrivée
     departure: Départ
-    hotels_and_accommodations: Hotels et hébergements
+    hotels_and_accommodations: Hôtels et hébergements
     flights: Vols
     trips: >-
         {count, plural, one {Voyage} other {Voyages}}

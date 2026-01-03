@@ -24,11 +24,11 @@ class NoteType extends AbstractType
                 'empty_data' => null,
             ])
             ->add('name', TextType::class, [
-                'label' => 'common.title',
+                'label' => false,
                 'empty_data' => '',
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'Ex: Note 1',
+                    'placeholder' => 'common.title',
                     'icon' => 'mynaui:tag',
                     'autocomplete' => 'off',
                 ],

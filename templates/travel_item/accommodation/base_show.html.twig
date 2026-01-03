@@ -4,10 +4,10 @@
             <div class="flex items-center text-gray-700">
                 <twig:ux:icon name="material-symbols:hotel" class="size-5 mr-2"/>
                 {{ item.name }}
-                <twig:ux:icon name="bi:dash-lg" class="size-3 text-gray-500 mx-3"/>
+                <twig:ux:icon name="bi:dash-lg" class="size-3 text-gray-400 mx-3"/>
                 {% set totalDays = item.endDay.position - item.startDay.position + 1 %}
                 {% set currentDay =  day.position - item.startDay.position + 1 %}
-                <div class="text-gray-500 text-sm">
+                <div class="text-gray-400 text-sm">
                     {{ currentDay }} / {{ totalDays }}
                 </div>
             </div>

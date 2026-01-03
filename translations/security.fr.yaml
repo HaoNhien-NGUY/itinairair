@@ -5,4 +5,5 @@ auth:
         no_email: Votre compte Discord n'a pas d'adresse email.
     google:
         label: Connexion avec Google
+        canceled: La connexion avec Google a été annulée.
 or_with_email: ou par email

@@ -3,12 +3,14 @@
 {% block title %}MyTravel - {{ 'form.security.connection'|trans }}{% endblock %}
 
 {% block body %}
+    {% set last_email = app.request.cookies.get('last_google_login_email') %}
+
     <div class="rounded-4xl max-w-screen-xl bg-indigo-25 mx-auto px-2 mt-4 py-12 lg:px-8" data-turbo-prefetch="false">
         <div class="max-w-sm py-8 border-indigo-200 rounded-4xl mx-auto px-4 lg:px-8">
             <h2 class="text-center text-2xl/9 mb-6 text-indigo-600 font-bold tracking-tight ">{{ 'form.security.connection'|trans }}</h2>
             <div class="space-y-3">
 
-                <a href="{{ path('app_connect_discord_start') }}" class="flex items-center px-4 rounded-xl border border-gray-300 text-gray-600 text-sm justify-center py-2 w-full bg-white">
+                <a href="{{ path('app_connect_google_start') }}" class="flex items-center px-4 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 text-sm justify-center py-2 w-full bg-white">
                     <twig:ux:icon name="flat-color-icons:google" class="size-6 mr-4" />
                     {{ 'auth.google.label'|trans([], 'security') }}
                 </a>

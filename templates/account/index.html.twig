@@ -1,0 +1,16 @@
+{% extends 'base_with_navbar.html.twig' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+<div class="container mx-auto max-w-3xl mt-18">
+    <h1 class="text-4xl mb-12">Profile</h1>
+
+    {{ form_start(form) }}
+        <div class="space-y-4 mb-8">
+            {{ form_row(form.username) }}
+            {{ form_row(form.bio) }}
+        </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

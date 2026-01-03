@@ -49,6 +49,7 @@
                             data-transition-leave-from="opacity-100 scale-100"
                             data-transition-leave-to="opacity-0 scale-95"
                         >
+                            <a href="{{ path('app_account') }}" data-action="dropdown#toggle" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 block px-4 py-2 text-sm">{{ 'common.my_account'|trans }}</a>
                             <a href="{{ path('app_trip_create') }}" data-turbo-frame="modal" data-action="dropdown#toggle" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 block px-4 py-2 text-sm">{{ 'trip.new_trip'|trans }}</a>
                             <a href="{{ path('app_logout') }}" data-action="dropdown#toggle" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 block px-4 py-2 text-sm">{{ 'common.logout'|trans }}</a>
                         </div>

@@ -5,6 +5,9 @@ travel_items:
         booking_needed: À réserver
         booked: Réservé
 form:
+    user_account:
+        bio: Bio
+        bio_placeholder: Dites-nous en un peu plus sur vous...
     security:
         registration: Inscription
         connection: Connexion
@@ -76,6 +79,7 @@ landing:
             title: Multi-Destinations
             subtitle: Road trip en vue ? Gérez plusieurs étapes et destinations au sein d'un seul voyage.
 common:
+    my_account: Mon compte
     or: ou
     title: Titre
     delete: Supprimer

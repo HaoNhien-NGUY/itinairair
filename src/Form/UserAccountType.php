@@ -16,7 +16,6 @@ class UserAccountType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                'attr' => ['class' => 'form-input bg-indigo-10 px-4 py-2'],
                 'label' => 'common.username',
             ])
             ->add('bio', TextareaType::class, [

@@ -14,9 +14,7 @@ final class DiscordController extends AbstractController
     {
         return $clientRegistry
             ->getClient('discord')
-            ->redirect([
-                'identify', 'email'
-            ]);
+            ->redirect(['identify', 'email'], ['approval_prompt' => null]);
     }
 
     #[Route('/connect/discord/check', name: 'app_connect_discord_check')]

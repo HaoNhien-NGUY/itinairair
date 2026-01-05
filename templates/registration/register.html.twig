@@ -7,10 +7,30 @@
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
 
-    <div class="rounded-4xl max-w-screen-xl bg-indigo-25 mx-auto px-2 mt-4 py-12 lg:px-8">
-        <div class="max-w-sm py-8 border-indigo-200 rounded-4xl mx-auto">
-            <h2 class="text-center text-2xl/9 text-indigo-600 font-bold tracking-tight ">{{ 'form.security.registration'|trans }}</h2>
-            <div class="mt-8 px-4 lg:px-8">
+    <div class="rounded-4xl max-w-screen-xl bg-indigo-25 mx-auto px-2 mt-4 py-12 lg:px-8" data-turbo-prefetch="false">
+        <div class="max-w-sm py-8 border-indigo-200 rounded-4xl mx-auto px-4 lg:px-8">
+            <h2 class="text-center text-3xl/9 text-indigo-500 mb-7 font-bold tracking-tight ">{{ 'form.security.registration'|trans }}</h2>
+
+            <div class="space-y-3">
+
+                <a href="{{ path('app_connect_google_start') }}" class="flex items-center px-4 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 text-sm justify-center py-2 w-full bg-white">
+                    <twig:ux:icon name="flat-color-icons:google" class="size-6 mr-4" />
+                    {{ 'auth.google.label'|trans([], 'security') }}
+                </a>
+                <a href="{{ path('app_connect_discord_start') }}" class="flex items-center px-4 rounded-xl text-white text-sm justify-center py-2 w-full discord-button">
+                    <twig:ux:icon name="ic:baseline-discord" class="size-6 mr-4" />
+                    {{ 'auth.discord.label'|trans([], 'security') }}
+                </a>
+
+            </div>
+
+            <div class="flex items-center gap-4 w-full my-8">
+                <div class="w-full h-px flex-2 bg-gray-300/90"></div>
+                <p class="w-full text-nowrap flex-1 text-sm text-gray-500/90">{{ 'or_with_email'|trans([], 'security') }}</p>
+                <div class="w-full h-px flex-2 bg-gray-300/90"></div>
+            </div>
+
+            <div class="mt-8">
 
                 {{ form_start(registrationForm) }}
                 <div class="space-y-3.5">
@@ -26,7 +46,7 @@
                 {{ form_end(registrationForm) }}
                 <p class="mt-10 text-center text-sm/6 text-gray-500">
                     {{ 'form.security.account_already'|trans }}
-                    <a href="{{ path('app_login') }}" class="font-semibold ml-1 text-gray-500 hover:text-gray-600">{{ 'form.security.login'|trans }}</a>
+                    <a href="{{ path('app_login') }}" class="font-semibold ml-1 text-gray-500 hover:underline hover:text-gray-600">{{ 'form.security.login'|trans }}</a>
                 </p>
             </div>
 

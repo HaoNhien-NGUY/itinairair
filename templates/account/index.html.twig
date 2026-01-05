@@ -3,14 +3,23 @@
 {% block title %}Profile{% endblock %}
 
 {% block body %}
-<div class="container mx-auto max-w-3xl mt-18">
-    <h1 class="text-4xl mb-12">Profile</h1>
 
-    {{ form_start(form) }}
-        <div class="space-y-4 mb-8">
-            {{ form_row(form.username) }}
-            {{ form_row(form.bio) }}
-        </div>
-    {{ form_end(form) }}
+<div class="rounded-4xl max-w-screen-xl bg-indigo-25 mx-auto px-2 mt-4 py-12 lg:px-8">
+    <div class="max-w-sm py-8 border-indigo-200 rounded-4xl mx-auto px-4 lg:px-8">
+        <h1 class="text-4xl mb-12 text-indigo-500 font-bold">Profile</h1>
+
+        {{ form_start(form) }}
+            <div class="space-y-4 mb-8">
+                <div>
+                    <div class="form-label mb-1">
+                        Email
+                    </div>
+                    <div id="email" class="form-input shadow-none hover:border-indigo-200 bg-indigo-25" type="text">{{ app.user.email }}</div>
+                </div>
+                {{ form_row(form.username) }}
+                {{ form_row(form.bio) }}
+            </div>
+        {{ form_end(form) }}
+    </div>
 </div>
 {% endblock %}

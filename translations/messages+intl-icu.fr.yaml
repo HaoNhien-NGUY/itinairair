@@ -79,6 +79,9 @@ landing:
             title: Multi-Destinations
             subtitle: Road trip en vue ? Gérez plusieurs étapes et destinations au sein d'un seul voyage.
 common:
+    change_photo: Changer de photo
+    my_profile: Mon profil
+    profile: Profil
     my_account: Mon compte
     or: ou
     title: Titre

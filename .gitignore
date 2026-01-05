@@ -16,6 +16,7 @@
 
 ###> symfony/asset-mapper ###
 /public/assets/
+/public/uploads/
 /assets/vendor/
 ###< symfony/asset-mapper ###
 
@@ -30,3 +31,7 @@
 ###> other ###
 GEMINI.md
 ###< other ###
+
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###

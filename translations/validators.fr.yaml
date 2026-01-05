@@ -1,0 +1,3 @@
+validation:
+    error:
+        user_avatar_type: Veuillez télécharger une image valide (JPG, PNG ou WebP).

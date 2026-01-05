@@ -1,0 +1,14 @@
+{% props user, imgClass = 'size-16' %}
+
+<div {{ attributes }}>
+    {% set url %}
+        {% if user.imageName %}
+            {{ vich_uploader_asset(user, 'imageFile')|imagine_filter('avatar_thumb') }}
+        {% elseif user.avatarUrl %}
+            {{ user.avatarUrl }}
+        {% else %}
+            https://placehold.co/40?text={{ user.username|first|upper }}&font=roboto
+        {% endif %}
+    {% endset %}
+    <img src="{{ url }}" alt="{{ user.username }}-avatar" class="rounded-full object-cover {{ imgClass }}">
+</div>

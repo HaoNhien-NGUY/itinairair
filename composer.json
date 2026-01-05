@@ -12,7 +12,9 @@
         "doctrine/doctrine-migrations-bundle": "^3.4",
         "doctrine/orm": "^3.5",
         "knpuniversity/oauth2-client-bundle": "^2.20",
+        "league/flysystem-bundle": "^3.6",
         "league/oauth2-google": "^4.1",
+        "liip/imagine-bundle": "^2.15",
         "phpdocumentor/reflection-docblock": "^5.6",
         "phpstan/phpdoc-parser": "^2.2",
         "symfony/asset": "7.3.*",
@@ -51,6 +53,7 @@
         "symfonycasts/verify-email-bundle": "^1.17",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
+        "vich/uploader-bundle": "^2.9",
         "wohali/oauth2-discord-new": "^1.2"
     },
     "config": {

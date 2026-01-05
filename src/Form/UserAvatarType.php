@@ -11,26 +11,20 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
-class UserAccountType extends AbstractType
+class UserAvatarType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username', TextType::class, [
-                'label' => 'common.username',
-            ])
-            ->add('bio', TextareaType::class, [
-                'label' => 'form.user_account.bio',
+            ->add('imageFile', VichImageType::class, [
                 'required' => false,
+                'allow_delete' => false,
+                'download_uri' => false,
+                'image_uri' => false,
+                'asset_helper' => false,
                 'attr' => [
-                    'rows' => 3,
-                    'placeholder' => 'form.user_account.bio_placeholder'
-                ]
-            ])
-            ->add('save', SubmitType::class, [
-                'label' => 'common.modify',
-                'attr' => [
-                    'class' => 'block w-full py-2'
+                    'onchange' => 'this.form.requestSubmit()',
+                    'accept' => 'image/*',
                 ]
             ]);
     }

@@ -1,12 +1,33 @@
 {% extends 'base_with_navbar.html.twig' %}
 
-{% block title %}Profile{% endblock %}
+{% block title %}{{ 'common.my_account'|trans }}{% endblock %}
 
 {% block body %}
 
 <div class="rounded-4xl max-w-screen-xl bg-indigo-25 mx-auto px-2 mt-4 py-12 lg:px-8">
     <div class="max-w-sm py-8 border-indigo-200 rounded-4xl mx-auto px-4 lg:px-8">
-        <h1 class="text-4xl mb-12 text-indigo-500 font-bold">Profile</h1>
+        <h1 class="text-4xl mb-10 text-indigo-500 font-bold">{{ 'common.profile'|trans }}</h1>
+
+        <div class="mb-10">
+            {{ form_start(avatarForm) }}
+            <div class="flex items-center gap-8">
+                <label for="{{ avatarForm.imageFile.file.vars.id }}" class="cursor-pointer">
+                    <twig:UserAvatar user="{{ app.user }}" imgClass="size-28"/>
+                </label>
+                <label for="{{ avatarForm.imageFile.file.vars.id }}" class="cursor-pointer btn">{{ 'common.change_photo'|trans }}</label>
+            </div>
+            {% if avatarForm.imageFile.vars.errors|length > 0 %}
+                <div class="mt-2 text-red-400 text-sm font-medium">
+                    {% for error in avatarForm.imageFile.vars.errors %}
+                        <p>{{ error.message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="hidden">
+                {{ form_widget(avatarForm.imageFile.file) }}
+            </div>
+            {{ form_end(avatarForm) }}
+        </div>
 
         {{ form_start(form) }}
             <div class="space-y-4 mb-8">

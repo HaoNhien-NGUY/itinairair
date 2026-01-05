@@ -6,8 +6,10 @@
     class="day-itinerary border-dashed border-indigo-100 rounded-xl min-h-14
             [:has(>_.draggable)]:opacity-100
             [&:not(:has(>_.draggable))]:border-2
-            [:has(>_.draggable)]:-my-15
-            [:has(>_.draggable)]:py-15"
+            [:has(>_.draggable)]:-mt-15
+            [:has(>_.draggable)]:pt-15
+            [:has(>_.draggable)]:-mb-20
+            [:has(>_.draggable)]:pb-20"
 >
     <form action="{{ path('app_travelitem_reorder_day_item', {trip: trip.id, day: day.id}) }}" method="POST" {{ stimulus_target('draggable', 'form')}} class="hidden">
         <input type="hidden" name="ordered_items" {{ stimulus_target('draggable', 'formInput')}}>

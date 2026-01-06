@@ -2,19 +2,15 @@
     {% block title %}
         <div class="w-100 flex items-center">
             {{ ux_icon('material-symbols:link', {class: 'size-5 mr-2'}) }}
-            Partage par lien
+            {{ 'trip.join_token.share_link'|trans }}
         </div>
     {% endblock %}
 
 
-    Toutes les personnes disposant du lien peuvent rejoindre ce voyage et le modifier.
+    {{ 'trip.join_token.allow_warning'|trans }}
     <hr class="my-8 text-gray-200" />
-    {% if success|default(false) %}
-        <div class="text-green-500">
-            LIEN CREER
-        </div>
-    {% endif %}
-    <div class="text-blue-500 text-sm">
+
+    <span class="text-blue-500 text-sm">
         {{ url('app_trip_join', {inviteToken: trip.inviteToken}) }}
-    </div>
+    </span>
 </twig:Modal>

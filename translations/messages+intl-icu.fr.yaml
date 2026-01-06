@@ -35,6 +35,11 @@ transport:
     train: Train
     bus: Bus
 trip:
+    join_token:
+        share_link: Partage par lien
+        create: Créer un lien
+        create_link: Créer un lien de partage
+        allow_warning: Toute personne munie du lien pourra rejoindre et modifier le voyage.
     start: Debut du voyage
     add_a_step: Ajouter une étape
     no_destination_yet: Le voyage est vide pour le moment, ajoutez une étape

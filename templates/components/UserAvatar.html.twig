@@ -10,5 +10,5 @@
             https://placehold.co/40?text={{ user.username|first|upper }}&font=roboto
         {% endif %}
     {% endset %}
-    <img src="{{ url }}" alt="{{ user.username }}-avatar" class="rounded-full object-cover {{ imgClass }}">
+    <img src="{{ url }}" alt="{{ user.username }}-avatar" title="{{ user.username }}" class="rounded-full object-cover {{ imgClass }}">
 </div>

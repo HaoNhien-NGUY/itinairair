@@ -64,7 +64,7 @@ class DiscordAuthenticator extends OAuth2Authenticator
 
                 $user = new User();
                 $user->setEmail($email);
-                $user->setUsername($discordUser->getUsername());
+                $user->setUsername(ucfirst($discordUser->getUsername()));
                 $avatarHash = $discordUser->getAvatarHash();
 
                 if ($avatarHash) {

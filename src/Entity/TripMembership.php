@@ -22,12 +22,11 @@ class TripMembership
     #[ORM\JoinColumn(nullable: false)]
     private ?User $member = null;
 
-    //TODO: add a display nane field ?
-
     #[ORM\Column(length: 255, enumType: TripRole::class)]
     private TripRole $role;
 
-    public function __construct(Trip $trip, User $member, TripRole $role = TripRole::VIEWER)
+    //TODO: if read only mode, default to VIEWER role
+    public function __construct(Trip $trip, User $member, TripRole $role = TripRole::EDITOR)
     {
         $this->trip = $trip;
         $this->member = $member;

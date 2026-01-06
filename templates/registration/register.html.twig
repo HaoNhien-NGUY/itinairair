@@ -12,12 +12,11 @@
             <h2 class="text-center text-3xl/9 text-indigo-500 mb-7 font-bold tracking-tight ">{{ 'form.security.registration'|trans }}</h2>
 
             <div class="space-y-3">
-
-                <a href="{{ path('app_connect_google_start') }}" class="flex items-center px-4 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 text-sm justify-center py-2 w-full bg-white">
+                <a href="{{ path('app_connect_google_start') }}" data-turbo="false" class="flex items-center px-4 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 text-sm justify-center py-2 w-full bg-white">
                     <twig:ux:icon name="flat-color-icons:google" class="size-6 mr-4" />
                     {{ 'auth.google.label'|trans([], 'security') }}
                 </a>
-                <a href="{{ path('app_connect_discord_start') }}" class="flex items-center px-4 rounded-xl text-white text-sm justify-center py-2 w-full discord-button">
+                <a href="{{ path('app_connect_discord_start') }}" data-turbo="false" class="flex items-center px-4 rounded-xl text-white text-sm justify-center py-2 w-full discord-button">
                     <twig:ux:icon name="ic:baseline-discord" class="size-6 mr-4" />
                     {{ 'auth.discord.label'|trans([], 'security') }}
                 </a>

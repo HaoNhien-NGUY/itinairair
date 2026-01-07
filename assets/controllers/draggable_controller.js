@@ -22,7 +22,7 @@ export default class extends Controller {
         const options = {
             filter: '.no-drag',
             draggable: '.draggable',
-            animation: 250,
+            animation: 350,
             dataIdAttr: 'data-item-id',
             handle: this.withHandleValue ? '.handle' : null,
             sort: this.allowSortValue,

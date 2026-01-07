@@ -1,5 +1,5 @@
-<turbo-frame id="details_item_{{ item.id }}" class="flex-1 [.idea-container_&]:mx-0 relative [.sortable-chosen_&]:bg-indigo-50 flex group/item">
-    <div class="{% block card_css %}outline hover:bg-gray-50{% endblock %} outline-indigo-200 flex flex-col pt-2.5 justify-between p-2 pl-6 rounded-xl w-full">
+<turbo-frame id="details_item_{{ item.id }}" class="flex-1 [.idea-container_&]:mx-0 relative [.sortable-chosen_&]:bg-indigo-50 flex group/item rounded-xl {% block card_css %}outline hover:bg-gray-50{% endblock %} outline-indigo-200">
+    <div class="flex flex-col pt-2.5 justify-between p-2 pl-6 w-full">
         <div class="">
             <div class="font-medium text-gray-700 text-base/6 line-clamp-2">{{ item.place.name }}</div>
 

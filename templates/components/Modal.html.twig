@@ -1,9 +1,17 @@
+{% props size = 'md' %}
+
+{% set maxWidth = {
+    'md': 'max-w-md',
+    'lg': 'max-w-lg',
+    'xl': 'max-w-xl',
+} %}
+
 <turbo-frame id="modal" {{ attributes }} class="">
     <div id="modal-backdrop" class="fixed inset-0 transition-opacity duration-[400ms] bg-black/25 flex items-center justify-center z-50"
          style="opacity: 0"
         {{ stimulus_target('modal', 'backdrop') }}
          data-action="click->modal#handleBackdropClick">
-        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full mx-4 max-h-[90vh] duration-[400ms] transition-[opacity,transform,translate]"
+        <div class="bg-white rounded-2xl shadow-xl {{ maxWidth[size] }} w-full mx-4 max-h-[90vh] duration-[400ms] transition-[opacity,transform,translate]"
              style="transform: translateY(-35%);"
              style="opacity: 0"
              {{ stimulus_target('modal', 'modal') }}

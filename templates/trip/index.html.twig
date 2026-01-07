@@ -90,11 +90,11 @@
 
         <div class="container max-w-3xl mx-auto">
             <div class="mb-12 flex justify-between items-end">
-                <h2 class="text-3xl font-medium text-indigo-600">{{ 'trip.my_trips'|trans }}</h2>
+                <h2 class="text-xl font-medium text-indigo-600">{{ 'trip.my_trips'|trans }}</h2>
                 {% if trips.count > 0 %}
                     <a href="{{ path('app_trip_create') }}"
                        data-turbo-frame="modal"
-                       class="bg-indigo-500 hover:bg-indigo-400 transition-colors text-white text-sm font-medium py-1 px-4 flex items-center rounded-lg">
+                       class="bg-indigo-500 hover:bg-indigo-400 transition-colors text-indigo-50 text-sm font-medium py-1 px-4 flex items-center rounded-2xl">
                         {{ 'trip.new_trip'|trans }}
                     </a>
                 {% else %}
@@ -135,13 +135,13 @@
             </div>
 
             {% if trips.past %}
-                <div class="flex items-center mt-12 mb-8">
-                    <div class="mr-5 text-lg font-medium text-slate-500">
-                        Souvenirs
-                    </div>
-                    <div class="border-b-1 border-gray-200 w-full"></div>
-                </div>
-                <div class="space-y-6">
+{#                <div class="flex items-center mt-12 mb-8">#}
+{#                    <div class="mr-5 text-lg font-medium text-slate-500">#}
+{#                        Souvenirs#}
+{#                    </div>#}
+{#                    <div class="border-b-1 border-gray-200 w-full"></div>#}
+{#                </div>#}
+                <div class="space-y-6 mt-10">
                     {% for trip in trips.past %}
                         {{ _self.trip_card(trip, today, countriesByTrip) }}
                     {% endfor %}

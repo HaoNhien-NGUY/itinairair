@@ -33,10 +33,13 @@
                         <twig:ux:icon name="flowbite:trash-bin-solid" class="size-4 text-gray-400" />
                     </button>
                 </form>
-                <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="flex items-center text-gray-400 hover:bg-gray-100 text-sm py-1 px-2.5 rounded-xl">
-                    <twig:ux:icon name="fluent:edit-16-filled" class="size-4" />
-                </a>
             </div>
+
+            <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}"
+               data-turbo-frame="modal"
+               class="py-0.5 px-2.5 z-30 text-indigo-400 font-medium text-sm bg-indigo-100 flex items-center focus:outline-none hover:bg-indigo-200 transition-colors rounded-xl">
+                {{ 'common.modify'|trans }}
+            </a>
             <twig:Button:OpenMaps item="{{ item }}" />
 
             <a href="{{ path('app_travelitem_activity_show', {'trip': trip.id, 'item': item.id }) }}"

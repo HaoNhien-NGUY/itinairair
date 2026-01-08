@@ -27,8 +27,8 @@ form:
 validation:
     error:
         username:
-            min_length: Votre nom d'utilisateur doit comporter au moins {{ limit }} caractères.
-            max_length: Votre nom d'utilisateur ne peut pas dépasser {{ limit }} caractères.
+            minLength: Votre nom d'utilisateur doit comporter au moins {{ limit }} caractères.
+            maxLength: Votre nom d'utilisateur ne peut pas dépasser {{ limit }} caractères.
 transport:
     airplane:
         flight_number: Numero du vol

@@ -35,9 +35,14 @@ task('deploy:assets:build', function () {
     run('{{bin/php}} bin/console asset-map:compile');
 });
 
+desc('Stop workers');
+task('deploy:stop-workers', function () {
+    run('{{bin/php}} bin/console messenger:stop-workers');
+});
 
 // Hooks
 after('deploy:vendors', 'deploy:dump-env');
 after('deploy:vendors', 'deploy:assets:build');
 after('deploy:vendors', 'database:migrate');
 after('deploy:failed', 'deploy:unlock');
+after('deploy:success', 'deploy:stop-workers');

@@ -28,8 +28,15 @@ class EmailVerifier
             ['id' => $user->getId()]
         );
 
+        $signedUrl = $signatureComponents->getSignedUrl();
+
+        $email->getHeaders()->addParameterizedHeader('params', 'params', [
+            'USERNAME'   => $user->getUsername(),
+            'signedUrl'  => $signedUrl,
+        ]);
+
         $context = $email->getContext();
-        $context['signedUrl'] = $signatureComponents->getSignedUrl();
+        $context['signedUrl'] = $signedUrl;
         $context['expiresAtMessageKey'] = $signatureComponents->getExpirationMessageKey();
         $context['expiresAtMessageData'] = $signatureComponents->getExpirationMessageData();
 

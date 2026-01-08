@@ -30,14 +30,13 @@ host('itinairair.com')
 
 desc('Build assets');
 task('deploy:assets:build', function () {
-    cd('{{release_path}}');
-    run('{{bin/php}} bin/console tailwind:build --minify');
-    run('{{bin/php}} bin/console asset-map:compile');
+    run('{{bin/console}} tailwind:build --minify');
+    run('{{bin/console}} asset-map:compile');
 });
 
 desc('Stop workers');
 task('deploy:stop-workers', function () {
-    run('{{bin/php}} bin/console messenger:stop-workers');
+    run('{{bin/console}} messenger:stop-workers');
 });
 
 // Hooks

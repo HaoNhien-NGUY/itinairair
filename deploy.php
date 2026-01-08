@@ -11,11 +11,13 @@ add('shared_files', ['.env.local', '.env.prod.local']);
 add('shared_dirs', [
     'public/uploads',
     'var/log',
-    'var/sessions'
+    'var/sessions',
+    'public/media',
     ]);
 add('writable_dirs', [
     'var',
     'public/uploads',
+    'public/media',
 ]);
 
 // Hosts

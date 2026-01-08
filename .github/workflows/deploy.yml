@@ -4,6 +4,8 @@ on:
     push:
         branches: [ master ]
 
+concurrency: production_environment
+
 jobs:
     deploy:
         runs-on: ubuntu-latest
@@ -11,11 +13,19 @@ jobs:
             -   name: Checkout code
                 uses: actions/checkout@v4
 
-            -   name: Deploy to VPS
-                uses: appleboy/ssh-action@master
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
                 with:
-                    host: ${{ secrets.SSH_HOST }}
-                    port: ${{ secrets.SSH_PORT }}
-                    username: ${{ secrets.SSH_USER }}
-                    key: ${{ secrets.SSH_PRIVATE_KEY }}
-                    script: "/home/ubuntu/deploy.sh"
+                    php-version: '8.3'
+
+            -   name: Install dependencies
+                run: composer install
+
+            -   name: Deploy
+                uses: deployphp/action@v1
+                with:
+                    dep: deploy
+                    private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+                    known-hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+                env:
+                    SSH_PORT: ${{ secrets.SSH_PORT }}

@@ -5,6 +5,12 @@ liip_imagine:
     resolvers:
         default:
             web_path: ~
+    loaders:
+        default:
+            filesystem:
+                data_root:
+                    - '%kernel.project_dir%/../../shared/public'
+                    - '%kernel.project_dir%/public'
     filter_sets:
         cache: ~
         avatar_thumb:

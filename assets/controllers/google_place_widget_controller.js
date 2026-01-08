@@ -49,7 +49,6 @@ export default class extends Controller {
             return;
         }
 
-        this.placeAutocomplete.Dg?.setAttribute('placeholder', 'Rechercher par nom');
         this.placeAutocomplete.includedPrimaryTypes = this.primaryTypesValue;
         if (Object.keys(this.locationValue).length > 0) {
             this.placeAutocomplete.locationBias = {

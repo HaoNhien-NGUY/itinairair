@@ -1,8 +1,8 @@
 <div class="relative group/item md:ml-0 ml-2 {{ newItem is same as(item) ? 'new-item' }}">
-    <div class="flex space-x-2 md:space-x-3">
+    <div class="flex md:space-x-3">
         {% include 'travel_item/activity/_base_show.frame.html.twig' with {trip, item, } %}
 
-        <img class="md:w-40 md:h-24 size-22 rounded-xl [.idea-container_&]:hidden cursor-grabbing shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
+        <img class="md:w-40 md:h-24 size-22 rounded-xl hidden md:block [.idea-container_&]:hidden cursor-grabbing shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
     </div>
 
     <div class="absolute handle z-30 cursor-grabbing -ml-6 pl-6 -mr-3 pr-3 top-3 -start-3.5">

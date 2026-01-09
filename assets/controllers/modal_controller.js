@@ -17,14 +17,8 @@ export default class extends Controller {
 
         document.body.style.overflow = 'hidden';
 
-        setTimeout(() => {
-            element.style.opacity = '1';
-            this.modalTarget.style.transform = 'translateY(-20%)';
-        }, 0);
-
-        setTimeout(() => {
-            this.modalTarget.style.opacity = '1';
-        }, 300);
+        this.backdropTarget.classList.remove("opacity-0");
+        this.modalTarget.classList.remove("translate-y-full", "opacity-0", "md:scale-95");
     }
 
     closeTargetConnected() {
@@ -42,12 +36,9 @@ export default class extends Controller {
 
         event?.preventDefault()
         document.body.style.overflow = '';
-        this.modalTarget.style.transform = 'translateY(-35%)';
-        this.modalTarget.style.opacity = '0';
 
-        setTimeout(() => {
-            this.backdropTarget.style.opacity = '0'
-        }, 200)
+        this.backdropTarget.classList.add("opacity-0");
+        this.modalTarget.classList.add("translate-y-full", "opacity-0", "md:scale-95");
 
         setTimeout(() => {
             this.element.innerHTML = '';

@@ -16,9 +16,10 @@
                     w-full mx-0 rounded-t-2xl rounded-b-none
                     md:rounded-2xl md:mx-4 {{ maxWidth[size]|default('max-w-md') }}
                     max-h-[90vh]
+                    min-h-[50vh] md:min-h-0
                     transform transition-all duration-[400ms] ease-out
                     translate-y-full opacity-0
-                    md:translate-y-0 md:scale-95"
+                    md:-translate-y-20"
             {{ stimulus_target('modal', 'modal') }}
         >
             <turbo-frame id="modal-content">
@@ -34,7 +35,7 @@
                     </div>
                 </div>
 
-                <div class="px-5 pb-8 md:pb-5">
+                <div class="px-5 pb-5">
                     {% block content %}
                     {% endblock %}
                 </div>

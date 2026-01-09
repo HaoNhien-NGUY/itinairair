@@ -56,6 +56,13 @@ gmp-place-autocomplete {
     color: #59637b !important;
 }
 
+@layer utilities {
+    .container {
+        padding-inline: 1rem;
+        margin-inline: auto;
+    }
+}
+
 @layer components {
     .btn {
         @apply font-medium rounded-full bg-indigo-500 px-4 py-2 text-white hover:bg-indigo-400 transition-colors text-sm;

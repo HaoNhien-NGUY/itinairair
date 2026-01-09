@@ -13,8 +13,8 @@
         <div class="inline-flex relative items-center justify-center w-7 h-7">
             <twig:ux:icon name="wpf:note" class="size-5 text-indigo-300 bg-white"/>
         </div>
-        <div class="-mt-1 opacity-0 group-hover/item:[&:not(.sortable-ghost_&)]:opacity-100 transition-opacity bg-white rounded-md flex justify-center">
-            <twig:ux:icon name="ic:baseline-drag-indicator" class="size-7 text-slate-400" />
+        <div class="-mt-1 opacity-100 group-hover/item:[&:not(.sortable-ghost_&)]:opacity-100 transition-opacity bg-white rounded-md flex justify-center">
+            <twig:ux:icon name="ic:baseline-drag-indicator" class="size-7 text-indigo-300/70" />
         </div>
     </div>
     <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="cursor-pointer z-20 absolute w-full h-full top-0 left-0"></a>

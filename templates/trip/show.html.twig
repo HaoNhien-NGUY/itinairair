@@ -23,7 +23,7 @@
     {% set noteEnum = enum("App\\Enum\\TravelItemType").NOTE.value %}
 
     <div class="container max-w-7xl mx-auto">
-        <div class="px-2 lg:px-4 pt-8">
+        <div class="pt-8">
             <h3 id="trip-name" class="text-4xl mb-2">{{ trip.name }}</h3>
             <div class="flex items-center text-sm">
                 <a href="{{ path('app_trip_edit', {'trip': trip.id}) }}" data-turbo-frame="modal" class="text-gray-500 hover:text-gray-700">{{ trip.startDate|date_short }} {{ trip.startDate|date('Y')}} - {{ trip.endDate|date_short }}</a>
@@ -66,11 +66,11 @@
         {{ _self.navTabBtn('trip.page.reservation'|trans, currentRoute == 'app_trip_bookings', path('app_trip_bookings', {'id': trip.id})) }}
     </div>
 
-    <main class="border-t-2 py-5 border-indigo-50 bg-indigo-10 grow">
+    <main class="md:border-t-2  md:py-5 pb-5 pt-2 border-indigo-50 bg-indigo-10 grow">
         {% block content %}
             <div id="drag-container" class="container max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3">
                 <div class="lg:col-span-2">
-                    <div class="rounded-2xl border-2 border-indigo-200 overflow-hidden">
+                    <div class="rounded-2xl md:border-2 -mx-4 md:mx-0 border-0 border-indigo-200 overflow-hidden">
                         {% set displayEmptyRange = true %}
                         {% for day in trip.days %}
 

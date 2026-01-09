@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block navbar %}
-    <nav class="flex items-center relative justify-between bg-white max-w-screen-xl mx-auto px-5 py-2 w-full">
+    <nav class="flex items-center select-none relative justify-between bg-white max-w-screen-xl mx-auto px-5 py-2 w-full">
         <div>
             <a href="{{ path('app_home') }}" class="text-gray-600 text-2xl font-bold cursor-pointer">{{ app_name|slice(0, 7) }}<span class="text-indigo-600">{{ app_name|slice(7) }}</a>
         </div>

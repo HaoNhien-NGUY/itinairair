@@ -17,8 +17,10 @@ export default class extends Controller {
 
         document.body.style.overflow = 'hidden';
 
-        this.backdropTarget.classList.remove('opacity-0');
-        this.modalTarget.classList.remove('translate-y-full', 'opacity-0', 'md:-translate-y-20');
+        setTimeout(() => {
+            this.backdropTarget.classList.remove('opacity-0');
+            this.modalTarget.classList.remove('translate-y-full', 'opacity-0', 'md:-translate-y-20');
+        }, 20);
     }
 
     closeTargetConnected() {
@@ -37,7 +39,7 @@ export default class extends Controller {
         event?.preventDefault()
         document.body.style.overflow = '';
 
-        this.backdropTarget.classList.add("opacity-0");
+        this.backdropTarget.classList.add('opacity-0');
         this.modalTarget.classList.add('translate-y-full', 'opacity-0', 'md:-translate-y-20');
 
         setTimeout(() => {

@@ -24,11 +24,11 @@
 
     <div class="container max-w-7xl mx-auto">
         <div class="pt-8">
-            <h3 id="trip-name" class="text-4xl mb-2">{{ trip.name }}</h3>
-            <div class="flex items-center text-sm">
+            <h3 id="trip-name" class="text-lg md:text-2xl mb-2">{{ trip.name }}</h3>
+            <div class="flex items-center md:text-sm text-xs">
                 <a href="{{ path('app_trip_edit', {'trip': trip.id}) }}" data-turbo-frame="modal" class="text-gray-500 hover:text-gray-700">{{ trip.startDate|date_xs }} {{ trip.startDate|date('Y')}} - {{ trip.endDate|date_xs }}</a>
-                <div class="flex flex-wrap ml-5 items-center text-sm">
-                    <twig:ux:icon name="bxs:map" class="size-4.5 text-gray-400 mr-1" />
+                <div class="flex flex-wrap ml-5 items-center">
+                    <twig:ux:icon name="bxs:map" class="size-4 text-gray-400 mr-1" />
                     {% for country in statistics.countries %}
                         {% if not loop.first %}<span class="inline-block mx-1.5 text-gray-500">•</span>{% endif %}
                         <span class="text-gray-500">{{ country }}</span>
@@ -53,12 +53,12 @@
     </div>
 
     {% macro navTabBtn(title, active, path) %}
-        <a href="{{ path }}" class="[&.active,&:hover]:bg-indigo-50 [&.active,&:hover]:text-indigo-400 [&.active]:font-medium px-4 py-1 hover:cursor-pointer text-gray-500 transition-colors rounded-xl {{ active ? 'active' }}">
+        <a href="{{ path }}" class="[&.active,&:hover]:bg-indigo-50 text-sm md:text-base [&.active,&:hover]:text-indigo-400 [&.active]:font-medium px-4 py-1 hover:cursor-pointer text-gray-500 transition-colors rounded-4xl {{ active ? 'active' }}">
             {{ title }}
         </a>
     {% endmacro %}
 
-    <div class="flex container max-w-7xl md:space-x-2 mb-3 mt-10">
+    <div class="flex container max-w-7xl md:space-x-2 space-x-1 mb-2 mt-10">
         {% set currentRoute = app.request.attributes.get('_route') %}
 
         {{ _self.navTabBtn('trip.page.schedule'|trans, currentRoute == 'app_trip_show', path('app_trip_show', {'id': trip.id})) }}

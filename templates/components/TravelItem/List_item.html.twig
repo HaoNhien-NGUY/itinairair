@@ -1,7 +1,9 @@
 <turbo-frame id="item_{{ item.id }}" class="itinerary-item">
-    {% if item.itemType is same as enum('App\\Enum\\TravelItemType').ACTIVITY %}
-        {% include 'travel_item/activity/_itinerary.html.twig' with {trip, item, position, newItem: newItem ?? null} %}
-    {% elseif item.itemType is same as enum('App\\Enum\\TravelItemType').NOTE %}
-        {% include 'travel_item/note/_itinerary.html.twig' with {trip, item, position, newItem: newItem ?? null} %}
-    {% endif %}
+    <div class="btn-animate">
+        {% if item.itemType is same as enum('App\\Enum\\TravelItemType').ACTIVITY %}
+            {% include 'travel_item/activity/_itinerary.html.twig' with {trip, item, position, newItem: newItem ?? null} %}
+        {% elseif item.itemType is same as enum('App\\Enum\\TravelItemType').NOTE %}
+            {% include 'travel_item/note/_itinerary.html.twig' with {trip, item, position, newItem: newItem ?? null} %}
+        {% endif %}
+    </div>
 </turbo-frame>

@@ -1,5 +1,5 @@
-<div class="relative group/item md:ml-0 ml-2 {{ newItem is same as(item) ? 'new-item' }}">
-    <div class="flex-1 [.idea-container_&]:mx-0 relative [.sortable-chosen_&]:bg-indigo-50 flex rounded-xl group/item {% block card_css %}outline hover:bg-gray-50{% endblock %} outline-indigo-200">
+<div class="relative group/item md:ml-0 ml-2 rounded-xl hover:bg-gray-50 [.sortable-chosen_&]:bg-indigo-50 outline  outline-indigo-200 {{ newItem is same as(item) ? 'new-item' }}">
+    <div class="flex-1 [.idea-container_&]:mx-0 relative flex group/item">
         <div class="min-h-12 flex flex-col pt-2.5 justify-between p-2 pl-6  w-full">
             <div class="">
                 {% if item.name %}

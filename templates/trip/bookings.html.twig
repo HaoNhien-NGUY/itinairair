@@ -2,8 +2,8 @@
 
 {% block content %}
 
-	<div class="container mx-auto max-w-7xl py-4 space-y-4 space-x-4 grid grid-cols-1 lg:grid-cols-2">
-        <div class="border border-indigo-200 bg-white rounded-2xl p-4">
+	<div class="container mx-auto max-w-7xl py-4 gap-2 grid grid-cols-1 lg:grid-cols-2">
+        <div class="border border-indigo-100 bg-white rounded-2xl p-4">
             <div class="flex justify-between items-center mb-3">
                 <h3 class="font-semibold">Vols</h3>
                 <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").FLIGHT.value}) }}" class="btn" data-turbo-frame="modal">
@@ -52,7 +52,7 @@
 
 
         </div>
-        <div class="border border-indigo-200 bg-white rounded-2xl p-4">
+        <div class="border border-indigo-100 bg-white rounded-2xl p-4">
             <div class="flex justify-between items-center">
                 <h3 class="font-semibold">{{ 'common.hotels_and_accommodations'|trans }}</h3>
                 <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").ACCOMMODATION.value}) }}" class="btn" data-turbo-frame="modal">

@@ -33,7 +33,7 @@
             {% endblock %}
         </div>
         {% block open_details %}
-            <a href="{{ path('app_travelitem_activity_details', {'item': item.id, 'trip': trip.id}) }}" class="cursor-pointer z-20 absolute w-full h-full top-0 left-0"></a>
+            <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}" class="cursor-pointer z-20 absolute w-full h-full top-0 left-0" data-turbo-frame="modal"></a>
         {% endblock %}
     </div>
 </turbo-frame>

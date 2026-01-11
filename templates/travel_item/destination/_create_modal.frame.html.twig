@@ -9,7 +9,7 @@
 
         <div class="space-y-4">
             <div {{ stimulus_controller('calendar', {dayMapping: trip.dayMapping, fullWidth: true, inModal: true, isRange: true, startDate: startDay ? startDay.date|date('Y-m-d'), endDate: endDay ? endDay.date|date('Y-m-d')} ) }}>
-                <div {{ stimulus_target('calendar', 'calendar') }} class="border border-gray-300 rounded-2xl p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50">
+                <div {{ stimulus_target('calendar', 'calendar') }} class="border select-none border-gray-300 rounded-2xl p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50">
                     <div class="flex justify-center">
                         <twig:ux:icon name="mage:calendar-2" class="size-6 mr-2 text-gray-700" />
                         Dates

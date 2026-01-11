@@ -6,6 +6,7 @@ namespace App\Form\TravelItem;
 use App\Entity\Activity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -22,6 +23,20 @@ class ActivityType extends AbstractType
             ->add('place', PlaceType::class, [
                 'required' => false,
                 'label'    => false,
+            ])
+            ->add('startTime', TimeType::class, [
+                'label' => 'Heure de debut',
+                'input'  => 'datetime',
+                'widget' => 'single_text',
+                'required' => false,
+                'attr' => ['class' => 'form-input py-1.5'],
+            ])
+            ->add('endTime', TimeType::class, [
+                'label' => 'Heure de fin',
+                'input'  => 'datetime',
+                'widget' => 'single_text',
+                'required' => false,
+                'attr' => ['class' => 'form-input py-1.5'],
             ]);
 
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {

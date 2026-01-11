@@ -6,14 +6,14 @@
         <div class="border border-indigo-100 bg-white rounded-2xl p-4">
             <div class="flex justify-between items-center mb-3">
                 <h3 class="font-semibold">Vols</h3>
-                <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").FLIGHT.value}) }}" class="btn" data-turbo-frame="modal">
+                <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").FLIGHT.value}) }}" class="btn btn-animate py-1" data-turbo-frame="modal">
                     {{ 'common.add'|trans }} +
                 </a>
             </div>
             <div class="space-y-4 mt-8">
                 {% for flight in flights %}
                     <div>
-                        <a href="{{ path('app_travelitem_edit', {'item': flight.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="-m-1 p-3 block cursor-pointer hover:bg-gray-200 bg-gray-100 rounded-2xl text-sm">
+                        <a href="{{ path('app_travelitem_edit', {'item': flight.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="-m-1 btn-animate p-3 block cursor-pointer hover:bg-gray-200 bg-gray-100 rounded-2xl text-sm">
                             <div class="font-medium text-indigo-500 mb-1">
                                 {% if flight.flightNumber %}
                                     {{ flight.flightNumber }}
@@ -55,14 +55,14 @@
         <div class="border border-indigo-100 bg-white rounded-2xl p-4">
             <div class="flex justify-between items-center">
                 <h3 class="font-semibold">{{ 'common.hotels_and_accommodations'|trans }}</h3>
-                <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").ACCOMMODATION.value}) }}" class="btn" data-turbo-frame="modal">
+                <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").ACCOMMODATION.value}) }}" class="btn btn-animate py-1" data-turbo-frame="modal">
                     Ajouter +
                 </a>
             </div>
             <div class="space-y-4 mt-8">
                 {% for accommodation in accommodations %}
                     <div>
-                        <a href="{{ path('app_travelitem_edit', {'item': accommodation.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="-m-1 p-3 block cursor-pointer hover:bg-gray-200 bg-gray-100 rounded-2xl">
+                        <a href="{{ path('app_travelitem_edit', {'item': accommodation.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="-m-1 btn-animate p-3 block cursor-pointer hover:bg-gray-200 bg-gray-100 rounded-2xl">
                             <h3 class="font-medium text-gray-700">{{ accommodation.name }}</h3>
                             <div class="text-sm">
                                 <div class="text-gray-500 text-sm">{{ accommodation.place.address }}</div>

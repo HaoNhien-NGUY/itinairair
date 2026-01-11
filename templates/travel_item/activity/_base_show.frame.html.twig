@@ -1,15 +1,24 @@
 <turbo-frame id="details_item_{{ item.id }}" class="flex-1 [.idea-container_&]:mx-0 relative flex group/item">
-    <div class="flex flex-col pt-2.5 justify-between p-2 pl-6 w-full {% block card_css %}outline hover:bg-gray-50{% endblock %} [.sortable-chosen_&]:bg-indigo-50 outline-indigo-200 rounded-xl">
+    <div class="pt-2.5 p-2 pl-6 w-full {% block card_css %}outline{% endblock %} btn-animate [.sortable-chosen_&]:bg-indigo-50 outline-indigo-200 rounded-xl">
         <div class="">
-            <div class="font-medium text-gray-700 text-base/6 line-clamp-2">{{ item.place.name }}</div>
+            <div class="flex justify-between">
+                <div>
+                    <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}" class="font-medium after:absolute after:z-1 after:top-0 after:left-0 after:w-full after:h-full text-slate-600 text-base/6 line-clamp-1" data-turbo-frame="modal">{{ item.place.name }}</a>
 
-            {% if item.place.type %}
-                <div class="-mt-2">
-                    <span class="text-xs/snug text-gray-500">
-                        {{ item.place.type }}
-                    </span>
+                    {% if item.place.type %}
+                        <div class="-mt-2">
+                            <span class="text-xs/snug text-gray-500">
+                                {{ item.place.type }}
+                            </span>
+                        </div>
+                    {% endif %}
                 </div>
-            {% endif %}
+                <div class="ml-2">
+                    <a href="{{ item.place.googleMapsURI }}" target="_blank" class="rounded-full btn-animate block relative z-20 bg-indigo-50 hover:bg-indigo-100 p-2">
+                        <twig:ux:icon name="bx:link-external" class="size-4 text-indigo-300" />
+                    </a>
+                </div>
+            </div>
             {% block details %}
                 <div class="flex mt-2 justify-between">
                     {% if item.notes is not empty %}
@@ -32,9 +41,6 @@
                 </div>
             {% endblock %}
         </div>
-        {% block open_details %}
-            <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}" class="cursor-pointer z-20 absolute w-full h-full top-0 left-0" data-turbo-frame="modal"></a>
-        {% endblock %}
     </div>
 </turbo-frame>
 

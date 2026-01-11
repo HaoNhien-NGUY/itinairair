@@ -9,7 +9,7 @@
         {% set startDay = day ?? item.startDay ?? null %}
         {% set endDay = endDay ?? item.endDay ?? null %}
 
-        <div class="space-y-4 mb-14">
+        <div class="space-y-4 mb-8">
             <div {{ stimulus_controller('calendar', {dayMapping: trip.dayMapping, fullWidth: true, inModal: true, isRange: true, startDate: startDay ? startDay.date|date('Y-m-d'), endDate: endDay ? endDay.date|date('Y-m-d')} ) }}>
                 <div {{ stimulus_target('calendar', 'calendar') }} class="border select-none border-gray-300 rounded-2xl p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50">
                     <div class="flex justify-center">
@@ -96,7 +96,7 @@
                 </div>
             </div>
 
-            <div class="flex gap-2 absolute right-0 left-0 bottom-0 px-3 md:px-5 py-3 bg-white">
+            <div class="flex gap-2 sticky bottom-5">
                 {% if item.id %}
                     <button type="submit" form="delete-form" class="cursor-pointer px-4 border bg-white border-slate-300 rounded-xl hover:bg-slate-100 btn-animate font-medium text-slate-300 text-center text-sm transition-colors">
                         <twig:ux:icon name="flowbite:trash-bin-solid" class="size-4 text-slate-400" />

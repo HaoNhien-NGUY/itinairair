@@ -1,5 +1,5 @@
 <twig:Modal>
-    {% block title %}<span class="modal-header">{{ (item.place ?? null) ? item.place.type : 'common.place'|trans }}</span>{% endblock %}
+    {% block title %}<span class="modal-header">{{ 'common.place'|trans }}</span>{% endblock %}
 
     {% set googlePlaceOptions = {primaryTypes: ['food', 'tourist_attraction', 'point_of_interest', 'store', 'cafe']} %}
     {% if destination|default %}
@@ -16,22 +16,16 @@
             placeholder="{{ 'common.search_by_name_address'|trans }}"
             {{ stimulus_target('google-place-widget', 'placeInput') }}>
         </gmp-place-autocomplete>
-        <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="-mt-3 mb-6 {{ not place ? 'hidden' }}">
-            <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-44 rounded-xl shrink-0 object-cover mb-4" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
+        <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="-mt-4 mb-5 {{ not place ? 'hidden' }}">
+            <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-52 rounded-2xl shrink-0 object-cover mb-4" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
             <div class="font-medium text-base/5 md:text-lg/5 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}>{{ place ? place.name }}</div>
-            <p {{ stimulus_target('google-place-widget', 'typeDisplay') }} class="text-xs/snug text-indigo-500 {{ place ? 'hidden' }}">{{ place ? place.type }}</p>
+{#            <p {{ stimulus_target('google-place-widget', 'typeDisplay') }} class="text-xs/snug text-indigo-500 {{ place ? 'hidden' }}">{{ place ? place.type }}</p>#}
             <a {{ stimulus_target('google-place-widget', 'addressDisplay addressLinkDisplay') }}
                 href="{{ place ? place.googleMapsURI }}"
                 target="_blank"
                 class="text-xs/snug md:text-sm/snug text-gray-500 hover:text-blue-400 mt-1 line-clamp-2">{{ place ? place.address }}</a>
         </div>
 
-        {% if item.id %}
-            <form action="{{ path('app_travelitem_delete', {'trip': trip.id}) }}" id="delete-form" method="post" class="flex-1" onsubmit="return confirm('{{ 'common.delete'|trans }}');">
-                <input type="hidden" name="_token" value="{{ csrf_token('delete-item' ~ trip.id) }}">
-                <input type="hidden" name="item" value="{{ item.id }}">
-            </form>
-        {% endif %}
 
         {{ form_start(form) }}
         <div class="space-y-2">
@@ -49,9 +43,9 @@
             {% endif %}
         </div>
 
-        <div class="mt-8 flex gap-2">
+        <div class="mt-8 flex gap-2 sticky bottom-5">
             {% if item.id %}
-                <button type="submit" form="delete-form" class="cursor-pointer px-4 border border-slate-300 rounded-xl hover:bg-slate-100 btn-animate font-medium text-slate-300 text-center text-sm transition-colors">
+                <button type="submit" form="delete-form" class="cursor-pointer px-4 border bg-white border-slate-300 rounded-xl hover:bg-slate-100 btn-animate font-medium text-slate-300 text-center text-sm transition-colors">
                     <twig:ux:icon name="flowbite:trash-bin-solid" class="size-4 text-slate-400" />
                 </button>
             {% endif %}
@@ -63,5 +57,12 @@
             </button>
         </div>
         {{ form_end(form) }}
+
+        {% if item.id %}
+            <form action="{{ path('app_travelitem_delete', {'trip': trip.id}) }}" id="delete-form" method="post" class="flex-1" onsubmit="return confirm('{{ 'common.delete'|trans }}');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete-item' ~ trip.id) }}">
+                <input type="hidden" name="item" value="{{ item.id }}">
+            </form>
+        {% endif %}
     </div>
 </twig:Modal>

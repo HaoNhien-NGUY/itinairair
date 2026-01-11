@@ -26,7 +26,7 @@
                 {% if flightEndDay|length > 0 %}
                     <div class="mb-4">
                         {% for item in flightEndDay %}
-                            <div class="rounded-xl text-sm overflow-hidden relative">
+                            <div class="rounded-xl btn-animate text-sm overflow-hidden relative">
                                 <div class="px-4 py-0.5 bg-indigo-100 flex justify-between items-center">
                                     <div class="flex items-center font-bold text-gray-700">
                                         <twig:ux:icon name="entypo:aircraft-landing" class="size-6 mr-3"/>
@@ -66,7 +66,7 @@
                     <div class="space-y-6 mb-4">
 
                         {% for item in flightSameDay %}
-                            <div class="rounded-2xl text-sm overflow-hidden relative">
+                            <div class="rounded-2xl btn-animate text-sm overflow-hidden relative">
                                 <div class="px-4 py-0.5 bg-indigo-100 flex items-center font-bold text-gray-700">
                                     <twig:ux:icon name="entypo:aircraft-take-off" class="size-6 text-gray-700 mr-3"/>
                                     {{ item.flightNumber ?? 'TBD' }}
@@ -117,7 +117,7 @@
                     <div class="mt-6">
                         {% for item in flightStartDay %}
 
-                            <div class="rounded-xl text-sm overflow-hidden relative">
+                            <div class="rounded-xl btn-animate text-sm overflow-hidden relative">
                                 <div class="px-4 py-0.5 bg-indigo-100 flex justify-between items-center">
                                     <div class="flex items-center font-bold text-gray-700">
                                         <twig:ux:icon name="entypo:aircraft-take-off" class="size-6 mr-3"/>

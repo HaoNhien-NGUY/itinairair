@@ -1,13 +1,13 @@
 <turbo-frame id="day_{{ day.id ?? '' }}_accommodation_{{ item.id}}">
-    <div class="bg-indigo-50 rounded-xl py-2 px-2">
+    <div class="bg-indigo-50 btn-animate rounded-xl relative py-2 px-2">
         <div class="flex justify-between">
             <div class="flex items-center text-gray-700">
                 <twig:ux:icon name="material-symbols:hotel" class="size-5 mr-2"/>
-                {{ item.name }}
+                <span class="line-clamp-1">{{ item.name }}</span>
                 <twig:ux:icon name="bi:dash-lg" class="size-3 text-gray-400 mx-3"/>
                 {% set totalDays = item.endDay.position - item.startDay.position + 1 %}
                 {% set currentDay =  day.position - item.startDay.position + 1 %}
-                <div class="text-gray-400 text-sm">
+                <div class="text-gray-400 text-sm text-nowrap">
                     {{ currentDay }} / {{ totalDays }}
                 </div>
             </div>
@@ -25,17 +25,10 @@
                 {% if item.notes is not empty %}
                     <twig:ux:icon name="wpf:note" class="size-4 text-gray-400 ml-2" />
                 {% endif %}
-                <div class="ml-6">
-                    {% block open_details %}
-                        <a href="{{ path('app_travelitem_accommodation_details', {'trip': trip.id, 'item': item.id, 'day': day.id ?? null}) }}"
-                           class="py-1 px-4 text-gray-900 bg-indigo-100 flex focus:outline-none hover:bg-indigo-200 focus:ring-4 transition-colors focus:ring-gray-100 font-medium rounded-lg">
-                            <twig:ux:icon name="uiw:down" class="size-4 text-indigo-400" />
-                        </a>
-                    {% endblock %}
-                </div>
             </div>
         </div>
         {% block details %}
         {% endblock %}
+        <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}" class="cursor-pointer z-20 absolute w-full h-full top-0 left-0" data-turbo-frame="modal"></a>
     </div>
 </turbo-frame>

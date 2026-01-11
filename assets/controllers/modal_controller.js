@@ -18,8 +18,6 @@ export default class extends Controller {
         if (!this.hasModalTarget || !this.hasBackdropTarget) return;
 
         document.body.style.overflow = 'hidden';
-        window.history.pushState({ modalOpen: true }, "", window.location.href)
-        window.addEventListener("popstate", this.handlePopstate)
 
         setTimeout(() => {
             this.backdropTarget.classList.remove('opacity-0');
@@ -40,12 +38,6 @@ export default class extends Controller {
     close(event = null) {
         if (!this.hasModalTarget || !this.hasBackdropTarget) return;
 
-        window.removeEventListener("popstate", this.handlePopstate)
-
-        if (!event || !event.causedByBack) {
-            window.history.back()
-        }
-
         event?.preventDefault()
         document.body.style.overflow = '';
 
@@ -61,11 +53,6 @@ export default class extends Controller {
         if (event.key === 'Escape' && this.hasBackdropTarget) {
             this.close(event)
         }
-    }
-
-    handlePopstate = event => {
-        event.causedByBack = true;
-        this.close(event);
     }
 
     cleanFrame = () => {

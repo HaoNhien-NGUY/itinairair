@@ -71,24 +71,27 @@
             {% endif %}
         </div>
     </div>
-    <div class="mt-8">
+
+    <div class="mt-8 flex gap-2 sticky bottom-5">
+        {% if item.id %}
+            <button type="submit" form="delete-form" class="cursor-pointer px-4 border bg-white border-slate-300 rounded-xl hover:bg-slate-100 btn-animate font-medium text-slate-300 text-center text-sm transition-colors">
+                <twig:ux:icon name="flowbite:trash-bin-solid" class="size-4 text-slate-400" />
+            </button>
+        {% endif %}
         <button type="submit"
-                class="px-2 block w-full py-2 bg-indigo-600 text-white transition-colors font-medium cursor-pointer not-disabled:hover:bg-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:cursor-pointer rounded-xl">
+                class="px-2 btn-animate flex-2 block w-full py-2 bg-indigo-600 text-white transition-colors font-medium cursor-pointer not-disabled:hover:bg-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:cursor-pointer rounded-xl">
             {{ item.id ? 'common.modify'|trans : 'common.add'|trans }}
         </button>
     </div>
+
     {{ form_end(form) }}
+
     {% if item.id %}
-        <hr class="my-4 border-gray-200">
-        <form action="{{ path('app_travelitem_delete', {'trip': trip.id}) }}" method="post" class="" onsubmit="return confirm('Supprimer ?');">
+        <form action="{{ path('app_travelitem_delete', {'trip': trip.id}) }}" id="delete-form" method="post" class="flex-1" onsubmit="return confirm('{{ 'common.delete'|trans }}');">
             <input type="hidden" name="_token" value="{{ csrf_token('delete-item' ~ trip.id) }}">
             <input type="hidden" name="item" value="{{ item.id }}">
-            <button type="submit" class="cursor-pointer w-full p-2 rounded-xl hover:bg-red-50 font-medium text-red-300 text-center text-sm transition-colors">
-                {{ 'common.delete'|trans }}
-            </button>
         </form>
     {% endif %}
-
 </div>
 
 

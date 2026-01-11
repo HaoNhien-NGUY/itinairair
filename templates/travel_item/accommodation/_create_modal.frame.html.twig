@@ -45,63 +45,23 @@
 
             {% set place = item.place %}
 
-            <div {{ stimulus_controller('hide-toggle') }}>
-                <div class="bg-indigo-10 border border-indigo-200 rounded-2xl">
-                    <div {{ stimulus_target('hide-toggle', 'item') }} class="{{ place ? 'hidden' }} p-2 pb-0">
-                        <gmp-place-autocomplete
-                            id="place-autocomplete"
-                            class="bg-white rounded-xl focus:outline-none focus:ring-0 border border-indigo-200"
-                            placeholder="{{ 'common.search_by_name_address'|trans }}"
-                            {{ stimulus_target('google-place-widget', 'placeInput') }}>
-                        </gmp-place-autocomplete>
-                    </div>
-
-
-                    <div class="p-3">
-                        <div {{ stimulus_target('google-place-widget', 'placeHolder') }} class="{{ place ? 'hidden' }}">
-                            <div class="flex flex-col justify-center items-center">
-                                <twig:ux:icon name="material-symbols:hotel" class="size-6" style="color: #6a6ba5"/>
-{#                                <div class="text-sm" style="color: #6a6ba5">#}
-{#                                    {{ 'form.label.choose_a_stay'|trans }}#}
-{#                                </div>#}
-                            </div>
-                        </div>
-                        <div {{ stimulus_target('google-place-widget', 'placeInfo') }}
-                            class="{{ not place ? 'hidden' }}">
-                            <div class="">
-                                <div class="w-full flex flex-col justify-between">
-                                    <div>
-                                        <div
-                                            class="font-medium text-base/5 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}>{{ place ? place.name }}</div>
-                                        <div {{ stimulus_target('google-place-widget', 'addressDisplay') }}
-                                            class="text-sm/snug text-gray-500 line-clamp-1">{{ place ? place.address }}</div>
-                                    </div>
-
-                                    <div class="flex mt-3 justify-end space-x-2">
-
-                                        {% if place %}
-                                            <button {{ stimulus_action('hide-toggle', 'toggle') }} type="button" class="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-200 px-2 font-medium rounded-xl text-sm cursor-pointer">
-                                                {{ 'common.modify'|trans }}
-                                            </button>
-                                        {% endif %}
-                                        <a {{ stimulus_target('google-place-widget', 'addressLinkDisplay') }}
-                                            href="{{ place ? place.googleMapsURI }}"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            class="py-0.5 px-2.5 z-30 text-white font-medium text-sm bg-indigo-500 flex items-center focus:outline-none hover:bg-indigo-400 transition-colors rounded-xl">
-                                            Maps
-                                            <twig:ux:icon name="bxs:map" class="size-4 ml-1"/>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <gmp-place-autocomplete
+                id="place-autocomplete"
+                class="{{ place ? 'hidden' }} mb-6 bg-white rounded-xl border focus:ring-0 placeholder:text-slate-400 shadow-sm text-slate-600 border-indigo-200 hover:border-indigo-300 ease-in transition duration-300 focus:outline-none focus:border-indigo-400 focus:shadow"
+                placeholder="{{ 'common.search_by_name_address'|trans }}"
+                {{ stimulus_target('google-place-widget', 'placeInput') }}>
+            </gmp-place-autocomplete>
+            <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="mb-5 {{ not place ? 'hidden' }}">
+                <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-52 rounded-2xl shrink-0 object-cover mb-4" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
+                <div class="font-medium text-base/5 md:text-lg/5 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}>{{ place ? place.name }}</div>
+                {#            <p {{ stimulus_target('google-place-widget', 'typeDisplay') }} class="text-xs/snug text-indigo-500 {{ place ? 'hidden' }}">{{ place ? place.type }}</p>#}
+                <a {{ stimulus_target('google-place-widget', 'addressDisplay addressLinkDisplay') }}
+                    href="{{ place ? place.googleMapsURI }}"
+                    target="_blank"
+                    class="text-xs/snug md:text-sm/snug text-gray-500 hover:text-blue-400 mt-1 line-clamp-2">{{ place ? place.address }}</a>
             </div>
 
-
-            <div class="space-y-2 mt-6">
+            <div class="space-y-2">
                 {{ form_row(form.notes) }}
                 {% if form.status is defined %}
                     {{ form_row(form.status) }}
@@ -109,27 +69,27 @@
             </div>
 
 
-            <div class="mt-8">
 
-                <div class="flex justify-end mt-8">
-                    <button type="submit"
-                        {{ not place ? 'disabled' }}
-                        {{ stimulus_target('google-place-widget', 'submitButton') }}
-                            class="px-2 block w-full py-2 bg-indigo-600 text-white transition-colors font-medium cursor-pointer not-disabled:hover:bg-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:cursor-pointer rounded-xl">
-                        {{ place ? 'common.modify'|trans : 'common.add'|trans }}
+            <div class="mt-8 flex gap-2 sticky bottom-5">
+                {% if item.id %}
+                    <button type="submit" form="delete-form" class="cursor-pointer px-4 border bg-white border-slate-300 rounded-xl hover:bg-slate-100 btn-animate font-medium text-slate-300 text-center text-sm transition-colors">
+                        <twig:ux:icon name="flowbite:trash-bin-solid" class="size-4 text-slate-400" />
                     </button>
-                </div>
+                {% endif %}
+                <button type="submit"
+                    {{ not place ? 'disabled' }}
+                    {{ stimulus_target('google-place-widget', 'submitButton') }}
+                        class="px-2 btn-animate flex-2 block w-full py-2 bg-indigo-600 text-white transition-colors font-medium cursor-pointer not-disabled:hover:bg-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:cursor-pointer rounded-xl">
+                    {{ place ? 'common.modify'|trans : 'common.add'|trans }}
+                </button>
             </div>
         </div>
         {{ form_end(form) }}
+
         {% if item.id %}
-            <hr class="my-4 border-gray-200">
-            <form action="{{ path('app_travelitem_delete', {'trip': trip.id}) }}" method="post" class="" onsubmit="return confirm('Supprimer ?');">
+            <form action="{{ path('app_travelitem_delete', {'trip': trip.id}) }}" id="delete-form" method="post" class="flex-1" onsubmit="return confirm('{{ 'common.delete'|trans }}');">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete-item' ~ trip.id) }}">
                 <input type="hidden" name="item" value="{{ item.id }}">
-                <button type="submit" class="cursor-pointer w-full p-2 rounded-xl hover:bg-red-50 font-medium text-red-300 text-center text-sm transition-colors">
-                    {{ 'common.delete'|trans }}
-                </button>
             </form>
         {% endif %}
     </div>

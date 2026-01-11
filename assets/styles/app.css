@@ -38,14 +38,6 @@ gmp-place-autocomplete {
     outline: none !important;
 }
 
-.bg-indigo-25 {
-    background-color: #F5F7FF;
-}
-
-.bg-indigo-10 {
-    background-color: #fcfcff;
-}
-
 .card-shadow {
     box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px 0, rgba(0, 0, 0, 0.06) 0 1px 2px 0;
 }
@@ -60,6 +52,14 @@ gmp-place-autocomplete {
     .container {
         padding-inline: 1rem;
         margin-inline: auto;
+    }
+
+    .bg-indigo-25 {
+        background-color: #F5F7FF;
+    }
+
+    .bg-indigo-10 {
+        background-color: #fcfcff;
     }
 }
 

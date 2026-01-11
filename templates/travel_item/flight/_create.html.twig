@@ -4,7 +4,7 @@
 
     {% set startDate = item.startDay ? item.startDay.date|date('Y-m-d') : null %}
     {% set endDate = item.endDay ? item.endDay.date|date('Y-m-d') : (startDate ?? null) %}
-    <div class="mb-4">
+    <div class="mb-14">
         <div class="mb-3">
             {{ form_row(form.flightNumber) }}
         </div>
@@ -72,7 +72,7 @@
         </div>
     </div>
 
-    <div class="mt-8 flex gap-2 sticky bottom-5">
+    <div class="flex gap-2 absolute right-0 left-0 bottom-0 px-3 md:px-5 py-3 bg-white">
         {% if item.id %}
             <button type="submit" form="delete-form" class="cursor-pointer px-4 border bg-white border-slate-300 rounded-xl hover:bg-slate-100 btn-animate font-medium text-slate-300 text-center text-sm transition-colors">
                 <twig:ux:icon name="flowbite:trash-bin-solid" class="size-4 text-slate-400" />

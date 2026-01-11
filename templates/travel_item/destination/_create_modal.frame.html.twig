@@ -108,6 +108,12 @@
                         class="px-2 btn-animate flex-2 block w-full py-2 bg-indigo-600 text-white transition-colors font-medium cursor-pointer not-disabled:hover:bg-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed not-disabled:cursor-pointer rounded-xl">
                     {{ place ? 'common.modify'|trans : 'common.add'|trans }}
                 </button>
+                <button type="button"
+                        class="cursor-pointer px-4 bg-white rounded-xl hover:bg-slate-100 btn-animate font-medium text-slate-300 text-center text-sm transition-colors" aria-label="Close"
+                        data-action="click->modal#close">
+                    <span class="sr-only">Close</span>
+                    <svg class="shrink-0 size-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
             </div>
         </div>
         {{ form_end(form) }}

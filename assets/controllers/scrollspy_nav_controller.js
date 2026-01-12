@@ -46,7 +46,7 @@ export default class extends Controller {
         const container = this.element;
 
         container.scrollTo({
-            left: target.offsetLeft,
+            left: target.offsetLeft - (container.clientWidth / 2) + (target.clientWidth / 2),
             behavior: 'smooth'
         });
     }

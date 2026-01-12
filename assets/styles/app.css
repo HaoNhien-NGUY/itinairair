@@ -51,12 +51,19 @@ gmp-place-autocomplete {
     color: #59637b !important;
 }
 
-@layer utilities {
-    .container {
-        padding-inline: 1rem;
-        margin-inline: auto;
-    }
+@utility container {
+    margin-inline: auto;
+    padding-inline: 1rem;
 
+    @variant md {
+        padding-inline: 1.5rem;
+    }
+    @variant lg {
+        padding-inline: 2rem;
+    }
+}
+
+@layer utilities {
     .bg-indigo-25 {
         background-color: #F5F7FF;
     }

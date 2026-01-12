@@ -14,18 +14,15 @@ export default class extends Controller {
             attributeFilter: ['class']
         });
 
-        this.element.addEventListener('wheel', (evt) => {
-            if (evt.deltaY !== 0) {
-                evt.preventDefault();
-                this.element.scrollLeft += evt.deltaY;
-            }
-        });
+        this.element.addEventListener('wheel', this.handleScroll);
     }
 
     disconnect() {
         if (this.observer) {
             this.observer.disconnect();
         }
+
+        this.element.removeEventListener('wheel', this.handleScroll);
     }
 
     handleMutations(mutations) {
@@ -41,6 +38,13 @@ export default class extends Controller {
             }
         }
     }
+
+    handleScroll = (event) => {
+        if (event.deltaY !== 0) {
+            event.preventDefault();
+            this.element.scrollLeft += event.deltaY;
+        }
+    };
 
     scrollToCenter(target) {
         const container = this.element;

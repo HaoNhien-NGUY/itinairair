@@ -3,11 +3,11 @@
         <div class="flex justify-between">
             <div class="flex items-center text-gray-700">
                 <twig:ux:icon name="material-symbols:hotel" class="size-5 mr-2"/>
-                <span class="line-clamp-1">{{ item.name }}</span>
+                <span class="line-clamp-1 text-sm">{{ item.name }}</span>
                 <twig:ux:icon name="bi:dash-lg" class="size-3 text-gray-400 mx-3"/>
                 {% set totalDays = item.endDay.position - item.startDay.position + 1 %}
                 {% set currentDay =  day.position - item.startDay.position + 1 %}
-                <div class="text-gray-400 text-sm text-nowrap">
+                <div class="text-gray-400 text-xs text-nowrap">
                     {{ currentDay }} / {{ totalDays }}
                 </div>
             </div>
@@ -17,9 +17,9 @@
                     {% set isEndDay = isEndDay|default(item.endDay is same as(day)) %}
 
                     {% if isStartDay %}
-                        <span class="inline-flex items-center rounded-lg px-2 py-1 text-sm text-gray-600">{{ 'common.arrival'|trans }}</span>
+                        <span class="inline-flex items-center rounded-lg px-2 text-sm text-gray-600">{{ 'common.arrival'|trans }}</span>
                     {% elseif isEndDay %}
-                        <span class="inline-flex items-center rounded-md px-2 py-1 text-sm text-gray-600">{{ 'common.departure'|trans }}</span>
+                        <span class="inline-flex items-center rounded-md px-2 text-sm text-gray-600">{{ 'common.departure'|trans }}</span>
                     {% endif %}
                 {% endif %}
                 {% if item.notes is not empty %}

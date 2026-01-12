@@ -41,10 +41,6 @@ gmp-place-autocomplete {
     outline: none !important;
 }
 
-.card-shadow {
-    box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px 0, rgba(0, 0, 0, 0.06) 0 1px 2px 0;
-}
-
 /* Custom styles for the date picker */
 [data-vc-theme=light] .vc-date[data-vc-date-month=next]:not(.vc-date[data-vc-date-disabled]) .vc-date__btn,
 [data-vc-theme=light] .vc-date[data-vc-date-month=prev]:not(.vc-date[data-vc-date-disabled]) .vc-date__btn {
@@ -70,6 +66,10 @@ gmp-place-autocomplete {
 
     .bg-indigo-10 {
         background-color: #fcfcff;
+    }
+
+    .shadow-card {
+        box-shadow: var(--tw-shadow-color, var(--color-indigo-100)) 0px 0px 0px 2px;
     }
 }
 

@@ -55,7 +55,7 @@
     {% macro navTabBtn(title, active, path) %}
         <a href="{{ path }}"
            class="{{ active ? 'active' }} [&.active]:font-medium [&.active]:border-indigo-300 border-b-2 [&.active,&:hover]:text-indigo-400
-           py-2 rounded-xlz px-4 inline-flex items-center gap-x-2 border-b-2z border-transparent text-sm md:text-base whitespace-nowrap text-gray-500">
+           py-2 px-3 inline-flex items-center gap-x-2 border-b-2z border-transparent text-sm md:text-base whitespace-nowrap text-gray-500">
             {{ title }}
         </a>
     {% endmacro %}
@@ -89,7 +89,7 @@
                         {% for day in trip.days %}
                             <a href="#scrollspy-day-{{ day.id }}"
                                class="{{ loop.first ? 'active' }} snap-start hs-scrollspy-active:font-bold hs-scrollspy-active:text-slate-600
-                               first-of-type:ml-2 last-of-type:mr-2 hover:bg-indigo-50
+                               first-of-type:ml-2 last-of-type:mr-2 hover:bg-slate-100
                                py-2 px-2.5 flex justify-center items-center text-sm text-center text-slate-400 font-medium hover:text-slate-600 focus:outline-hidden">
                                 {{ day.date|format_datetime(pattern='EEE') }} {{ day.date|date('d/m') }}
                             </a>

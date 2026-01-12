@@ -28,10 +28,9 @@ host('itinairair.com')
     ->set('deploy_path', '/var/www/itinairair')
     ->set('http_user', 'www-data');
 
-desc('Build assets');
-task('deploy:assets:build', function () {
-    run('{{bin/console}} tailwind:build --minify');
-    run('{{bin/console}} asset-map:compile');
+desc('Upload assets');
+task('deploy:assets:upload', function () {
+    upload('public/assets/', '{{release_path}}/public/assets/');
 });
 
 desc('Stop workers');
@@ -41,7 +40,7 @@ task('deploy:stop-workers', function () {
 
 // Hooks
 after('deploy:vendors', 'deploy:dump-env');
-after('deploy:vendors', 'deploy:assets:build');
+after('deploy:vendors', 'deploy:assets:upload');
 after('deploy:vendors', 'database:migrate');
 after('deploy:failed', 'deploy:unlock');
 after('deploy:success', 'deploy:stop-workers');

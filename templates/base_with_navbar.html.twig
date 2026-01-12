@@ -83,28 +83,28 @@
                     <div class="p-4">
                         <ul class="gap-3 ">
                             <li class="p-3 py-2 text-gray-600">
-                                <a href="{{ path('app_home') }}" class="hover:text-indigo-500">{{ 'common.home'|trans }}</a>
+                                <a href="{{ path('app_home') }}" aria-label="Close" data-hs-overlay="#hs-offcanvas" class="hover:text-indigo-500">{{ 'common.home'|trans }}</a>
                             </li>
                             <li class="p-3 py-2 text-gray-600">
-                                <a href="{{ path('app_trip') }}" class="hover:text-indigo-500">{{ 'trip.my_trips'|trans }}</a>
+                                <a href="{{ path('app_trip') }}" aria-label="Close" data-hs-overlay="#hs-offcanvas" class="hover:text-indigo-500">{{ 'trip.my_trips'|trans }}</a>
                             </li>
                             {% if app.user %}
                                 <li class="p-3 py-2 text-gray-600">
-                                    <a href="{{ path('app_account') }}" class="hover:text-indigo-500">{{ 'common.my_account'|trans }}</a>
+                                    <a href="{{ path('app_account') }}" aria-label="Close" data-hs-overlay="#hs-offcanvas" class="hover:text-indigo-500">{{ 'common.my_account'|trans }}</a>
                                 </li>
                                 <li class="p-3 py-2 text-gray-600">
-                                    <a href="{{ path('app_trip_create') }}" class="hover:text-indigo-500">{{ 'trip.new_trip'|trans }}</a>
+                                    <a href="{{ path('app_trip_create') }}" data-turbo-frame="modal" aria-label="Close" data-hs-overlay="#hs-offcanvas" class="hover:text-indigo-500">{{ 'trip.new_trip'|trans }}</a>
                                 </li>
                                 <li class="p-3 py-2 mt-5 text-red-400">
-                                    <a href="{{ path('app_logout') }}" class="hover:text-indigo-500">{{ 'common.logout'|trans }}</a>
+                                    <a href="{{ path('app_logout') }}" aria-label="Close" data-hs-overlay="#hs-offcanvas" class="hover:text-indigo-500">{{ 'common.logout'|trans }}</a>
                                 </li>
                             {% else %}
                                 <li class="px-0 py-2 mt-10 text-gray-600">
                                     <div class="flex items-center space-x-1">
-                                        <a href="{{ path('app_login') }}" class="text-sm text-indigo-600 hover:bg-indigo-50 transition-colors rounded-full px-4 py-2 font-bold">
+                                        <a href="{{ path('app_login') }}" aria-label="Close" data-hs-overlay="#hs-offcanvas" class="text-sm text-indigo-600 hover:bg-indigo-50 transition-colors rounded-full px-4 py-2 font-bold">
                                             {{ 'common.login'|trans }}
                                         </a>
-                                        <a href="{{ path('app_register') }}" class="btn">
+                                        <a href="{{ path('app_register') }}" aria-label="Close" data-hs-overlay="#hs-offcanvas" class="btn">
                                             {{ 'form.security.register'|trans }}
                                         </a>
                                     </div>

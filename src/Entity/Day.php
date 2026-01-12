@@ -24,6 +24,9 @@ class Day
     #[ORM\JoinColumn(nullable: false)]
     private ?Trip $trip = null;
 
+    #[ORM\Column]
+    private ?\DateTime $date = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -66,7 +69,7 @@ class Day
         return $this;
     }
 
-    public function getDate(): ?DateTimeInterface
+    public function getComputedDate(): ?\DateTime
     {
         if (!$this->trip?->getStartDate()) {
             return null;
@@ -74,4 +77,15 @@ class Day
         return (clone $this->trip->getStartDate())->modify(sprintf('+%d days', $this->position - 1));
     }
 
+    public function getDate(): ?\DateTime
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTime $date): static
+    {
+        $this->date = $date;
+
+        return $this;
+    }
 }

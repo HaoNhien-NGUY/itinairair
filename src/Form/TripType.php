@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Day;
 use App\Entity\Trip;
+use App\Service\TripService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -17,6 +18,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class TripType extends AbstractType
 {
+
+    public function __construct(private readonly TripService $tripService)
+    {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var Trip $trip */
@@ -89,34 +95,7 @@ class TripType extends AbstractType
             $endDate = $form->get('endDate')->getData();
             $requiredCount = $startDate->diff($endDate)->days + 1;
 
-            if (!$trip->getStartDate() || !$trip->getEndDate()) {
-                return;
-            }
-
-            $currentDays = $trip->getDays();
-            $currentCount = count($currentDays);
-
-            if ($currentCount > $requiredCount) {
-                $toRemove = [];
-
-                foreach ($currentDays as $day) {
-                    if ($day->getPosition() > $requiredCount) {
-                        $toRemove[] = $day;
-                    }
-                }
-
-                foreach ($toRemove as $day) {
-                    $trip->removeDay($day);
-                }
-            }
-
-            elseif ($currentCount < $requiredCount) {
-                for ($i = $currentCount; $i < $requiredCount; $i++) {
-                    $newDay = new Day();
-                    $newDay->setPosition($i + 1);
-                    $trip->addDay($newDay);
-                }
-            }
+            $this->tripService->addOrRemoveTripDays($trip, $requiredCount);
         });
     }
 

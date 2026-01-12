@@ -58,8 +58,11 @@ class TripService
                 $newDay = new Day();
                 $newDay->setPosition($i + 1);
                 $trip->addDay($newDay);
-                $newDay->setDate($newDay->getComputedDate());
             }
+        }
+
+        foreach ($trip->getDays() as $day) {
+            $day->setDate($day->getComputedDate());
         }
     }
 }

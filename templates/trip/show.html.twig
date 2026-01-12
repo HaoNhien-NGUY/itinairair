@@ -70,11 +70,21 @@
             </nav>
         </div>
         {% if currentRoute == 'app_trip_show' %}
-            <div class="bg-indigo-10 select-none md:hidden">
-                <div class="relative mx-auto  max-w-7xl overflow-hidden">
-                    <div data-hs-scrollspy="#scrollspy-days" class="hs-scroll-nav-body [--scrollspy-offset:90px] flex gap-x-1.5 snap-x py-2 md:py-3 snap-mandatory overflow-x-auto [&::-webkit-scrollbar]:h-0">
+            <div class="bg-indigo-10 select-none">
+                <div class="relative overflow-hidden">
+                    <div {{ stimulus_controller('scrollspy-nav')}}
+                        data-hs-scrollspy="#scrollspy-days"
+                        class="hs-scroll-nav-body scroll-p-4 [--scrollspy-offset:90px] md:[--scrollspy-offset:110px] flex space-x-1.5 snap-x py-2 md:py-3 snap-mandatory overflow-x-auto
+                        [&::-webkit-scrollbar]:h-1
+                        [&::-webkit-scrollbar-track]:bg-gray-100
+                        [&::-webkit-scrollbar-thumb]:bg-gray-300
+                        [&::-webkit-scrollbar-track]:rounded-full
+                        [&::-webkit-scrollbar-thumb]:rounded-full">
                         {% for day in trip.days %}
-                            <a href="#scrollspy-day-{{ day.id }}" class="hs-scrollspy-active:bg-slate-200 first-of-type:ml-2 last-of-type:mr-2 hs-scrollspy-active:font-medium hs-scrollspy-active:text-slate-600 bg-slate-100 text-nowrap py-1.5 px-2.5 inline-flex items-center text-sm text-center text-gray-500 hover:text-slate-600 focus:outline-hidden rounded-lg">
+                            <a href="#scrollspy-day-{{ day.id }}"
+                               class="snap-start hs-scrollspy-active:bg-indigo-100 hs-scrollspy-active:font-medium hs-scrollspy-active:text-slate-700
+                               first-of-type:ml-2 last-of-type:mr-2
+                               bg-indigo-50 text-nowrap py-1.5 px-2.5 inline-flex items-center text-sm text-center text-gray-500 hover:text-slate-600 focus:outline-hidden rounded-lg">
                                 {{ day.date|date_xs }}
                             </a>
                         {% endfor %}

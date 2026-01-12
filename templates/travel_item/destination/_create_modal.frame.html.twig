@@ -11,7 +11,7 @@
 
         <div class="space-y-4 mb-8 min-h-[300px]">
             <div {{ stimulus_controller('calendar', {dayMapping: trip.dayMapping, fullWidth: true, inModal: true, isRange: true, startDate: startDay ? startDay.date|date('Y-m-d'), endDate: endDay ? endDay.date|date('Y-m-d')} ) }}>
-                <div {{ stimulus_target('calendar', 'calendar') }} class="border select-none border-gray-300 rounded-2xl p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50">
+                <div {{ stimulus_target('calendar', 'calendar') }} class="border select-none border-gray-300 rounded-xl p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50">
                     <div class="flex justify-center">
                         <twig:ux:icon name="mage:calendar-2" class="size-6 mr-2 text-gray-700" />
                         Dates
@@ -43,12 +43,12 @@
             </div>
 
 
-            <div {{ stimulus_controller('hide-toggle') }} class="border border-indigo-200 bg-indigo-10 rounded-2xl">
+            <div {{ stimulus_controller('hide-toggle') }} class="">
 
-                <div {{ stimulus_target('hide-toggle', 'item') }} class="{{ place ? 'hidden' }} p-2 pb-0">
+                <div {{ stimulus_target('hide-toggle', 'item') }} class="{{ place ? 'hidden' }}">
                     <gmp-place-autocomplete
                         id="place-autocomplete"
-                        class="bg-white rounded-xl border border-indigo-200 focus:outline-none focus:ring-0"
+                        class="bg-white rounded-xl mb-2 border border-indigo-200 focus:outline-none focus:ring-0"
                         placeholder="{{ 'common.search_destination'|trans }}"
                         {{ stimulus_target('google-place-widget', 'placeInput') }}>
                     </gmp-place-autocomplete>
@@ -57,14 +57,11 @@
 
 
 
-                <div class="p-3">
+                <div class="p-3 border rounded-xl border-indigo-200">
                     <div {{ stimulus_target('google-place-widget', 'placeHolder') }} class="{{ place ? 'hidden' }}">
-                        <div class="flex flex-col justify-center items-center">
-                            <twig:ux:icon name="iconoir:city" class="size-8 text-indigo-300"/>
-{#                            <div class="text-sm" style="color: #6a6ba5">#}
-{#                                {{ 'trip.place.select_a_city'|trans }}#}
-{#                            </div>#}
-                        </div>
+{#                        <div class="flex flex-col justify-center items-center">#}
+{#                            <twig:ux:icon name="iconoir:city" class="size-8 text-indigo-300"/>#}
+{#                        </div>#}
                     </div>
                     <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="{{ not place ? 'hidden' }}">
                         <div class="">

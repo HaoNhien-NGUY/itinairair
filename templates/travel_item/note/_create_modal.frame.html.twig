@@ -9,9 +9,9 @@
     {% endif %}
     <div>
         {{ form_start(form) }}
-        <div class="space-y-4 mb-8">
+        <div class="space-y-4 mb-8 min-h-[250px]">
             {{ form_row(form.name) }}
-            {{ form_widget(form.notes, {attr: {rows: 3}}) }}
+            {{ form_widget(form.notes, {attr: {rows: 6}}) }}
         </div>
 
 

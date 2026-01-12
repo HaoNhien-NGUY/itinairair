@@ -50,17 +50,17 @@
                             </a>
                         </div>
 
-                        <span class="shrink-0 px-4 text-gray-400 text-sm flex items-center">
-                            {% if prevItem and prevItem.place|default and item.place|default %}
-                                <twig:ux:icon name="ic:baseline-directions-walk" class="size-3.5" fill="currentColor"/>
-                                {% set mapsDirection = prevItem
-                                    ? "https://www.google.com/maps/dir/?api=1&origin=" ~ (prevItem.place.name ~ prevItem.place.address)|url_encode ~ "&destination=" ~ (item.place.name ~ item.place.address)|url_encode
-                                    : "" %}
-                                <span class="ps-1 hover:underline cursor-pointer">
-                                    <a href="{{ mapsDirection }}" target="_blank">Itineraire</a>
-                                </span>
-                            {% endif %}
-                        </span>
+{#                        <span class="shrink-0 px-4 text-gray-400 text-sm flex items-center">#}
+{#                            {% if prevItem and prevItem.place|default and item.place|default %}#}
+{#                                <twig:ux:icon name="ic:baseline-directions-walk" class="size-3.5" fill="currentColor"/>#}
+{#                                {% set mapsDirection = prevItem#}
+{#                                    ? "https://www.google.com/maps/dir/?api=1&origin=" ~ (prevItem.place.name ~ prevItem.place.address)|url_encode ~ "&destination=" ~ (item.place.name ~ item.place.address)|url_encode#}
+{#                                    : "" %}#}
+{#                                <span class="ps-1 hover:underline cursor-pointer">#}
+{#                                    <a href="{{ mapsDirection }}" target="_blank">Itineraire</a>#}
+{#                                </span>#}
+{#                            {% endif %}#}
+{#                        </span>#}
                     </div>
                 </div>
             {% endif %}

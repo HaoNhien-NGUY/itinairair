@@ -22,11 +22,10 @@ export default class extends Controller {
         const options = {
             filter: '.no-drag',
             draggable: '.draggable',
-            animation: 300,
+            animation: 250,
             dataIdAttr: 'data-item-id',
             handle: this.withHandleValue ? '.handle' : null,
             sort: this.allowSortValue,
-            // swapThreshold: 0.70,
             emptyInsertThreshold: 60,
             onStart: (event) => {
                 this.dragContainer?.classList.add('is-dragging');

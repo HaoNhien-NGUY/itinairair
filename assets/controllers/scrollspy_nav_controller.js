@@ -13,6 +13,13 @@ export default class extends Controller {
             subtree: true,
             attributeFilter: ['class']
         });
+
+        this.element.addEventListener('wheel', (evt) => {
+            if (evt.deltaY !== 0) {
+                evt.preventDefault();
+                this.element.scrollLeft += evt.deltaY;
+            }
+        });
     }
 
     disconnect() {

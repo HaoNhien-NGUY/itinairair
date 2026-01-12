@@ -54,37 +54,39 @@
 
     {% macro navTabBtn(title, active, path) %}
         <a href="{{ path }}"
-           class="snap-start [&.active]:font-medium [&.active]:border-indigo-400 [&.active,&:hover]:text-indigo-400 py-2 md:py-3 px-2 inline-flex items-center gap-x-2 border-b-2 border-transparent text-sm md:text-base whitespace-nowrap text-gray-500 {{ active ? 'active' }}">
+           class="{{ active ? 'active' }} [&.active]:font-medium [&.active]:bg-indigo-50 [&.active,&:hover]:text-indigo-400
+           py-1 rounded-lg px-4 inline-flex items-center gap-x-2 border-b-2z border-transparent text-sm md:text-base whitespace-nowrap text-gray-500">
             {{ title }}
         </a>
     {% endmacro %}
 
-    <div class="sticky top-0 z-30 mt-8 bg-white">
+    <div class="sticky border-b border-indigo-100 select-none top-0 z-30 mt-8 bg-white">
         {% set currentRoute = app.request.attributes.get('_route') %}
 
-        <div class="border-b border-indigo-100 bg-white overflow-hidden">
-            <nav class="container max-w-7xl flex gap-x-1 snap-x snap-mandatory overflow-x-auto [&::-webkit-scrollbar]:h-0">
+        <div class="border-bz border-indigo-100 mt-2 bg-white overflow-hidden">
+            <nav class="container max-w-7xl flex gap-x-1 md:mb-3 mb-2 overflow-x-auto [&::-webkit-scrollbar]:h-0">
                 {{ _self.navTabBtn('trip.page.schedule'|trans, currentRoute == 'app_trip_show', path('app_trip_show', {'id': trip.id})) }}
                 {{ _self.navTabBtn('trip.page.itinerary'|trans, currentRoute == 'app_trip_itinerary', path('app_trip_itinerary', {'id': trip.id})) }}
                 {{ _self.navTabBtn('trip.page.reservation'|trans, currentRoute == 'app_trip_bookings', path('app_trip_bookings', {'id': trip.id})) }}
             </nav>
         </div>
         {% if currentRoute == 'app_trip_show' %}
-            <div class="bg-indigo-10 select-none">
+            <div class="">
                 <div class="relative overflow-hidden">
                     <div {{ stimulus_controller('scrollspy-nav')}}
                         data-hs-scrollspy="#scrollspy-days"
-                        class="hs-scroll-nav-body scroll-p-4 [--scrollspy-offset:90px] md:[--scrollspy-offset:110px] flex space-x-1.5 snap-x py-2 md:py-3 snap-mandatory overflow-x-auto
-                        [&::-webkit-scrollbar]:h-1
-                        [&::-webkit-scrollbar-track]:bg-gray-100
-                        [&::-webkit-scrollbar-thumb]:bg-gray-300
-                        [&::-webkit-scrollbar-track]:rounded-full
+                        class="hs-scroll-nav-body scroll-p-4 [--scrollspy-offset:115px] flex space-x-1.5 snap-x snap-mandatory overflow-x-auto
+                        [&::-webkit-scrollbar]:h-0
+                        md:[&::-webkit-scrollbar]:h-1
+                        [&::-webkit-scrollbar-track]:bg-transparent
+                        [&::-webkit-scrollbar-thumb]:bg-slate-200
+                        [&::-webkit-scrollbar-thumb]:cursor-grabbing
                         [&::-webkit-scrollbar-thumb]:rounded-full">
                         {% for day in trip.days %}
                             <a href="#scrollspy-day-{{ day.id }}"
-                               class="snap-start hs-scrollspy-active:bg-indigo-100 hs-scrollspy-active:font-medium hs-scrollspy-active:text-slate-700
-                               first-of-type:ml-2 last-of-type:mr-2
-                               bg-indigo-50 text-nowrap py-1.5 px-2.5 inline-flex items-center text-sm text-center text-gray-500 hover:text-slate-600 focus:outline-hidden rounded-lg">
+                               class="snap-start hs-scrollspy-active:border-b-2 border-indigo-300 hs-scrollspy-active:font-medium hs-scrollspy-active:text-slate-700
+                               first-of-type:ml-2 last-of-type:mr-2 hover:bg-indigo-50 rounded-t-xl
+                               text-nowrap py-2 px-2.5 inline-flex items-center text-sm text-center text-gray-500 hover:text-slate-600 focus:outline-hidden">
                                 {{ day.date|date_xs }}
                             </a>
                         {% endfor %}

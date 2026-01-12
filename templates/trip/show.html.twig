@@ -55,7 +55,7 @@
     {% macro navTabBtn(title, active, path) %}
         <a href="{{ path }}"
            class="{{ active ? 'active' }} [&.active]:font-medium [&.active]:border-indigo-300 border-b-2 [&.active,&:hover]:text-indigo-400
-           py-2 px-3 inline-flex items-center gap-x-2 border-b-2z border-transparent text-sm md:text-base whitespace-nowrap text-gray-500">
+           py-2 px-2 inline-flex items-center gap-x-2 border-b-2z border-transparent text-sm md:text-base whitespace-nowrap text-gray-500">
             {{ title }}
         </a>
     {% endmacro %}
@@ -79,7 +79,7 @@
 {#                    </div>#}
                     <div {{ stimulus_controller('scrollspy-nav')}}
                         data-hs-scrollspy="#scrollspy-days"
-                        class="hs-scroll-nav-body scroll-p-4 [--scrollspy-offset:125px] flex space-x-1.5 snap-x snap-mandatory overflow-x-auto
+                        class="hs-scroll-nav-body scroll-p-4 [--scrollspy-offset:150px] flex space-x-1.5 snap-x snap-mandatory overflow-x-auto
                         [&::-webkit-scrollbar]:h-0
                         md:[&::-webkit-scrollbar]:h-1
                         [&::-webkit-scrollbar-track]:bg-transparent
@@ -89,8 +89,8 @@
                         {% for day in trip.days %}
                             <a href="#scrollspy-day-{{ day.id }}"
                                class="{{ loop.first ? 'active' }} snap-start hs-scrollspy-active:font-bold hs-scrollspy-active:text-slate-600
-                               first-of-type:ml-2 last-of-type:mr-2 hover:bg-slate-100
-                               py-2 px-2.5 flex justify-center items-center text-sm text-center text-slate-400 font-medium hover:text-slate-600 focus:outline-hidden">
+                               first-of-type:ml-2 last-of-type:mr-2 hover:bg-slate-100 text-nowrap
+                               py-2.5 px-2.5 flex justify-center items-center text-sm text-center text-slate-400 font-medium hover:text-slate-600 focus:outline-hidden">
                                 {{ day.date|format_datetime(pattern='EEE') }} {{ day.date|date('d/m') }}
                             </a>
                         {% endfor %}
@@ -100,11 +100,11 @@
         {% endif %}
     </div>
 
-    <main class="py-5 border-indigo-50 bg-indigo-10 grow">
+    <main class="pt-0 md:py-5 pb-5 border-indigo-50 bg-indigo-10 grow">
         {% block content %}
             <div id="drag-container" class="container max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3">
                 <div class="lg:col-span-2">
-                    <div id="scrollspy-days" class="rounded-2xl md:border-2 -mx-4 md:mx-0 border-0 border-indigo-200 overflow-hidden">
+                    <div id="scrollspy-days" class="md:rounded-2xl md:border-2 -mx-4 md:mx-0 border-0 border-indigo-200 overflow-hidden">
                         {% set displayEmptyRange = true %}
                         {% for day in trip.days %}
 

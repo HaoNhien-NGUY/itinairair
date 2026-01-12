@@ -47,4 +47,7 @@ return [
     'stimulus-use' => [
         'version' => '0.52.2',
     ],
+    'preline' => [
+        'version' => '3.2.3',
+    ],
 ];

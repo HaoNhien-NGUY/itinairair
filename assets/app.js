@@ -1,4 +1,5 @@
 import './bootstrap.js';
+import 'preline';
 /*
  * Welcome to your app's main JavaScript file!
  *
@@ -24,5 +25,11 @@ addEventListener("turbo:frame-missing", (event) => {
     if (response.redirected) {
         event.preventDefault();
         visit(response);
+    }
+});
+
+addEventListener('turbo:load', () => {
+    if (typeof window.HSStaticMethods !== 'undefined') {
+        window.HSStaticMethods.autoInit();
     }
 });

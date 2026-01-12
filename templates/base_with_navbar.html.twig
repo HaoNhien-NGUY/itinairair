@@ -3,43 +3,17 @@
 {% block navbar %}
     <nav class="flex items-center select-none relative justify-between bg-white max-w-screen-xl mx-auto px-5 py-2 w-full">
         <div>
-            <a href="{{ path('app_home') }}" class="text-gray-600 text-2xl font-bold cursor-pointer">{{ app_name|slice(0, 7) }}<span class="text-indigo-600">{{ app_name|slice(7) }}</a>
+            <a href="{{ path('app_home') }}" class="text-gray-600 text-2xl font-bold cursor-pointer">{{ app_name|slice(0, 7) }}<span class="text-indigo-600">{{ app_name|slice(7) }}</span></a>
         </div>
 
-        <div class="flex items-center gap-5" {{ stimulus_controller('drawer') }}>
-            <ul {{ stimulus_target('drawer', 'backdrop')}} id="drawer" role="menu"
-                class="md:gap-3 bg-indigo-25 md:bg-transparent p-3 md:p-0 transition-[translate] ease-[cubic-bezier(0.4, 0.0, 0.2, 1)] delay-150 z-40 md:w-auto md:z-auto md:flex flex flex-col absolute min-h-screen -left-0 sm:static w-full translate-x-full md:translate-0 top-0 bg-white sm:shadow-none shadow-xl sm:flex-row sm:w-auto sm:min-h-0">
-                <div class="md:hidden mb-5">
-                    <div class="flex justify-between">
-                        <div class="text-gray-600 text-2xl font-bold cursor-pointer">{{ app_name|slice(0, 7) }}<span class="text-indigo-600">{{ app_name|slice(7) }}</div>
-                        <div {{ stimulus_action('drawer', 'close', 'click') }} class="cursor-pointer p-1.5 rounded-full hover:bg-indigo-50">
-                            <svg class="shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                        </div>
-                    </div>
-                </div>
+        <div class="flex items-center gap-5">
+            <ul
+                class="gap-3 bg-transparent hidden md:flex md:p-0 transition-[translate] ease-[cubic-bezier(0.4, 0.0, 0.2, 1)] delay-150 w-auto bg-white">
                 <li class="p-3 py-2 md:py-3 text-gray-600">
                     <a href="{{ path('app_home') }}" class="hover:text-indigo-500">{{ 'common.home'|trans }}</a>
                 </li>
                 <li class="p-3 py-2 md:py-3 text-gray-600">
                     <a href="{{ path('app_trip') }}" class="hover:text-indigo-500">{{ 'trip.my_trips'|trans }}</a>
-                </li>
-                <hr class="my-4 border-indigo-100 md:hidden" />
-                <li class="md:hidden">
-                    {% if app.user %}
-
-                    <a href="{{ path('app_account') }}" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 block p-3 py-2 md:py-3 text-sm">{{ 'common.my_account'|trans }}</a>
-                    <a href="{{ path('app_trip_create') }}" data-turbo-frame="modal" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 block p-3 py-2 md:py-3 text-sm">{{ 'trip.new_trip'|trans }}</a>
-                    <a href="{{ path('app_logout') }}" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 block p-3 py-2 md:py-3 text-sm">{{ 'common.logout'|trans }}</a>
-                    {% else %}
-                        <div class="flex items-center space-x-1 border-indigo-100 mt-2">
-                            <a href="{{ path('app_login') }}" class="text-sm text-indigo-600 hover:bg-indigo-50 transition-colors rounded-full px-4 py-2 font-bold">
-                                {{ 'common.login'|trans }}
-                            </a>
-                            <a href="{{ path('app_register') }}" class="btn">
-                                {{ 'form.security.register'|trans }}
-                            </a>
-                        </div>
-                    {% endif %}
                 </li>
             </ul>
             <div class="flex gap-3 group items-center" data-turbo-prefetch="false">
@@ -75,12 +49,69 @@
                         </a>
                     </div>
                 {% endif %}
-                <div class="md:hidden cursor-pointer" id="mobile-toggle" {{ stimulus_action('drawer', 'open', 'click') }}>
+
+
+                <button type="button" class="md:hidden cursor-pointer -m-2 p-2" id="mobile-toggle" {{ stimulus_action('drawer', 'open', 'click') }}
+                        aria-haspopup="dialog"
+                        aria-expanded="false"
+                        aria-controls="hs-offcanvas"
+                        data-hs-overlay="#hs-offcanvas">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                          stroke="currentColor">
                         <path class="" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
+                </button>
+                <div id="hs-offcanvas" class="hs-overlay hs-overlay-open:translate-x-0 hidden translate-x-full fixed top-0 end-0 transition-all duration-300 transform h-full max-w-xs w-full z-80 bg-white border-e border-gray-200"
+                     role="dialog"
+                     tabindex="-1"
+                     aria-labelledby="hs-offcanvas-label">
+                    <div class="flex justify-between items-center py-3 px-4 border-b border-gray-200">
+                        <h3 id="hs-offcanvas-label" class="text-gray-600 text-2xl font-bold">
+                            <span class=" cursor-pointer">{{ app_name|slice(0, 7) }}</span><span class="text-indigo-600">{{ app_name|slice(7) }}</span>
+                        </h3>
+                        <button type="button"
+                                class="inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none"
+                                aria-label="Close" data-hs-overlay="#hs-offcanvas">
+                            <span class="sr-only">Close</span>
+                            <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 6 6 18"></path>
+                                <path d="m6 6 12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <ul class="gap-3 ">
+                            <li class="p-3 py-2 text-gray-600">
+                                <a href="{{ path('app_home') }}" class="hover:text-indigo-500">{{ 'common.home'|trans }}</a>
+                            </li>
+                            <li class="p-3 py-2 text-gray-600">
+                                <a href="{{ path('app_trip') }}" class="hover:text-indigo-500">{{ 'trip.my_trips'|trans }}</a>
+                            </li>
+                            {% if app.user %}
+                                <li class="p-3 py-2 text-gray-600">
+                                    <a href="{{ path('app_account') }}" class="hover:text-indigo-500">{{ 'common.my_account'|trans }}</a>
+                                </li>
+                                <li class="p-3 py-2 text-gray-600">
+                                    <a href="{{ path('app_trip_create') }}" class="hover:text-indigo-500">{{ 'trip.new_trip'|trans }}</a>
+                                </li>
+                                <li class="p-3 py-2 mt-5 text-red-400">
+                                    <a href="{{ path('app_logout') }}" class="hover:text-indigo-500">{{ 'common.logout'|trans }}</a>
+                                </li>
+                            {% else %}
+                                <li class="px-0 py-2 mt-10 text-gray-600">
+                                    <div class="flex items-center space-x-1">
+                                        <a href="{{ path('app_login') }}" class="text-sm text-indigo-600 hover:bg-indigo-50 transition-colors rounded-full px-4 py-2 font-bold">
+                                            {{ 'common.login'|trans }}
+                                        </a>
+                                        <a href="{{ path('app_register') }}" class="btn">
+                                            {{ 'form.security.register'|trans }}
+                                        </a>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

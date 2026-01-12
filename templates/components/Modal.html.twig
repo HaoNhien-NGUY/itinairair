@@ -25,18 +25,18 @@
             {{ stimulus_target('modal', 'modal') }}
         >
             <turbo-frame id="modal-content">
-                <div class="flex select-none bg-white sticky top-0 z-20 items-center justify-center px-4 pb-1 pt-3">
-                    {% block title %}{% endblock %}
-                    <div class="absolute top-3 end-2">
-                        <button type="button"
-                                class="size-5 cursor-pointer inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent text-gray-800 hover:bg-gray-200 focus:outline-hidden focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none" aria-label="Close"
-                                data-action="click->modal#close">
-                            <span class="sr-only">Close</span>
-                            <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+{#                <div class="flex select-none bg-white sticky top-0 z-20 items-centerjustify-center px-4 pb-1 pt-3">#}
+                    <div class="flex justify-between select-none bg-white sticky top-0 z-20 items-center md:px-5 py-3 px-4 border-b border-gray-200">
+                        <h3 class="line-clamp-1 text-sm md:text-base">
+                            {% block title %}{% endblock %}
+                        </h3>
+                        <button type="button" data-action="click->modal#close" class="size-6.5 cursor-pointer inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent text-slate-400 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none" aria-label="Close">
+                            <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 6 6 18"></path>
+                                <path d="m6 6 12 12"></path>
+                            </svg>
                         </button>
                     </div>
-                </div>
-
                 <div class="px-3 md:px-5 pb-5 mt-5">
                     {% block content %}
                     {% endblock %}

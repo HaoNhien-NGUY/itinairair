@@ -84,7 +84,7 @@ gmp-place-autocomplete {
     }
 
     .modal-header {
-        @apply font-medium text-gray-500;
+        @apply text-gray-500;
     }
 
     .pill {

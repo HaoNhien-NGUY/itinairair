@@ -16,14 +16,14 @@
             placeholder="{{ 'common.search_by_name_address'|trans }}"
             {{ stimulus_target('google-place-widget', 'placeInput') }}>
         </gmp-place-autocomplete>
-        <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="-mt-4 mb-5 {{ not place ? 'hidden' }}">
-            <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-52 rounded-2xl shrink-0 object-cover mb-4" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
+        <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="-mt-1 mb-5 {{ not place ? 'hidden' }}">
+            <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-52 rounded-xl shrink-0 object-cover mb-4" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
             <div class="font-medium text-base/5 md:text-lg/5 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}>{{ place ? place.name }}</div>
 {#            <p {{ stimulus_target('google-place-widget', 'typeDisplay') }} class="text-xs/snug text-indigo-500 {{ place ? 'hidden' }}">{{ place ? place.type }}</p>#}
             <a {{ stimulus_target('google-place-widget', 'addressDisplay addressLinkDisplay') }}
                 href="{{ place ? place.googleMapsURI }}"
                 target="_blank"
-                class="text-xs/snug md:text-sm/snug text-gray-500 hover:text-blue-400 mt-1">{{ place ? place.address }}</a>
+                class="text-xs/snug md:text-sm/snug text-slate-400 hover:text-blue-400 mt-1">{{ place ? place.address }}</a>
         </div>
 
 
@@ -56,7 +56,7 @@
                 {{ place ? 'common.modify'|trans : 'common.add'|trans }}
             </button>
             <button type="button"
-                    class="cursor-pointer px-4 bg-white rounded-xl hover:bg-slate-100 btn-animate font-medium text-slate-300 text-center text-sm transition-colors" aria-label="Close"
+                    class="cursor-pointer px-4 bg-gray-100 rounded-xl hover:bg-gray-200 btn-animate font-medium text-slate-300 text-center text-sm transition-colors" aria-label="Close"
                     data-action="click->modal#close">
                 <span class="sr-only">Close</span>
                 <svg class="shrink-0 size-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>

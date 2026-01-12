@@ -53,20 +53,24 @@
     </div>
 
     {% macro navTabBtn(title, active, path) %}
-        <a href="{{ path }}" class="[&.active,&:hover]:bg-indigo-50 text-sm md:text-base [&.active,&:hover]:text-indigo-400 [&.active]:font-medium px-4 py-1 hover:cursor-pointer text-gray-500 transition-colors rounded-4xl {{ active ? 'active' }}">
+        <a href="{{ path }}"
+           class="snap-start [&.active]:font-medium [&.active]:border-indigo-400 [&.active,&:hover]:text-indigo-400 py-2 md:py-3 px-2 inline-flex items-center gap-x-2 border-b-2 border-transparent text-sm md:text-base whitespace-nowrap text-gray-500 {{ active ? 'active' }}">
             {{ title }}
         </a>
     {% endmacro %}
 
-    <div class="flex container max-w-7xl md:space-x-2 space-x-1 mb-2 mt-10">
+
+    <div class="relative border-b mt-8 border-indigo-100 overflow-hidden">
         {% set currentRoute = app.request.attributes.get('_route') %}
 
-        {{ _self.navTabBtn('trip.page.schedule'|trans, currentRoute == 'app_trip_show', path('app_trip_show', {'id': trip.id})) }}
-        {{ _self.navTabBtn('trip.page.itinerary'|trans, currentRoute == 'app_trip_itinerary', path('app_trip_itinerary', {'id': trip.id})) }}
-        {{ _self.navTabBtn('trip.page.reservation'|trans, currentRoute == 'app_trip_bookings', path('app_trip_bookings', {'id': trip.id})) }}
+        <nav class="container max-w-7xl flex gap-x-1 snap-x snap-mandatory overflow-x-auto [&::-webkit-scrollbar]:h-0">
+            {{ _self.navTabBtn('trip.page.schedule'|trans, currentRoute == 'app_trip_show', path('app_trip_show', {'id': trip.id})) }}
+            {{ _self.navTabBtn('trip.page.itinerary'|trans, currentRoute == 'app_trip_itinerary', path('app_trip_itinerary', {'id': trip.id})) }}
+            {{ _self.navTabBtn('trip.page.reservation'|trans, currentRoute == 'app_trip_bookings', path('app_trip_bookings', {'id': trip.id})) }}
+        </nav>
     </div>
 
-    <main class="border-t-2  py-5 border-indigo-50 bg-indigo-10 grow">
+    <main class="border-t-2z  py-5 border-indigo-50 bg-indigo-10 grow">
         {% block content %}
             <div id="drag-container" class="container max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3">
                 <div class="lg:col-span-2">
@@ -121,7 +125,7 @@
 
                             <div class="bg-indigo-50 text-gray-700 px-4 py-1 flex justify-between">
                                 <div class="flex items-end">
-                                    <div class="text-gray-500 font-medium">{{ day.date|date_short }}</div>
+                                    <div class="text-gray-500 text-sm">{{ day.date|date_short }}</div>
                                 </div>
                                 <div class="text-sm flex items-center">
                                     {% macro destination_link(trip, item, suffix = false) %}

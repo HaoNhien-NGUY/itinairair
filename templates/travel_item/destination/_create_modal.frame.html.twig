@@ -57,14 +57,14 @@
 
 
 
-                <div class="p-3 border rounded-xl border-indigo-200">
+                <div class="">
                     <div {{ stimulus_target('google-place-widget', 'placeHolder') }} class="{{ place ? 'hidden' }}">
 {#                        <div class="flex flex-col justify-center items-center">#}
 {#                            <twig:ux:icon name="iconoir:city" class="size-8 text-indigo-300"/>#}
 {#                        </div>#}
                     </div>
                     <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="{{ not place ? 'hidden' }}">
-                        <div class="">
+                        <div class="p-3 border rounded-xl border-indigo-200">
                             <div class="w-full flex">
                                 <div>
                                     <div class="font-medium text-base/5 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}>{{ place ? place.name }}</div>

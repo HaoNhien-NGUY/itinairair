@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Day;
 use App\Entity\Trip;
 use App\Repository\DestinationRepository;
 
@@ -29,5 +30,36 @@ class TripService
         ];
 
         return $stats;
+    }
+
+    public function addOrRemoveTripDays(Trip $trip, int $requiredCount): void
+    {
+        if (!$trip->getStartDate() || !$trip->getEndDate()) {
+            return;
+        }
+
+        $currentDays = $trip->getDays();
+        $currentCount = count($currentDays);
+
+        if ($currentCount > $requiredCount) {
+            $toRemove = [];
+
+            foreach ($currentDays as $day) {
+                if ($day->getPosition() > $requiredCount) {
+                    $toRemove[] = $day;
+                }
+            }
+
+            foreach ($toRemove as $day) {
+                $trip->removeDay($day);
+            }
+        } elseif ($currentCount < $requiredCount) {
+            for ($i = $currentCount; $i < $requiredCount; $i++) {
+                $newDay = new Day();
+                $newDay->setPosition($i + 1);
+                $trip->addDay($newDay);
+                $newDay->setDate($newDay->getComputedDate());
+            }
+        }
     }
 }

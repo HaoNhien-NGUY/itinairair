@@ -29,6 +29,7 @@ jobs:
 
             -   name: Build Assets
                 run: |
+                    php bin/console importmap:install
                     php bin/console tailwind:build --minify
                     php bin/console asset-map:compile
 

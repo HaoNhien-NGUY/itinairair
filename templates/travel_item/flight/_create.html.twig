@@ -16,13 +16,14 @@
         <div class="mb-3 grid grid-cols-2 space-x-3">
             <div class="col-span-1">
                     <h3 class="form-label">{{ 'common.departure'|trans }}</h3>
+
                 <div class="grid grid-cols-2 space-x-1">
                     <div {{  stimulus_controller('calendar', {dayMapping: dayMapping, startDate: startDate, isRange: false, autoHide: true, inputMode: true, inModal: true, displayWeekDay: false}) }}
                         {{ stimulus_target('calendar', 'calendar') }}
                         class="col-span-1"
                     >
                         {{ form_widget(form.startDay) }}
-                        <div class="form-input cursor-pointer py-1.5">
+                        <div class="form-input {{ not form.startDay.vars.valid ? 'border-red-400'}} cursor-pointer py-1.5">
                             <div {{ stimulus_target('calendar', 'startDayDisplay') }}><span class="italic text-gray-500 text-sm">Date</span></div>
                         </div>
                     </div>

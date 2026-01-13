@@ -39,7 +39,9 @@ class FlightType extends AbstractType
             ])
             ->add('startDay', EntityType::class, [
                 'class' => Day::class,
+                'required' => false,
                 'placeholder' => '',
+                'constraints' => [new Assert\NotBlank()],
                 'query_builder' => function (DayRepository $dayRepository) use ($trip) {
                     return $dayRepository->createQueryBuilder('d')
                         ->where('d.trip = :trip')

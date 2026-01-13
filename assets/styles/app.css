@@ -59,15 +59,12 @@ gmp-place-autocomplete {
     }
 }
 
+@theme {
+    --color-indigo-10: #fcfcff;
+    --color-indigo-25: #F5F7FF;
+}
+
 @layer utilities {
-    .bg-indigo-25 {
-        background-color: #F5F7FF;
-    }
-
-    .bg-indigo-10 {
-        background-color: #fcfcff;
-    }
-
     .shadow-card {
         box-shadow: var(--tw-shadow-color, var(--color-indigo-100)) 0px 0px 0px 2px;
     }

@@ -19,7 +19,7 @@
                                 <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").FLIGHT.value, day: day.id }) }}"
                                    class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
                                    data-turbo-frame="modal">
-                                    {{ 'common.flight'|trans }}
+                                    {{ 'common.overnight_flight'|trans }}
                                 </a>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
 <turbo-frame id="itinerary">
     <div class="container mx-auto max-w-2xl py-6 md:py-12">
         <div class="flex items-center ml-4">
-            <twig:ux:icon name="material-symbols:home-outline" class="size-10 text-gray-400 mr-4 p-2 rounded-full bg-gray-200"/>
+            <twig:ux:icon name="material-symbols:home-outline" class="size-10 text-slate-500 mr-4 p-2 rounded-full bg-indigo-100"/>
 
             <div>
                 <span class="text-gray-600 font-medium">{{ 'trip.start'|trans }}</span>

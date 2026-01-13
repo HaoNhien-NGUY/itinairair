@@ -84,6 +84,7 @@ landing:
             title: Multi-Destinations
             subtitle: Road trip en vue ? Gérez plusieurs étapes et destinations au sein d'un seul voyage.
 common:
+    overnight_flight: Vol de nuit
     search_destination: Rechercher une ville
     search_by_name_address: Rechercher par nom ou adresse
     change_photo: Changer de photo

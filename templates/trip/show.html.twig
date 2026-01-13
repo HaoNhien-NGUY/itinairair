@@ -59,7 +59,7 @@
             {{ title }}
         </a>
     {% endmacro %}
-    <div class="sticky border-b border-indigo-100 select-none top-0 z-30 mt-8 bg-white">
+    <div class="sticky border-bz border-indigo-100 select-none top-0 z-30 mt-8 bg-white">
         {% set currentRoute = app.request.attributes.get('_route') %}
 
         <div class="border-b border-indigo-100 bg-white overflow-hidden">
@@ -70,7 +70,7 @@
             </nav>
         </div>
         {% if currentRoute == 'app_trip_show' %}
-            <div class="bg-slate-50">
+            <div class="bg-indigo-25">
                 <div class="relative flex overflow-hidden">
 {#                    <div class="px-3 border-r-1 flex justify-center items-center border-slate-200">#}
 {#                        <div class="rounded-full bg-slate-100z p-1 flex items-center justify-center cursor-grab">#}
@@ -79,7 +79,7 @@
 {#                    </div>#}
                     <div {{ stimulus_controller('scrollspy-nav')}}
                         data-hs-scrollspy="#scrollspy-days"
-                        class="hs-scroll-nav-body scroll-p-4 [--scrollspy-offset:150px] flex space-x-1.5 snap-x snap-mandatory overflow-x-auto
+                        class="hs-scroll-nav-body scroll-p-4 [--scrollspy-offset:200px] flex space-x-1.5 snap-x snap-mandatory overflow-x-auto
                         [&::-webkit-scrollbar]:h-0
                         md:[&::-webkit-scrollbar]:h-1
                         [&::-webkit-scrollbar-track]:bg-transparent
@@ -89,8 +89,8 @@
                         {% for day in trip.days %}
                             <a href="#scrollspy-day-{{ day.id }}"
                                class="{{ loop.first ? 'active' }} snap-start hs-scrollspy-active:font-bold hs-scrollspy-active:text-slate-600
-                               first-of-type:ml-2 last-of-type:mr-2 hover:bg-slate-100 text-nowrap
-                               py-3.5 px-2.5 flex justify-center items-center text-sm text-center text-slate-400 font-medium hover:text-slate-600 focus:outline-hidden">
+                               first-of-type:ml-2 last-of-type:mr-2 hover:bg-slate-100 md:text-nowrap
+                               py-3 px-2.5 flex justify-center items-center text-sm text-center text-slate-400 font-medium hover:text-slate-600 focus:outline-hidden">
                                 {{ day.date|format_datetime(pattern='EEE') }} {{ day.date|date('d/m') }}
                             </a>
                         {% endfor %}
@@ -100,11 +100,12 @@
         {% endif %}
     </div>
 
-    <main class="pt-0 md:py-5 pb-5 border-indigo-50 bg-indigo-10 grow">
+    <main class="pt-2 md:py-5 pb-5 grow bg-indigo-25 md:bg-white">
         {% block content %}
-            <div id="drag-container" class="container max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3">
-                <div class="lg:col-span-2">
-                    <div id="scrollspy-days" class="md:rounded-2xl md:border-2 -mx-4 md:mx-0 border-0 border-indigo-200 overflow-hidden">
+            <div id="drag-container" class="max-w-7xl container grid grid-cols-1 lg:grid-cols-3">
+                <div class="lg:col-span-2 -mx-4 md:mx-0">
+
+                    <div id="scrollspy-days" class="rounded-3xl md:rounded-3xl md:border-2 border-0 border-indigo-200 overflow-hidden">
                         {% set displayEmptyRange = true %}
                         {% for day in trip.days %}
 
@@ -124,11 +125,10 @@
                             {% set isTravelDay = (day.position == 1 and flightTripStart) %}
 
                             {% if isTravelDay %}
-                                <div class="flex justify-center items-center flex-col bg-white p-3 mt-4">
+                                <div class="flex justify-center items-center flex-col bg-white lg:px-10 md:px-8 px-3 pt-5 pb-3">
                                     <h3 class="text-slate-500 font-extrabold text-2xl">{{ 'common.departure'|trans }}</h3>
                                     <div>
-                                        <div class="text-gray-500 text-sm">{{ day.date|date_short }}</div>
-
+                                        <div class="text-gray-500 text-sm">{{ day.date|date_short }} {{ trip.startDate|date('Y')}}</div>
                                     </div>
                                 </div>
                             {% elseif destinationStartDay %}
@@ -194,7 +194,7 @@
 
 
                 <div class="max-lg:hidden">
-                    <div class="space-y-4 px-4 pb-20 sticky top-24 max-h-screen no-scrollbar overflow-y-auto">
+                    <div class="space-y-4 px-4 pb-20 sticky top-28 max-h-screen no-scrollbar overflow-y-auto">
                         <div class="p-2 text-sm bg-white border-gray-200 border rounded-2xl">
                             <a href="{{ path('app_trip_bookings', {'id': trip.id}) }}" class=" hover:bg-indigo-50 transition-colors rounded-xl font-medium flex items-center justify-between text-gray-500 py-2 px-3">
                                 <span class="flex items-center">{{ 'common.hotels_and_accommodations'|trans }}<twig:ux:icon name="bi:dash-lg" class="mx-2.5 size-4" />{{ accommodationCount }}</span>

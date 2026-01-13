@@ -28,8 +28,12 @@ addEventListener("turbo:frame-missing", (event) => {
     }
 });
 
-addEventListener('turbo:load', () => {
+const initPreline = () => {
     if (typeof window.HSStaticMethods !== 'undefined') {
         window.HSStaticMethods.autoInit();
     }
-});
+};
+
+document.addEventListener('turbo:load', initPreline);
+document.addEventListener('turbo:frame-load', initPreline);
+document.addEventListener('turbo:render', initPreline);

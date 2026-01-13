@@ -28,7 +28,7 @@ class FlightRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function findFlightsByTrip(\App\Entity\Trip $trip): array
+    public function findFlightsByTrip(Trip $trip): array
     {
         return $this->createQueryBuilder('f')
             ->join('f.startDay', 'sd')
@@ -38,5 +38,32 @@ class FlightRepository extends ServiceEntityRepository
             ->addOrderBy('f.startTime', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findOverNightFlightsByTrip(Trip $trip): array
+    {
+        return $this->createQueryBuilder('f')
+            ->join('f.startDay', 'sd')
+            ->where('sd.trip = :trip')
+            ->andWhere('f.startDay != f.endDay')
+            ->setParameter('trip', $trip)
+            ->orderBy('sd.position', 'ASC')
+            ->addOrderBy('f.startTime', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findFirstDayOverNightFlight(Trip $trip): ?Flight
+    {
+        return $this->createQueryBuilder('f')
+            ->join('f.startDay', 'sd')
+            ->where('sd.trip = :trip')
+            ->andWhere('f.startDay != f.endDay')
+            ->andWhere('sd.position = 1')
+            ->setParameter('trip', $trip)
+            ->orderBy('sd.position', 'ASC')
+            ->addOrderBy('f.startTime', 'ASC')
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

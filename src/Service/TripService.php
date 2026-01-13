@@ -3,12 +3,17 @@
 namespace App\Service;
 
 use App\Entity\Day;
+use App\Entity\TravelItem;
 use App\Entity\Trip;
 use App\Repository\DestinationRepository;
+use App\Repository\FlightRepository;
 
 class TripService
 {
-    public function __construct(private DestinationRepository $destinationRepository) {
+    public function __construct(
+        private readonly DestinationRepository $destinationRepository,
+        private readonly FlightRepository $flightRepository,
+    ) {
     }
 
     /**
@@ -30,6 +35,17 @@ class TripService
         ];
 
         return $stats;
+    }
+
+    public function getTripItinerary(Trip $trip): array
+    {
+        $destinations = $this->destinationRepository->findDestinationByTrip($trip);
+        $flights = $this->flightRepository->findOverNightFlightsByTrip($trip);
+
+        $merged = array_merge($destinations, $flights);
+        usort($merged, fn(TravelItem $a, TravelItem  $b) => $a->getStartDay()->getPosition() <=> $b->getStartDay()->getPosition());
+
+        return $merged;
     }
 
     public function addOrRemoveTripDays(Trip $trip, int $requiredCount): void

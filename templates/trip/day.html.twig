@@ -107,13 +107,13 @@
 
 
 
-            <div class="">
+            <div class="{{ isTravelDay ? 'hidden' }}">
                 {{ include('trip/day/_itinerary.html.twig') }}
             </div>
 
 
                 {% if flightStartDay|length > 0 %}
-                    <div class="mt-6">
+                    <div class="{{ not isTravelDay ? 'mt-6' }}">
                         {% for item in flightStartDay %}
 
                             <div class="rounded-xl btn-animate text-sm overflow-hidden relative">

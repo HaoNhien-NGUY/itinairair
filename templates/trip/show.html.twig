@@ -121,7 +121,17 @@
                                 {% endif %}
                             {% endfor %}
 
-                            {% if destinationStartDay %}
+                            {% set isTravelDay = (day.position == 1 and flightTripStart) %}
+
+                            {% if isTravelDay %}
+                                <div class="flex justify-center items-center flex-col bg-white p-3 pl-5">
+                                    <h3 class="text-slate-500 font-extrabold text-2xl">{{ 'common.departure'|trans }}</h3>
+                                    <div>
+                                        <div class="text-gray-500 text-sm">{{ day.date|date_short }}</div>
+
+                                    </div>
+                                </div>
+                            {% elseif destinationStartDay %}
                                 <div class="flex justify-between bg-linear-to-r from-indigo-400 to-indigo-200 p-3 pl-5">
                                     <div>
                                         <div>
@@ -153,7 +163,7 @@
                                 {% set displayEmptyRange = false %}
                             {% endif %}
 
-                            <div id="scrollspy-day-{{ day.id }}" class="bg-indigo-50 text-gray-700 px-4 py-1 flex justify-between">
+                            <div id="scrollspy-day-{{ day.id }}" class="{{ isTravelDay ? 'hidden'}} bg-indigo-50 text-gray-700 px-4 py-1 flex justify-between">
                                 <div class="flex items-end">
                                     <div class="text-gray-500 text-sm">{{ day.date|date_short }}</div>
                                 </div>
@@ -177,7 +187,7 @@
                                 </div>
                             </div>
 
-                            {{ include('trip/day.html.twig', {day, trip, startDate, statistics, items: items[day.id] ?? null}) }}
+                            {{ include('trip/day.html.twig', {day, trip, startDate, isTravelDay, statistics, items: items[day.id] ?? null}) }}
                         {% endfor %}
                     </div>
                 </div>

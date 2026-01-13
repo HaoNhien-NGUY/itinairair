@@ -1,11 +1,13 @@
-<div id="day_{{ day.id }}_accommodation" class="space-y-2 mb-2">
+<div id="day_{{ day.id }}_accommodation">
     {% if items[accommodationEnum] is defined %}
-        {% for item in items[accommodationEnum] %}
-            {% set isStartDay = item.startDay is same as(day) %}
-            {% set isEndDay = item.endDay is same as(day) %}
-            <div>
-                {{ include('travel_item/accommodation/_show.frame.html.twig') }}
-            </div>
-        {% endfor %}
+        <div class="space-y-2 mb-2">
+            {% for item in items[accommodationEnum] %}
+                {% set isStartDay = item.startDay is same as(day) %}
+                {% set isEndDay = item.endDay is same as(day) %}
+                <div>
+                    {{ include('travel_item/accommodation/_show.frame.html.twig') }}
+                </div>
+            {% endfor %}
+        </div>
     {% endif %}
 </div>

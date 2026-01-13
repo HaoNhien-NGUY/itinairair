@@ -110,6 +110,7 @@ final class TripController extends AbstractController
             'flightCount' => $flightRepository->countFlightsByTrip($trip),
             'statistics' => $tripService->getTripStatistics($trip),
             'ideas' => $ideas,
+            'flightTripStart' => $flightRepository->findFirstDayOverNightFlight($trip),
         ]);
     }
 
@@ -117,14 +118,13 @@ final class TripController extends AbstractController
     #[Route('/{id}/itinerary', name: 'app_trip_itinerary', methods: ['GET'])]
     public function itinerary(
         Trip $trip,
-        DestinationRepository $destinationRepository,
         TripService $tripService,
     ): Response
     {
         return $this->render('trip/itinerary.html.twig', [
             'trip'  => $trip,
             'statistics' => $tripService->getTripStatistics($trip),
-            'destinations' => $destinationRepository->findDestinationByTrip($trip),
+            'destinations' => $tripService->getTripItinerary($trip),
         ]);
     }
 

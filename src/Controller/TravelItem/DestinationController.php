@@ -5,7 +5,7 @@ namespace App\Controller\TravelItem;
 use App\Entity\Destination;
 use App\Entity\Trip;
 use App\Repository\DayRepository;
-use App\Repository\DestinationRepository;
+use App\Service\TripService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +21,7 @@ final class DestinationController extends AbstractController
         EntityManagerInterface $entityManager,
         DayRepository $dayRepository,
         ValidatorInterface $validator,
-        DestinationRepository $destinationRepository,
+        TripService $tripService,
         Trip $trip,
         Destination $item,
     ): Response
@@ -39,7 +39,7 @@ final class DestinationController extends AbstractController
         }
         return $this->render('travel_item/destination/show.frame.html.twig', [
             'trip' => $trip,
-            'destinations' => $destinationRepository->findDestinationByTrip($trip),
+            'destinations' => $tripService->getTripItinerary($trip),
         ]);
     }
 }

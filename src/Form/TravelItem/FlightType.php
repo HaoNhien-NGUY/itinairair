@@ -35,7 +35,7 @@ class FlightType extends AbstractType
             ->add('flightNumber', TextType::class, [
                 'required' => false,
                 'label'    => 'transport.airplane.flight_number',
-                'attr' => ['placeholder' => 'ex: AF012', 'maxLength' => 4],
+                'attr' => ['placeholder' => 'ex: AF012', 'maxLength' => 5],
             ])
             ->add('startDay', EntityType::class, [
                 'class' => Day::class,

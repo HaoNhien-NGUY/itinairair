@@ -47,7 +47,8 @@
                                         </div>
                                     </div>
                                     <div class="flex items-center text-gray-600">
-                                        {{ 'common.arrival'|trans }}
+
+                                        {{ item.endDay is not null and item.endDay is same as(day) ? 'common.arrival'|trans }}
                                         <twig:ux:icon name="bi:dash-lg" class="mx-2.5 size-4" />
                                         <span class="font-medium text-indigo-600">{{ item.endTime ? item.endTime|date("H:i") : 'TBD' }}</span>
                                     </div>

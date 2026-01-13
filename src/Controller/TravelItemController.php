@@ -187,6 +187,7 @@ final class TravelItemController extends AbstractController
         ?TravelItemType $type = TravelItemType::ACTIVITY,
         ?Day $day = null,
         #[MapQueryParameter] ItemStatus $status = ItemStatus::PLANNED,
+        #[MapQueryParameter] bool $overnight = false,
     ): Response {
         if ($day && $day->getTrip() !== $trip) throw $this->createAccessDeniedException();
 
@@ -211,6 +212,7 @@ final class TravelItemController extends AbstractController
             'type'       => $type,
             'status'     => $status,
             'day'        => $day,
+            'overnight'  => $overnight,
             'destination' => $destination,
         ]);
     }

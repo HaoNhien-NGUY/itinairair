@@ -1,0 +1,20 @@
+{% props user, membership = null, imgClass = 'size-16' %}
+
+<div {{ attributes }}>
+    <div class="hs-tooltip [--trigger:click] [--placement:auto] inline-block">
+        <div class="hs-tooltip-toggle block text-center" tabindex="0">
+            <button type="button" class="cursor-pointer focus:outline-hidden">
+                <twig:UserAvatar user="{{ user }}" imgClass="{{ imgClass }}" />
+            </button>
+            <div class="hs-tooltip-content z-50 hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible hidden opacity-0 transition-opacity absolute invisible max-w-xs bg-white border border-gray-100 text-start rounded-lg shadow-md" role="tooltip">
+
+                <div class="py-3 px-4 text-sm flex items-center gap-2 text-gray-600">
+                    <twig:UserAvatar user="{{ user }}" imgClass="{{ imgClass }}" />
+                    <div>
+                        {{ user.username }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

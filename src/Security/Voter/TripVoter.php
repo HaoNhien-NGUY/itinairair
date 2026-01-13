@@ -29,14 +29,14 @@ final class TripVoter extends Voter
             return false;
         }
 
-        /** @var TripMembership|Trip $subject */
-        $membership = null;
-
         if ($subject instanceof TripMembership) {
-            $membership = $subject;
-        } elseif ($subject instanceof Trip) {
-            $membership = $subject->getMembershipForUser($user);
+            $trip = $subject->getTrip();
+        } else {
+            $trip = $subject;
         }
+
+        /** @var Trip $subject */
+        $membership = $trip->getMembershipForUser($user);
 
         if (!$membership) {
             return false;

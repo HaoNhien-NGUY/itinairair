@@ -3,7 +3,11 @@
     {% set dayMapping = trip.dayMapping %}
 
     {% set startDate = item.startDay ? item.startDay.date|date('Y-m-d') : null %}
-    {% set endDate = item.endDay ? item.endDay.date|date('Y-m-d') : (startDate ?? null) %}
+    {% if overnight|default and item.startDay %}
+        {% set endDate = item.startDay.date|date_modify("+1 day")|date('Y-m-d') %}
+    {% else %}
+        {% set endDate = item.endDay ? item.endDay.date|date('Y-m-d') : (startDate ?? null) %}
+    {% endif %}
     <div class="mb-8">
         <div class="mb-3">
             {{ form_row(form.flightNumber) }}

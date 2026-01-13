@@ -55,6 +55,8 @@ export default class extends Controller {
             },
         };
 
+        if (this.startDateValue) this.startDaySelectTarget.value = this.hasDayMappingValue ? (this.dayMappingValue[this.startDateValue] ?? '') : this.startDateValue;
+        if (this.endDateValue) this.endDaySelectTarget.value = this.hasDayMappingValue ? (this.dayMappingValue[this.endDateValue] ?? '') : this.endDateValue;
         if (startDate) this.startDayDisplayTarget.innerText = this.formatDate(startDate);
         if (endDate) this.endDayDisplayTarget.innerText = this.formatDate(endDate);
 

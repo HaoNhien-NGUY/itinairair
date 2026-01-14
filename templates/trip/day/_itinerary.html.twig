@@ -19,7 +19,7 @@
     {% set positionDisplay = 1 %}
     {% for item in items['itinerary']|default([]) %}
         {% set lastItem = item %}
-        <div class="draggable itinerary-item [.is-dragging_&]:py-3.5 -mx-10 px-10 [.is-dragging_.day-itinerary_&:first-of-type]:pt-7 [.idea-container_&:first-of-type]:pt-0 [.is-dragging_&:last-of-type]:pb-0" data-item-id="{{ item.id }}">
+        <div class="draggable itinerary-item [.is-dragging_&]:py-3 -mx-10 px-10 [.is-dragging_.day-itinerary_&:first-of-type]:pt-6 [.idea-container_&:first-of-type]:pt-0 [.is-dragging_&:last-of-type]:pb-0" data-item-id="{{ item.id }}">
             {% if loop.first %}
                 <div class="flex [.idea-container_&]:hidden [.is-dragging_&]:hidden opacity-0 hover:opacity-100 duration-200 transition-opacity items-center">
                     <div class="relative flex items-start ml-6">

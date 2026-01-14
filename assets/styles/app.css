@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
+
 @import "tailwindcss";
 @import "../../node_modules/preline/variants.css";
 
@@ -62,6 +65,9 @@ gmp-place-autocomplete {
 @theme {
     --color-indigo-10: #fcfcff;
     --color-indigo-25: #F5F7FF;
+
+    --font-sans: "Nunito Sans";
+    --font-brand: "Caveat", "serif";
 }
 
 @layer utilities {
@@ -71,6 +77,10 @@ gmp-place-autocomplete {
 }
 
 @layer components {
+    .brand-font {
+        font-family: var(--font-brand), "serif";
+    }
+
     .btn {
         @apply font-medium rounded-full bg-indigo-500 px-4 py-2 text-white hover:bg-indigo-400 transition-colors text-sm;
     }

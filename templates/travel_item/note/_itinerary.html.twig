@@ -1,11 +1,11 @@
 <div class="relative group/item md:ml-0 ml-2 btn-animate rounded-xl [.sortable-chosen_&]:bg-indigo-50 bg-white shadow-card {{ newItem is same as(item) ? 'new-item' }}">
     <div class="flex-1 [.idea-container_&]:mx-0 relative flex group/item">
-        <div class="min-h-12 flex flex-col pt-2.5 justify-between p-2 pl-6  w-full">
+        <div class="min-h-12 flex flex-col pt-2.5 justify-between p-2 pl-6 w-full">
             <div class="">
                 {% if item.name %}
-                    <div class="font-medium text-gray-700 text-base/6 line-clamp-2 mb-2">{{ item.name }}</div>
+                    <div class="font-medium text-gray-700 text-sm/6 line-clamp-2 mb-2">{{ item.name }}</div>
                 {% endif %}
-                <div class="text-gray-600">{{ item.notes }}</div>
+                <div class="text-gray-600 text-sm">{{ item.notes }}</div>
             </div>
         </div>
     </div>

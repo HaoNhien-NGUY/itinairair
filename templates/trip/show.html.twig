@@ -72,11 +72,6 @@
         {% if currentRoute == 'app_trip_show' %}
             <div class="bg-indigo-50/20 md:bg-white">
                 <div class="relative flex overflow-hidden">
-{#                    <div class="px-3 border-r-1 flex justify-center items-center border-slate-200">#}
-{#                        <div class="rounded-full bg-slate-100z p-1 flex items-center justify-center cursor-grab">#}
-{#                            <twig:ux:icon name="material-symbols:menu" class="text-slate-400 size-5"/>#}
-{#                        </div>#}
-{#                    </div>#}
                     <div {{ stimulus_controller('scrollspy-nav')}}
                         data-hs-scrollspy="#scrollspy-days"
                         class="hs-scroll-nav-body scroll-p-4 [--scrollspy-offset:200px] flex space-x-1.5 snap-x snap-mandatory overflow-x-auto
@@ -169,7 +164,7 @@
                                 </div>
                                 <div class="text-sm flex items-center">
                                     {% macro destination_link(trip, item, suffix = false) %}
-                                        <a href="{{ path('app_trip_itinerary', {id: trip.id }) }}" class="hover:text-indigo-500 text-xs text-slate-400">
+                                        <a href="{{ path('app_trip_itinerary', {id: trip.id }) }}" class="hover:text-indigo-500 text-xs text-indigo-400/70">
                                             {{- item.name -}}
                                         </a>
                                         {%- if suffix -%}<span class="pl-0.5 pr-1 text-indigo-400">,</span>{%- endif -%}

@@ -1,11 +1,11 @@
 {% macro destintionSeparator(trip, day = null, isExtremy = false, gap = null) %}
     <div class="flex items-center">
         <div class="flex items-center group w-12 justify-end">
-            <div class="relative flex items-center {{ day and isExtremy ? 'h-24' : 'h-12 '}}">
+            <div class="relative flex items-center {{ day and isExtremy ? 'h-22' : 'h-10' }}">
                 <div class=" before:absolute before:left-1/2 before:top-0 before:bottom-0 before:border-l-2 before:border-dashed before:border-gray-300 before:-translate-x-1/2"></div>
                 {% if day %}
-                    <div class="hs-dropdown [--placement:right] z-20">
-                        <button id="hs-dropdown-custom-icon-trigger" type="button" class="hs-dropdown-toggle cursor-pointer rounded-lg outline outline-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:bg-gray-50" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
+                    <div class="hs-dropdown flex [--placement:right] z-20">
+                        <button id="hs-dropdown-custom-icon-trigger" type="button" class="hs-dropdown-toggle cursor-pointer rounded-lg outline outline-gray-300 bg-white text-gray-800 shadow-2xs hover:bg-indigo-50 focus:bg-gray-50" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
                             <twig:ux:icon name="bx:plus" class="size-5.5 text-gray-400"/>
                         </button>
 
@@ -30,7 +30,7 @@
             </div>
         </div>
         {% if gap and gap > 0 %}
-            <div class="ml-3 text-sm font-medium text-gray-400">
+            <div class="ml-3 text-xs font-medium text-gray-400">
                 {{ gap }} {{ 'common.nights'|trans({count: gap})|lower }}
             </div>
         {% endif %}
@@ -39,8 +39,8 @@
 
 <turbo-frame id="itinerary">
     <div class="container mx-auto max-w-2xl py-6 md:py-12">
-        <div class="flex items-center ml-4">
-            <twig:ux:icon name="material-symbols:home-outline" class="size-10 text-slate-500 mr-4 p-2 rounded-full bg-indigo-100"/>
+        <div class="flex items-center ml-4.5">
+            <twig:ux:icon name="material-symbols:home-outline" class="size-10 text-indigo-400 mr-4 p-2 rounded-full bg-indigo-100"/>
 
             <div>
                 <span class="text-gray-600 font-medium">{{ 'trip.start'|trans }}</span>
@@ -74,9 +74,9 @@
 
 
             {% if destination.itemType == enum('App\\Enum\\TravelItemType').FLIGHT %}
-                <div class="rounded-2xl btn-animate shadow text-sm overflow-hidden relative">
+                <div class="rounded-2xl border-2 border-indigo-100 btn-animate text-sm overflow-hidden relative">
                     <div class="px-4 py-0.5 bg-indigo-50 flex items-center font-bold text-gray-700">
-                        <twig:ux:icon name="entypo:aircraft-take-off" class="size-6 text-gray-700 mr-3"/>
+                        <twig:ux:icon name="entypo:aircraft-take-off" class="size-6 text-gray-600 mr-3"/>
                         {{ destination.flightNumber ?? 'TBD' }}
                     </div>
 
@@ -114,7 +114,7 @@
                 </form>
 
 
-                <div class="bg-white border border-gray-100 shadow flex flex-wrap justify-between rounded-2xl p-3 md:p-5">
+                <div class="bg-white border-2 border-indigo-100 flex flex-wrap justify-between rounded-2xl p-3 md:p-5">
                     <a href="{{ path('app_travelitem_edit', {trip: trip.id, item: destination.id }) }}" class="hover:underline" data-turbo-frame="modal">
                         <div>
                             <span class="text-gray-700 font-medium">{{ destination.place.city }}</span><span class="text-sm text-gray-500">, {{ destination.place.country }}</span>
@@ -160,7 +160,7 @@
 
         {{ _self.destintionSeparator(trip, lastDestination and lastDestination.endDay.position < lastTripDay.position ? lastDestination.endDay, true, dayGap) }}
 
-        <div class="flex items-center ml-5">
+        <div class="flex items-center ml-4.5">
             <twig:ux:icon name="icons8:finish-flag" class="size-10 text-gray-400 mr-4 p-2.5 rounded-full bg-gray-200"/>
             <div>
                 <div class="text-sm text-gray-500">

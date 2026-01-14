@@ -2,7 +2,6 @@
 {% set destinationEnum = enum("App\\Enum\\TravelItemType").DESTINATION.value %}
 {% set flightEnum = enum("App\\Enum\\TravelItemType").FLIGHT.value %}
 {% set noteEnum = enum("App\\Enum\\TravelItemType").NOTE.value %}
-{% set isTravelDay = isTravelDay|default %}
 
 {% set flightSameDay = [] %}
 {% set flightStartDay = [] %}
@@ -18,6 +17,8 @@
         {% endif %}
     {% endfor %}
 {% endif %}
+
+{% set isTravelDay = isTravelDay|default(day.position == 1 and flightStartDay) %}
 
 <div id="day_{{ day.id }}">
     <div class="">
@@ -71,7 +72,7 @@
 
 
                 {% if flightSameDay|length > 0 %}
-                    <div class="space-y-6 mb-4">
+                    <div class="space-y-4 mb-4">
                         {% for item in flightSameDay %}
                             <div class="rounded-2xl btn-animate text-sm overflow-hidden relative">
                                 <div class="px-4 py-0.5 bg-indigo-100 flex items-center font-bold text-gray-700">
@@ -115,9 +116,7 @@
 
 
 
-            <div class="{{ isTravelDay ? 'hidden' }}">
                 {{ include('trip/day/_itinerary.html.twig') }}
-            </div>
 
 
                 {% if flightStartDay|length > 0 %}

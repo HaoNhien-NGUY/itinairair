@@ -9,7 +9,7 @@
         coming: 'from-gray-500to-gray-200 bg-gray-400',
     } %}
     <a href="{{ path('app_trip_show', {id: trip.id}) }}"
-       class="bg-white border border-gray-200 hover:shadow-lg transition duration-200 rounded-2xl overflow-hidden block">
+       class="bg-white border-2 border-indigo-100 btn-animate transition duration-200 rounded-2xl overflow-hidden block">
         {% if status %}
             <div class="text-white text-sm bg-linear-to-r flex items-center {{ class[status]|default }} font-medium px-4 py-1">
                 {{ ('trip.status.' ~ status)|trans }}
@@ -60,23 +60,23 @@
 
             <div class="mt-10">
                 <div class="grid grid-cols-3 gap-1.5 md:gap-4">
-                    <div class="rounded-xl bg-indigo-50 border-2 border-indigo-100 flex items-center p-2 col-span-1">
+                    <div class="rounded-xl bg-indigo-25 border-2 border-indigo-100/70 flex items-center p-2 col-span-1">
                         <twig:ux:icon name="iconoir:map" class="size-6 text-indigo-400 mr-3"/>
-                        <div class="font-medium">
+                        <div class="">
                             <span class="">{{ memberships|length }}</span>
                             <span class="block -mt-1 text-sm text-gray-500">{{ 'common.trips'|trans({count:memberships|length})|lower }}</span>
                         </div>
                     </div>
-                    <div class="rounded-xl bg-indigo-50 border-2 border-indigo-100 flex items-center p-2 col-span-1">
+                    <div class="rounded-xl bg-indigo-25 border-2 border-indigo-100/70 flex items-center p-2 col-span-1">
                         <twig:ux:icon name="bi:passport" class="size-6 text-indigo-400 mr-3"/>
-                        <div class="font-medium">
+                        <div class="">
                             <span class="">{{ statistics.countries|length }}</span>
                             <span class="block -mt-1 text-sm text-gray-500">{{ 'common.countries'|trans({count: statistics.countries|length})|lower }}</span>
                         </div>
                     </div>
-                    <div class="rounded-xl bg-indigo-50 border-2 border-indigo-100 flex items-center p-2 col-span-1">
+                    <div class="rounded-xl bg-indigo-25 border-2 border-indigo-100/70 flex items-center p-2 col-span-1">
                         <twig:ux:icon name="iconoir:city" class="size-6 text-indigo-400 mr-3"/>
-                        <div class="font-medium">
+                        <div class="">
                             <span class="">{{ statistics.cities|length }}</span>
                             <span class="block -mt-1 text-sm text-gray-500">{{ 'common.cities'|trans({count: statistics.cities|length})|lower }}</span>
                         </div>

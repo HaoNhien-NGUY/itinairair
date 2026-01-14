@@ -1,9 +1,9 @@
 {% set lastItem = null %}
 {% set hasItems = items['itinerary']|default([]) is not empty %}
-
+{% set isTravelDay = isTravelDay|default %}
 
 <div {{ stimulus_controller('draggable', {group: 'itinerary'}) }}
-    class="day-itinerary border-dashed border-indigo-100 rounded-xl min-h-14
+    class="day-itinerary border-dashed border-slate-200 rounded-xl {{ isTravelDay ? 'min-h-0 border-none' : 'min-h-14' }}
             [:has(>_.draggable)]:opacity-100
             [&:not(:has(>_.draggable))]:border-2
             [:has(>_.draggable)]:-mt-15
@@ -21,15 +21,14 @@
         {% set lastItem = item %}
         <div class="draggable itinerary-item [.is-dragging_&]:py-3.5 -mx-10 px-10 [.is-dragging_.day-itinerary_&:first-of-type]:pt-7 [.idea-container_&:first-of-type]:pt-0 [.is-dragging_&:last-of-type]:pb-0" data-item-id="{{ item.id }}">
             {% if loop.first %}
-
                 <div class="flex [.idea-container_&]:hidden [.is-dragging_&]:hidden opacity-0 hover:opacity-100 duration-200 transition-opacity items-center">
                     <div class="relative flex items-start ml-6">
-                        <div class="h-7 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:border-l-2 before:border-dashed before:border-indigo-200 before:-translate-x-1/2"></div>
+                        <div class="h-6 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:border-l-2 before:border-dashed before:border-indigo-200 before:-translate-x-1/2"></div>
                         <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id }) }}"
                            class="relative border-gray-300 hover:bg-indigo-50 bg-white rounded-lg"
                            data-turbo-frame="modal">
                             <div>
-                                <twig:ux:icon name="bx:plus" class="size-6 text-indigo-300" />
+                                <twig:ux:icon name="bx:plus" class="size-5 text-indigo-300" />
                             </div>
                         </a>
                     </div>
@@ -40,12 +39,12 @@
                 <div class="[.sortable-chosen_&]:opacity-0 [.idea-container_&]:hidden [.is-dragging_&]:hidden">
                     <div class="flex items-center group">
                         <div class="relative flex items-center ml-6">
-                            <div class="h-7 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:border-l-2 before:border-dashed before:border-indigo-200 before:-translate-x-1/2"></div>
+                            <div class="h-6 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:border-l-2 before:border-dashed before:border-indigo-200 before:-translate-x-1/2"></div>
                             <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id, position: item.position }) }}"
                                class="relative border-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-indigo-50 bg-white rounded-lg"
                                data-turbo-frame="modal">
                                 <div>
-                                    <twig:ux:icon name="bx:plus" class="size-6 text-indigo-300"/>
+                                    <twig:ux:icon name="bx:plus" class="size-5 text-indigo-300"/>
                                 </div>
                             </a>
                         </div>
@@ -71,28 +70,37 @@
                 {% set positionDisplay = positionDisplay + 1 %}
             {% endif %}
         </div>
+        {% if loop.last and isTravelDay %}
+            <div class="mb-5">
+            </div>
+        {% endif %}
     {% endfor %}
 </div>
-<div class="mt-6 flex space-x-2">
-    {% set createInPosition = lastItem ? lastItem.position + 1 : 0 %}
-    <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id, position: createInPosition }) }}"
-       class="flex flex-2 items-center text-slate-400 border border-slate-300/70 text-sm rounded-xl px-4 py-2 hover:bg-slate-50 btn-animate"
-       data-turbo-frame="modal">
-        <twig:ux:icon name="bxs:map" class="size-4 mr-2 text-slate-400"/>
-        {{ 'trip.place.add'|trans }}
-    </a>
 
-    <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, position: createInPosition, type: noteEnum, day: day.id }) }}"
-       data-turbo-frame="modal"
-       class="text-slate-400 border border-slate-300/70 flex items-center rounded-2xl px-4 py-2 hover:bg-slate-50 transition-colors btn-animate"
-    >
-        <twig:ux:icon name="wpf:note" class="size-4"/>
-    </a>
+{% if not isTravelDay %}
+    <div>
+        <div class="mt-6 flex space-x-2">
+            {% set createInPosition = lastItem ? lastItem.position + 1 : 0 %}
+            <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, day: day.id, position: createInPosition }) }}"
+               class="flex flex-2 items-center text-slate-400 border border-slate-300/70 text-sm rounded-xl px-4 py-2 hover:bg-slate-50 btn-animate"
+               data-turbo-frame="modal">
+                <twig:ux:icon name="bxs:map" class="size-4 mr-2 text-slate-400"/>
+                {{ 'trip.place.add'|trans }}
+            </a>
 
-    <a href="{{ path('app_travelitem_create', {trip: trip.id, type: accommodationEnum, day: day.id }) }}"
-       data-turbo-frame="modal"
-       class="text-slate-400 border border-slate-300/70 flex items-center rounded-2xl px-4 py-2 hover:bg-slate-50 transition-colors btn-animate"
-    >
-        <twig:ux:icon name="material-symbols:hotel" class="size-4"/>
-    </a>
-</div>
+            <a href="{{ path('app_travelitem_create_day_item', {trip: trip.id, position: createInPosition, type: noteEnum, day: day.id }) }}"
+               data-turbo-frame="modal"
+               class="text-slate-400 border border-slate-300/70 flex items-center rounded-2xl px-4 py-2 hover:bg-slate-50 transition-colors btn-animate"
+            >
+                <twig:ux:icon name="wpf:note" class="size-4"/>
+            </a>
+
+            <a href="{{ path('app_travelitem_create', {trip: trip.id, type: accommodationEnum, day: day.id }) }}"
+               data-turbo-frame="modal"
+               class="text-slate-400 border border-slate-300/70 flex items-center rounded-2xl px-4 py-2 hover:bg-slate-50 transition-colors btn-animate"
+            >
+                <twig:ux:icon name="material-symbols:hotel" class="size-4"/>
+            </a>
+        </div>
+    </div>
+{% endif %}

@@ -24,20 +24,22 @@
 
     <div class="container max-w-7xl mx-auto">
         <div class="pt-8">
-            <h3 id="trip-name" class="text-lg md:text-2xl mb-2">{{ trip.name }}</h3>
-            <div class="flex items-center md:text-sm text-xs">
-                <a href="{{ path('app_trip_edit', {'trip': trip.id}) }}" data-turbo-frame="modal" class="text-gray-500 hover:text-gray-700">{{ trip.startDate|date_xs }} {{ trip.startDate|date('Y')}} - {{ trip.endDate|date_xs }}</a>
-                <div class="flex flex-wrap ml-5 items-center">
+
+            <h3 id="trip-name" class="text-lg font-medium md:text-2xl mb-1">{{ trip.name }}</h3>
+
+            <div class="flex items-center md:text-sm gap-4 text-xs">
+                <a href="{{ path('app_trip_edit', {'trip': trip.id}) }}" data-turbo-frame="modal" class="text-gray-500 md:text-sm text-xs hover:text-gray-700">{{ trip.startDate|date_xs }} {{ trip.startDate|date('Y')}} - {{ trip.endDate|date_xs }}</a>
+                <div class="flex flex-wrap items-center">
                     <twig:ux:icon name="bxs:map" class="size-4 text-gray-400 mr-1" />
                     {% for country in statistics.countries %}
-                        {% if not loop.first %}<span class="inline-block mx-1.5 text-gray-500">•</span>{% endif %}
+                        {% if not loop.first %}<span class="inline-block mx-1 text-gray-400">•</span>{% endif %}
                         <span class="text-gray-500">{{ country }}</span>
                     {% else %}
                         <span class="text-gray-400">{{ 'trip.no_destination'|trans }}</span>
                     {% endfor %}
                 </div>
             </div>
-            <div class="flex items-center mt-5">
+            <div class="flex items-center md:text-sm text-xs justify-between md:gap-6 md:justify-start mt-7">
                 <div class="flex space-x-1 select-none">
                     {% for membership in trip.tripMemberships %}
                         <div class="flex items-center">
@@ -54,12 +56,12 @@
 
     {% macro navTabBtn(title, active, path) %}
         <a href="{{ path }}"
-           class="{{ active ? 'active' }} [&.active]:font-medium [&.active]:border-indigo-300 border-b-2 [&.active,&:hover]:text-indigo-400
-           py-2.5 px-2 inline-flex items-center gap-x-2 border-b-2z border-transparent text-sm md:text-base whitespace-nowrap text-gray-500">
+           class="{{ active ? 'active' }} md:fond-medium font-bold [&.active]:border-indigo-300 border-b-2 [&.active,&:hover]:text-indigo-400
+           py-2.5 px-2 inline-flex items-center gap-x-2 border-transparent text-sm md:text-sm whitespace-nowrap text-gray-400">
             {{ title }}
         </a>
     {% endmacro %}
-    <div class="sticky md:border-b border-indigo-100 select-none top-0 z-30 mt-8 bg-white">
+    <div class="sticky md:border-b border-indigo-100 select-none top-0 z-30 mt-6 bg-white">
         {% set currentRoute = app.request.attributes.get('_route') %}
 
         <div class="border-b border-indigo-100 bg-white overflow-hidden">
@@ -70,7 +72,7 @@
             </nav>
         </div>
         {% if currentRoute == 'app_trip_show' %}
-            <div class="bg-indigo-50/20 md:bg-white">
+            <div class="bg-indigo-50/50 md:bg-white">
                 <div class="relative flex overflow-hidden">
                     <div {{ stimulus_controller('scrollspy-nav')}}
                         data-hs-scrollspy="#scrollspy-days"
@@ -85,8 +87,8 @@
                             <a href="#scrollspy-day-{{ day.id }}"
                                class="{{ loop.first ? 'active' }} snap-start hs-scrollspy-active:font-bold hs-scrollspy-active:text-slate-600
                                first-of-type:ml-2 last-of-type:mr-2 hover:bg-slate-100 md:text-nowrap
-                               py-3 px-2.5 flex justify-center items-center text-sm text-center text-slate-400 font-medium hover:text-slate-600 focus:outline-hidden">
-                                {{ day.date|format_datetime(pattern='EEE') }} {{ day.date|date('d/m') }}
+                               md:py-3 py-2.5 px-2.5 flex justify-center items-center text-sm text-center text-slate-400 font-medium hover:text-slate-600 focus:outline-hidden">
+                                {{ day.date|format_datetime(pattern='EEE')|capitalize }} {{ day.date|date('d/m') }}
                             </a>
                         {% endfor %}
                     </div>
@@ -95,137 +97,155 @@
         {% endif %}
     </div>
 
-    <main class="pt-2 md:py-6 pb-5 grow bg-indigo-50/20 md:bg-indigo-50/10">
+    <main class="grow">
         {% block content %}
-            <div id="drag-container" class="max-w-7xl container grid grid-cols-1 lg:grid-cols-3">
-                <div class="lg:col-span-2 -mx-4 md:mx-0">
+            <div class="pt-2 md:py-6 pb-5 bg-indigo-50/50 md:bg-indigo-50/25">
+                <div id="drag-container" class="max-w-7xl container grid grid-cols-1 lg:grid-cols-3">
+                    <div class="lg:col-span-2 -mx-4 md:mx-0">
+                        <div id="scrollspy-days"
+                             class="rounded-2xl md:rounded-2xl md:border-2 border-0 border-indigo-200 overflow-hidden">
+                            {% set displayEmptyRange = true %}
+                            {% for day in trip.days %}
 
-                    <div id="scrollspy-days" class="rounded-2xl md:rounded-2xl md:border-2 border-0 border-indigo-200 overflow-hidden">
-                        {% set displayEmptyRange = true %}
-                        {% for day in trip.days %}
+                                {% set destinationStartDay = null %}
+                                {% set destinationEndDay = null %}
+                                {% set destinationDay = null %}
+                                {% for item in items[day.id][destinationEnum]|default([]) %}
+                                    {% if item.startDay is same as(day) %}
+                                        {% set destinationStartDay = item %}
+                                    {% elseif item.endDay is same as(day) %}
+                                        {% set destinationEndDay = item %}
+                                    {% else %}
+                                        {% set destinationDay = item %}
+                                    {% endif %}
+                                {% endfor %}
 
-                            {% set destinationStartDay = null %}
-                            {% set destinationEndDay = null %}
-                            {% set destinationDay = null %}
-                            {% for item in items[day.id][destinationEnum]|default([]) %}
-                                {% if item.startDay is same as(day) %}
-                                    {% set destinationStartDay = item %}
-                                {% elseif item.endDay is same as(day) %}
-                                    {% set destinationEndDay = item %}
-                                {% else %}
-                                    {% set destinationDay = item %}
-                                {% endif %}
-                            {% endfor %}
+                                {% set isTravelDay = (day.position == 1 and flightTripStart) %}
 
-                            {% set isTravelDay = (day.position == 1 and flightTripStart) %}
-
-                            {% if isTravelDay %}
-                                <div class="flex justify-center items-center flex-col bg-white lg:px-10 md:px-8 px-3 py-3.5">
-                                    <h3 class="text-slate-500 font-extrabold text-2xl">{{ 'common.departure'|trans }}</h3>
-                                    <div>
-                                        <div class="text-gray-500 text-sm">{{ day.date|date_short }} {{ trip.startDate|date('Y')}}</div>
-                                    </div>
-                                </div>
-                            {% elseif destinationStartDay %}
-                                <div class="flex justify-between bg-linear-to-r from-indigo-400 to-indigo-200 p-3 pl-5">
-                                    <div>
+                                {% if isTravelDay %}
+                                    <div
+                                        class="flex justify-center items-center flex-col bg-white lg:px-10 md:px-8 px-3 py-3.5">
+                                        <h3 class="text-slate-500 font-extrabold text-2xl">{{ 'common.departure'|trans }}</h3>
                                         <div>
-                                            <span class="text-white font-extrabold text-2xl">{{ destinationStartDay.place.city }}</span>
-                                        </div>
-                                        <div class="mt-1.5 space-x-2 flex items-center">
-                                            <a href="{{ path('app_trip_itinerary', {id: trip.id }) }}" class="bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-2 py-0.5 rounded-2xl text-sm">
-                                                {{ destinationStartDay.startDay.date|date_xs }} - {{ destinationStartDay.endDay.date|date_xs }}
-                                            </a>
-
-                                            <a href="{{ path('app_trip_bookings', {'id': trip.id}) }}" class="bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-2 py-0.5 flex items-center rounded-2xl text-sm">
-                                                <twig:ux:icon name="material-symbols:hotel" class="size-4 mr-1.5"/>
-                                                {{ destinationStartDay.accommodationCount }}
-                                            </a>
+                                            <div
+                                                class="text-gray-500 text-sm">{{ day.date|date_short|capitalize }} {{ trip.startDate|date('Y') }}</div>
                                         </div>
                                     </div>
-                                    <div class="flex items-center space-x-4">
+                                {% elseif destinationStartDay %}
+                                    <div class="flex justify-between bg-linear-to-r from-indigo-400 to-indigo-200 p-3 pl-5">
+                                        <div>
+                                            <div>
+                                                <span
+                                                    class="text-white font-extrabold text-3xl">{{ destinationStartDay.place.city }}</span>
+                                            </div>
+                                            <div class="mt-1.5 space-x-2 flex items-center">
+                                                <a href="{{ path('app_trip_itinerary', {id: trip.id }) }}"
+                                                   class="bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-2 py-0.5 rounded-2xl text-sm">
+                                                    {{ destinationStartDay.startDay.date|date_xs }}
+                                                    - {{ destinationStartDay.endDay.date|date_xs }}
+                                                </a>
+
+                                                <a href="{{ path('app_trip_bookings', {'id': trip.id}) }}"
+                                                   class="bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-2 py-0.5 flex items-center rounded-2xl text-sm">
+                                                    <twig:ux:icon name="material-symbols:hotel" class="size-4 mr-1.5"/>
+                                                    {{ destinationStartDay.accommodationCount }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-4">
+                                        </div>
+                                    </div>
+                                    {% set displayEmptyRange = true %}
+                                {% elseif not destinationDay and not destinationEndDay and displayEmptyRange %}
+                                    {% set emptyTrip = day.position == 1 and statistics|default(false) and  statistics.city_count == 0 %}
+                                    <div class="flex items-center {{ emptyTrip ? 'bg-indigo-400' : 'bg-gray-400' }} ">
+                                        <a href="{{ path('app_trip_itinerary', {'id': trip.id}) }}"
+                                           class="text-white p-5 group hover:underline font-medium transition-colors flex items-center">
+                                            {{ emptyTrip ? 'trip.no_destination_yet'|trans : 'trip.add_a_step'|trans }}
+                                            <twig:ux:icon name="iconoir:nav-arrow-right"
+                                                          class="size-5 ml-2 transition-transform group-hover:translate-x-2"/>
+                                        </a>
+                                    </div>
+                                    {% set displayEmptyRange = false %}
+                                {% endif %}
+
+                                <div id="scrollspy-day-{{ day.id }}"
+                                     class="{{ isTravelDay ? 'hidden' }} bg-indigo-50 text-gray-700 px-4 py-1 flex justify-between">
+                                    <div class="flex items-end">
+                                        <div class="text-gray-500 text-xs md:text-sm">{{ day.date|format_datetime(pattern='EEE') }}
+                                            <span class="font-bold">{{ day.date|format_datetime(pattern='d MMM') }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-sm flex items-center">
+                                        {% macro destination_link(trip, item, suffix = false) %}
+                                            <a href="{{ path('app_trip_itinerary', {id: trip.id }) }}"
+                                               class="hover:text-indigo-500 text-xs text-indigo-400/70">
+                                                {{- item.name -}}
+                                            </a>
+                                            {%- if suffix -%}<span class="pl-0.5 pr-1 text-indigo-400">,</span>{%- endif -%}
+                                        {% endmacro %}
+
+                                        {% if destinationDay %}
+                                            {{ _self.destination_link(trip, destinationDay) }}
+                                        {% endif %}
+                                        {% if destinationEndDay %}
+                                            {{ _self.destination_link(trip, destinationEndDay, destinationStartDay ? true : false) }}
+                                        {% endif %}
+                                        {% if destinationStartDay %}
+                                            {{ _self.destination_link(trip, destinationStartDay) }}
+                                        {% endif %}
                                     </div>
                                 </div>
-                                {% set displayEmptyRange = true %}
-                            {% elseif not destinationDay and not destinationEndDay and displayEmptyRange %}
-                                {% set emptyTrip = day.position == 1 and statistics|default(false) and  statistics.city_count == 0 %}
-                                <div class="flex items-center {{ emptyTrip ? 'bg-indigo-400' : 'bg-gray-400' }} ">
-                                    <a href="{{ path('app_trip_itinerary', {'id': trip.id}) }}" class="text-white p-5 group hover:underline font-medium transition-colors flex items-center">
-                                        {{ emptyTrip ? 'trip.no_destination_yet'|trans : 'trip.add_a_step'|trans }}
-                                        <twig:ux:icon name="iconoir:nav-arrow-right" class="size-5 ml-2 transition-transform group-hover:translate-x-2" />
+
+                                {{ include('trip/day.html.twig', {day, trip, startDate, isTravelDay, statistics, items: items[day.id] ?? null}) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+
+                    <div class="max-lg:hidden">
+                        <div class="space-y-4 px-4 pb-20 sticky top-28 max-h-screen no-scrollbar overflow-y-auto">
+                            <div class="p-2 text-sm bg-white border-gray-200 border rounded-2xl">
+                                <a href="{{ path('app_trip_bookings', {'id': trip.id}) }}"
+                                   class=" hover:bg-indigo-50 transition-colors rounded-xl font-medium flex items-center justify-between text-gray-500 py-2 px-3">
+                                    <span class="flex items-center">{{ 'common.hotels_and_accommodations'|trans }}<twig:ux:icon
+                                            name="bi:dash-lg" class="mx-2.5 size-4"/>{{ accommodationCount }}</span>
+                                    <twig:ux:icon name="iconoir:nav-arrow-right" class="size-5"/>
+                                </a>
+                                <hr class="border border-gray-100 my-1.5 mx-6"/>
+                                <a href="{{ path('app_trip_bookings', {'id': trip.id}) }}"
+                                   class=" hover:bg-indigo-50 transition-colors rounded-xl font-medium flex items-center justify-between text-gray-500 py-2 px-3">
+                                    <span class="flex items-center">{{ 'common.flights'|trans }}<twig:ux:icon
+                                            name="bi:dash-lg" class="mx-2.5 size-4"/>{{ flightCount }}</span>
+                                    <twig:ux:icon name="iconoir:nav-arrow-right" class="size-5"/>
+                                </a>
+                            </div>
+
+                            <div class="border border-gray-200 bg-white rounded-2xl py-4">
+                                <div class="px-3 mb-3">
+                                    <h3 class="font-semibold text-gray-600">{{ 'trip.idea_box.title'|trans }}</h3>
+                                    <p class="text-gray-500 text-sm">{{ 'trip.idea_box.subtitle'|trans }}</p>
+                                </div>
+                                <div class="p-2">
+                                    {% include 'trip/idea/_list.html.twig' %}
+                                </div>
+
+                                <div class="mt-4 px-4 flex space-x-2">
+                                    <a href="{{ path('app_travelitem_create', {trip: trip.id, status: statusIdea }) }}"
+                                       class="flex flex-2 items-center border border-slate-300/70 rounded-xl btn-animate text-slate-400 transition-colors text-sm px-4 py-2 hover:bg-slate-50"
+                                       data-turbo-frame="modal">
+                                        <twig:ux:icon name="bxs:map" class="size-4 mr-2 text-slate-400"/>
+                                        {{ 'trip.idea_box.add_idea'|trans }}
+                                    </a>
+                                    <a href="{{ path('app_travelitem_create', {trip: trip.id, type: noteEnum, status: statusIdea }) }}"
+                                       data-turbo-frame="modal"
+                                       class="text-slate-400 border border-slate-300/70 flex btn-animate items-center rounded-2xl px-4 py-2 hover:bg-slate-50 transition-colors"
+                                    >
+                                        <twig:ux:icon name="wpf:note" class="size-4"/>
                                     </a>
                                 </div>
-                                {% set displayEmptyRange = false %}
-                            {% endif %}
 
-                            <div id="scrollspy-day-{{ day.id }}" class="{{ isTravelDay ? 'hidden'}} bg-indigo-50 text-gray-700 px-4 py-1 flex justify-between">
-                                <div class="flex items-end">
-                                    <div class="text-gray-500 text-sm">{{ day.date|format_datetime(pattern='EEE') }} <span class="font-medium">{{ day.date|format_datetime(pattern='d MMM') }}</span></div>
-                                </div>
-                                <div class="text-sm flex items-center">
-                                    {% macro destination_link(trip, item, suffix = false) %}
-                                        <a href="{{ path('app_trip_itinerary', {id: trip.id }) }}" class="hover:text-indigo-500 text-xs text-indigo-400/70">
-                                            {{- item.name -}}
-                                        </a>
-                                        {%- if suffix -%}<span class="pl-0.5 pr-1 text-indigo-400">,</span>{%- endif -%}
-                                    {% endmacro %}
-
-                                    {% if destinationDay %}
-                                        {{ _self.destination_link(trip, destinationDay) }}
-                                    {% endif %}
-                                    {% if destinationEndDay %}
-                                        {{ _self.destination_link(trip, destinationEndDay, destinationStartDay ? true : false) }}
-                                    {% endif %}
-                                    {% if destinationStartDay %}
-                                        {{ _self.destination_link(trip, destinationStartDay) }}
-                                    {% endif %}
-                                </div>
                             </div>
-
-                            {{ include('trip/day.html.twig', {day, trip, startDate, isTravelDay, statistics, items: items[day.id] ?? null}) }}
-                        {% endfor %}
-                    </div>
-                </div>
-
-
-                <div class="max-lg:hidden">
-                    <div class="space-y-4 px-4 pb-20 sticky top-28 max-h-screen no-scrollbar overflow-y-auto">
-                        <div class="p-2 text-sm bg-white border-gray-200 border rounded-2xl">
-                            <a href="{{ path('app_trip_bookings', {'id': trip.id}) }}" class=" hover:bg-indigo-50 transition-colors rounded-xl font-medium flex items-center justify-between text-gray-500 py-2 px-3">
-                                <span class="flex items-center">{{ 'common.hotels_and_accommodations'|trans }}<twig:ux:icon name="bi:dash-lg" class="mx-2.5 size-4" />{{ accommodationCount }}</span>
-                                <twig:ux:icon name="iconoir:nav-arrow-right" class="size-5" />
-                            </a>
-                            <hr class="border border-gray-100 my-1.5 mx-6" />
-                            <a href="{{ path('app_trip_bookings', {'id': trip.id}) }}" class=" hover:bg-indigo-50 transition-colors rounded-xl font-medium flex items-center justify-between text-gray-500 py-2 px-3">
-                                <span class="flex items-center">{{ 'common.flights'|trans }}<twig:ux:icon name="bi:dash-lg" class="mx-2.5 size-4" />{{ flightCount }}</span>
-                                <twig:ux:icon name="iconoir:nav-arrow-right" class="size-5" />
-                            </a>
-                        </div>
-
-                        <div class="border border-gray-200 bg-white rounded-2xl py-4">
-                            <div class="px-3 mb-3">
-                                <h3 class="font-semibold text-gray-600">{{ 'trip.idea_box.title'|trans }}</h3>
-                                <p class="text-gray-500 text-sm">{{ 'trip.idea_box.subtitle'|trans }}</p>
-                            </div>
-                            <div class="p-2">
-                                {% include 'trip/idea/_list.html.twig' %}
-                            </div>
-
-                            <div class="mt-4 px-4 flex space-x-2">
-                                <a href="{{ path('app_travelitem_create', {trip: trip.id, status: statusIdea }) }}"
-                                   class="flex flex-2 items-center border border-slate-300/70 rounded-xl btn-animate text-slate-400 transition-colors text-sm px-4 py-2 hover:bg-slate-50"
-                                   data-turbo-frame="modal">
-                                    <twig:ux:icon name="bxs:map" class="size-4 mr-2 text-slate-400"/>
-                                    {{ 'trip.idea_box.add_idea'|trans }}
-                                </a>
-                                <a href="{{ path('app_travelitem_create', {trip: trip.id, type: noteEnum, status: statusIdea }) }}"
-                                   data-turbo-frame="modal"
-                                   class="text-slate-400 border border-slate-300/70 flex btn-animate items-center rounded-2xl px-4 py-2 hover:bg-slate-50 transition-colors"
-                                >
-                                    <twig:ux:icon name="wpf:note" class="size-4"/>
-                                </a>
-                            </div>
-
                         </div>
                     </div>
                 </div>

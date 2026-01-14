@@ -1,78 +1,33 @@
-# My Travel Project
+# Itinairair - Planificateur de Voyage️
 
-## Description
+ItinairAir est une app de planification de voyage conçue pour aider à organiser des séjours, gérer des itinéraires et collaborer avec des amis.
 
-This is a Symfony application for managing travel plans, including trips, accommodations, activities, and flights.
+## ✨ Fonctionnalités Clés
 
-## Setup
+- **Itinéraire Interactif** : Planification par glisser-déposer pour les activités quotidiennes, vols et hébergements.
+- **Planification Collaborative** : Invitez des amis à rejoindre votre voyage (Système de Membres de Voyage).
+- **Connexion Sociale** : Authentification transparente via Google et Discord.
+- **Destinations Intelligentes** : Logique de gestion des chevauchements de destinations et continuité du voyage.
 
-1.  **Clone the repository**:
+## 🛠️ Stack Technique
 
-    ```bash
-    git clone <repository_url>
-    cd my_travel
-    ```
+### Backend
+- **Framework** : Symfony 7.3 (PHP 8.3+)
+- **Base de données** : PostgreSQL
+- **Authentification** : `knpuniversity/oauth2-client-bundle` (Discord/Google)
+- **Uploads** : `vich/uploader-bundle` / Flysystem
+- **Mailing** : Symfony Mailer (intégration Brevo)
 
-2.  **Install Composer dependencies**:
+### Frontend
+- **Style** : TailwindCSS 4
+- **Interactivité** :
+    - **Symfony UX Turbo** : Pour la navigation type SPA et les mises à jour de flux.
+    - **Stimulus** : Pour un comportement JavaScript modeste et maintenable.
+    - **Live Components** : Mises à jour de composants en temps réel (Symfony UX).
+    - **Vanilla Calendar Pro** : Pour des interfaces de sélection de dates robustes.
+- **Gestion des Assets** : Symfony AssetMapper.
 
-    ```bash
-    composer install
-    ```
-
-3.  **Install Node.js dependencies**:
-
-    ```bash
-    npm install
-    ```
-
-4.  **Set up environment variables**:
-
-    Copy `.env` to `.env.local` and configure your database connection and other settings.
-
-    ```bash
-    cp .env .env.local
-    ```
-
-5.  **Run database migrations**:
-
-    ```bash
-    php bin/console doctrine:migrations:migrate
-    ```
-
-6.  **Start the Symfony development server**:
-
-    ```bash
-    symfony serve
-    ```
-
-## Usage
-
-(Add instructions on how to use the application here)
-
-**Turbo convention**:
-
-```├── base.html.twig
-├── components/           # Reusable UI components
-│   ├── _card.html.twig
-│   ├── _modal.html.twig
-│   └── _notification.html.twig
-│
-├── [entity]/            # e.g., product/, user/, post/
-│   ├── index.html.twig       # Full page
-│   ├── show.html.twig        # Full page
-│   ├── _form.html.twig       # Partial (reusable form)
-│   ├── _list.html.twig       # Partial (list of items)
-│   ├── _item.html.twig       # Partial (single item)
-│   │
-│   └── turbo/               # Turbo-specific templates
-│       ├── _form_frame.html.twig
-│       ├── _list_frame.html.twig
-│       ├── create_stream.html.twig
-│       ├── update_stream.html.twig
-│       └── delete_stream.html.twig
-│
-└── layout/
-├── _header.html.twig
-├── _footer.html.twig
-└── _sidebar.html.twig
-```
+### DevOps & Infrastructure
+- **Hébergement** : Hébergé chez OVH sur un VPS (Ubuntu).
+- **CI/CD** : GitHub Actions pour les **workflows** de build et déploiement.
+- **Déploiement** : **Deployer PHP** configuré pour des déploiements atomiques.

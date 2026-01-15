@@ -105,10 +105,10 @@
 
             {% if trips.count == 0 %}
                 <div class="flex flex-col items-center">
-                    <img src="{{ asset('images/icons/Destination-pana.svg') }}" class="mx-auto w-[32rem] mt-12"  alt="no-trips"/>
+                    <img src="{{ asset('images/icons/Destination-pana.svg') }}" class="mx-auto w-[32rem] mt-0"  alt="no-trips"/>
                     <a href="{{ path('app_trip_create') }}"
                        data-turbo-frame="modal"
-                       class="bg-indigo-500 mt-6 hover:bg-indigo-400 transition-colors text-white text-xl font-medium py-3 px-8 flex items-center rounded-4xl">
+                       class="bg-indigo-500 mt-6 hover:bg-indigo-400 transition-colors text-white font-medium py-3 px-8 flex items-center rounded-4xl">
                         {{ 'landing.cta'|trans }}
                     </a>
                 </div>

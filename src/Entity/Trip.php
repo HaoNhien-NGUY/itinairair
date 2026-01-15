@@ -57,6 +57,9 @@ class Trip
     #[ORM\OneToMany(targetEntity: TravelItem::class, mappedBy: 'trip', orphanRemoval: true)]
     private Collection $travelItems;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $isTemporary = false;
+
     public function __construct()
     {
         $this->days = new ArrayCollection();
@@ -255,5 +258,17 @@ class Trip
         return $this->travelItems->filter(function (TravelItem $item) {
             return $item instanceof Destination;
         })->getValues();
+    }
+
+    public function isTemporary(): ?bool
+    {
+        return $this->isTemporary;
+    }
+
+    public function setIsTemporary(bool $isTemporary): static
+    {
+        $this->isTemporary = $isTemporary;
+
+        return $this;
     }
 }

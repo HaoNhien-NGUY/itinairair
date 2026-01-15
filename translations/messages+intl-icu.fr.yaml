@@ -35,6 +35,8 @@ transport:
     train: Train
     bus: Bus
 trip:
+    demo:
+        name: Voyage demo au japon
     join_token:
         share_link: Partage par lien
         create: Créer un lien
@@ -72,7 +74,8 @@ landing:
     title_1: Planifiez vos voyages
     title_2: simplement
     subtitle: Une solution simple pour gérer vos itinéraires quotidiens, vos réservations de vols et d'hôtels. Fini la dispersion, place à l'organisation.
-    cta: Planifier mon prochain voyage
+    cta: Planifier mon voyage
+    cta_demo: Lancer la démo sans inscription
     features:
         one:
             title: Réservations Centralisées

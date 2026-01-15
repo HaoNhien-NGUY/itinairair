@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Destination;
 use App\Entity\TravelItem;
 use App\Entity\Trip;
+use App\Enum\TripRole;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -63,5 +64,23 @@ class TripRepository extends ServiceEntityRepository
         });
 
         return $results;
+    }
+
+    /**
+     * @return Trip[]
+     */
+    public function findExpiredDemoTrips(\DateTimeImmutable $limitDate): array
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.tripMemberships', 'tm')
+            ->join('tm.member', 'u')
+            ->where('u.expiresAt < :now')
+            ->andWhere('u.expiresAt IS NOT NULL')
+            ->andWhere('t.isTemporary = true')
+            ->andWhere('tm.role = :tm_role')
+            ->setParameter('now', $limitDate)
+            ->setParameter('tm_role', TripRole::ADMIN)
+            ->getQuery()
+            ->getResult();
     }
 }

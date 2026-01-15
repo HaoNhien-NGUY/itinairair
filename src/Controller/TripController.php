@@ -57,6 +57,7 @@ final class TripController extends AbstractController
             /** @var User $user */
             $user = $this->getUser();
 
+            $trip->setIsTemporary($user->isTemporary());;
             $tripMembership = (new TripMembership($trip, $user, TripRole::ADMIN));
             $entityManager->persist($trip);
             $entityManager->persist($tripMembership);

@@ -39,6 +39,7 @@ transport:
 trip:
     demo:
         name: Voyage demo au japon
+        temporary_account_alert: Bienvenue en mode Démo. Ce compte temporaire et ses données seront automatiquement supprimés dans 1 heure
     join_token:
         share_link: Partage par lien
         create: Créer un lien

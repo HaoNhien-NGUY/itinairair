@@ -7,7 +7,7 @@ ItinairAir est une application SaaS collaborative de gestion de voyage, elle off
 ## 🎯 Objectifs du projet
 J'ai créé ce projet pour maîtriser le cycle de vie d'un SaaS, de la conception et de l'architecture jusqu'au déploiement en production sur un VPS.
 
-L'objectif principal était d'utiliser l'écosystème **Symfony**, en minimisant la dépendance au JavaScript tout en gardant une interface fluide **SPA-like** grâce à l'utilisation de Symfony UX / Turbo / Stimulus.
+L'objectif principal était d'utiliser l'écosystème Symfony en minimisant la dépendance au JavaScript, le tout en gardant une interface fluide **SPA-like** grâce à l'utilisation de Symfony UX / Turbo / Stimulus.
 
 ## 🛠️ Stack Technique
 

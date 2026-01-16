@@ -34,6 +34,6 @@ final class DemoController extends AbstractController
 
         $security->login($user, 'form_login', 'main');
 
-        return $this->redirectToRoute('app_trip_show', ['id' => $trip->getId()]);;
+        return $this->redirectToRoute('app_trip');
     }
 }

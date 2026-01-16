@@ -1,68 +1,101 @@
 <twig:Modal>
     {% block title %}<span class="modal-header">{{ 'common.accommodations'|trans({count:1}) }}</span>{% endblock %}
 
+    {% block header %}
+        {% if not item.place %}
+            {{ parent() }}
+        {% endif %}
+    {% endblock %}
+
+
     {% set googlePlaceOptions = {primaryTypes: ['lodging', 'street_address']} %}
     {% if destination|default %}
         {% set googlePlaceOptions = googlePlaceOptions|merge({'location': destination.place.location}) %}
     {% endif %}
 
-
     {% set day = day ?? item.startDay ?? null %}
     {% set startDate = day ? day.date|date('Y-m-d') : null %}
     {% set endDate = item.endDay ? item.endDay.date|date('Y-m-d') : null %}
+    {% set place = item.place %}
 
 
     <div  {{ stimulus_controller('google-place-widget', googlePlaceOptions) }}>
         {{ form_start(form) }}
 
-        <div class="space-y-4">
-            <div {{ stimulus_controller('calendar', {dayMapping: trip.dayMapping, endDate: endDate, fullWidth: true, inModal: true, isRange: true, startDate: startDate}) }}>
-                <div {{ stimulus_target('calendar', 'calendar') }} class="border select-none border-gray-300 rounded-2xl p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50">
-                    <div class="flex justify-center">
-                        <twig:ux:icon name="mage:calendar-2" class="size-6 mr-2 text-gray-700" />
-                        Dates
-                    </div>
-                    <div class="flex items-center text-blue-500 font-medium">
-                        <div>
-                            <div {{ stimulus_target('calendar', 'startDayDisplay') }}>
-                                <span class="text-gray-400">{{ 'common.arrival'|trans }}</span>
+        <div class="space-y-4" {{ stimulus_controller('calendar', {dayMapping: trip.dayMapping, endDate: endDate, fullWidth: true, inModal: true, isRange: true, startDate: startDate}) }}>
+            {{ form_widget(form.startDay) }}
+            {{ form_widget(form.endDay) }}
+            {% if not place %}
+                <div>
+                    <div {{ stimulus_target('calendar', 'calendar') }} class="select-none text-sm border border-gray-300 rounded-2xl p-3 flex items-center justify-between cursor-pointer">
+                        <div class="flex justify-center items-center text-gray-600">
+                            <twig:ux:icon name="mage:calendar-2" class="size-6 mr-2" />
+                            Dates
+                        </div>
+                        <div class="flex items-center text-blue-500 font-medium">
+                            <div>
+                                <div {{ stimulus_target('calendar', 'startDayDisplay') }}>
+                                    <span class="text-gray-400">{{ 'common.arrival'|trans }}</span>
+                                </div>
+                            </div>
+                            <div class="mx-2">
+                                -
+                            </div>
+                            <div>
+                                <div {{ stimulus_target('calendar', 'endDayDisplay') }}>
+                                    <span class="text-gray-400">{{ 'common.departure'|trans }}</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="mx-2">
-                            -
-                        </div>
-                        <div>
-                            <div {{ stimulus_target('calendar', 'endDayDisplay') }}>
-                                <span class="text-gray-400">{{ 'common.departure'|trans }}</span>
-                            </div>
-                        </div>
+
                     </div>
+                </div>
+                <gmp-place-autocomplete
+                    id="place-autocomplete"
+                    class="{{ place ? 'hidden' }} mb-8 bg-white rounded-xl border focus:ring-0 placeholder:text-slate-400 shadow-sm text-slate-600 border-indigo-200 hover:border-indigo-300 ease-in transition duration-300 focus:outline-none focus:border-indigo-400 focus:shadow"
+                    placeholder="{{ 'common.search_by_name_address'|trans }}"
+                    {{ stimulus_target('google-place-widget', 'placeInput') }}>
+                </gmp-place-autocomplete>
+            {% endif %}
+            <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="-mt-2 relative mb-32 -mx-5 {{ not place ? 'hidden' }}">
+                <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-56 shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
+                <div class="mx-5 shadow-md bg-white rounded-xl border border-indigo-200 p-4 absolute left-0 right-0 -bottom-25">
+                    {% if place %}
+                        <div {{ stimulus_target('calendar', 'calendar') }} class="select-none text-sm flex items-center justify-between cursor-pointer">
+                            <div class="flex justify-center items-center text-gray-600">
+                                <twig:ux:icon name="mage:calendar-2" class="size-6 mr-2" />
+                                Dates
+                            </div>
+                            <div class="flex items-center text-blue-500 font-medium">
+                                <div>
+                                    <div {{ stimulus_target('calendar', 'startDayDisplay') }}>
+                                        <span class="text-gray-400">{{ 'common.arrival'|trans }}</span>
+                                    </div>
+                                </div>
+                                <div class="mx-2">
+                                    -
+                                </div>
+                                <div>
+                                    <div {{ stimulus_target('calendar', 'endDayDisplay') }}>
+                                        <span class="text-gray-400">{{ 'common.departure'|trans }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <hr class="my-4 -mx-4 border-slate-200" />
+
+                    <div class="font-medium text-base/5 mb-2 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}>{{ place ? place.name }}</div>
+                    <a {{ stimulus_target('google-place-widget', 'addressDisplay addressLinkDisplay') }}
+                        href="{{ place ? place.googleMapsURI }}"
+                        target="_blank"
+                        class="text-xs/snug text-slate-400 hover:text-blue-400 block">{{ place ? place.address }}</a>
 
                 </div>
-                {{ form_widget(form.startDay) }}
-                {{ form_widget(form.endDay) }}
             </div>
 
-            {% set place = item.place %}
-
-            <gmp-place-autocomplete
-                id="place-autocomplete"
-                class="{{ place ? 'hidden' }} mb-6 bg-white rounded-xl border focus:ring-0 placeholder:text-slate-400 shadow-sm text-slate-600 border-indigo-200 hover:border-indigo-300 ease-in transition duration-300 focus:outline-none focus:border-indigo-400 focus:shadow"
-                placeholder="{{ 'common.search_by_name_address'|trans }}"
-                {{ stimulus_target('google-place-widget', 'placeInput') }}>
-            </gmp-place-autocomplete>
-            <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="mb-5 {{ not place ? 'hidden' }}">
-                <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-52 rounded-2xl shrink-0 object-cover mb-4" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
-                <div class="font-medium text-base/5 md:text-lg/5 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}>{{ place ? place.name }}</div>
-                {#            <p {{ stimulus_target('google-place-widget', 'typeDisplay') }} class="text-xs/snug text-indigo-500 {{ place ? 'hidden' }}">{{ place ? place.type }}</p>#}
-                <a {{ stimulus_target('google-place-widget', 'addressDisplay addressLinkDisplay') }}
-                    href="{{ place ? place.googleMapsURI }}"
-                    target="_blank"
-                    class="text-xs/snug md:text-sm/snug text-gray-500 hover:text-blue-400 mt-1 line-clamp-2">{{ place ? place.address }}</a>
-            </div>
-
-            <div class="space-y-2 mb-8">
-                {{ form_row(form.notes) }}
+            <div class="space-y-5 mb-10">
+                {{ form_widget(form.notes) }}
                 {% if form.status is defined %}
                     {{ form_row(form.status) }}
                 {% endif %}

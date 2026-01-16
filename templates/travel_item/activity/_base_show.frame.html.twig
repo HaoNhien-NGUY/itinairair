@@ -4,7 +4,7 @@
             <div class="flex justify-between">
                 <div>
                     <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}"
-                       class="font-bold after:absolute after:z-1 after:top-0 after:left-0 after:w-full after:h-full text-slate-700 text-sm/6 line-clamp-1"
+                       class="font-semibold after:absolute after:z-1 after:top-0 after:left-0 after:w-full after:h-full text-slate-700 text-sm/6 line-clamp-1"
                        data-turbo-frame="modal">
                         {{ item.place.name }}
                     </a>
@@ -18,8 +18,10 @@
                     {% endif %}
                 </div>
                 <div class="ml-2">
-                    <a href="{{ item.place.googleMapsURI }}" rel="noopener noreferrer" target="_blank" class="rounded-full btn-animate block relative z-20 bg-indigo-50 hover:bg-indigo-100 p-2">
-                        <twig:ux:icon name="bx:link-external" class="size-4 text-indigo-300" />
+                    <a href="{{ item.place.googleMapsURI }}" rel="noopener noreferrer" target="_blank" class="rounded-fullbtn-animate block relative z-20 bg-indigo-50z group p-2 -m-2">
+                        <span class="bg-indigo-50 rounded-full btn-animate p-2 group-hover:bg-indigo-100 block">
+                            <twig:ux:icon name="bx:link-external" class="size-4 text-indigo-300" />
+                        </span>
                     </a>
                 </div>
             </div>

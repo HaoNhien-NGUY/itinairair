@@ -1,33 +1,42 @@
-# Itinairair - Planificateur de Voyage️
+# Itinairair - Projet Fullstack Symfony
 
-ItinairAir est une app de planification de voyage conçue pour aider à organiser des séjours, gérer des itinéraires et collaborer avec des amis.
+ItinairAir est une application SaaS collaborative de gestion de voyage, elle offre une interface fluide pour gérer des itinéraires jour par jour et gérer des réservations.
 
-## ✨ Fonctionnalités Clés
+> [https://itinairair.com](https://itinairair.com) (Compte démo sans inscription)
 
-- **Itinéraire Interactif** : Planification par glisser-déposer pour les activités quotidiennes, vols et hébergements.
-- **Planification Collaborative** : Invitez des amis à rejoindre votre voyage (Système de Membres de Voyage).
-- **Connexion Sociale** : Authentification transparente via Google et Discord.
-- **Destinations Intelligentes** : Logique de gestion des chevauchements de destinations et continuité du voyage.
+## 🎯 Objectifs du projet
+J'ai créé ce projet pour maîtriser le cycle de vie d'un SaaS, de la conception et de l'architecture jusqu'au déploiement en production sur un VPS.
+
+L'objectif principal était d'utiliser l'écosystème **Symfony**, en minimisant la dépendance au JavaScript tout en gardant une interface fluide **SPA-like** grâce à l'utilisation de Symfony UX / Turbo / Stimulus.
 
 ## 🛠️ Stack Technique
 
 ### Backend
 - **Framework** : Symfony 7.3 (PHP 8.3+)
 - **Base de données** : PostgreSQL
-- **Authentification** : `knpuniversity/oauth2-client-bundle` (Discord/Google)
-- **Uploads** : `vich/uploader-bundle` / Flysystem
-- **Mailing** : Symfony Mailer (intégration Brevo)
+- **Authentification** : OAuth2 (Discord/Google) via `knpuniversity/oauth2-client-bundle`
+- **Uploads** : `vich/uploader-bundle` & Flysystem
+- **Mailing** : Symfony Mailer (intégration API Brevo)
 
 ### Frontend
-- **Style** : TailwindCSS 4
-- **Interactivité** :
-    - **Symfony UX Turbo** : Pour la navigation type SPA et les mises à jour de flux.
-    - **Stimulus** : Pour un comportement JavaScript modeste et maintenable.
-    - **Live Components** : Mises à jour de composants en temps réel (Symfony UX).
-    - **Vanilla Calendar Pro** : Pour des interfaces de sélection de dates robustes.
+- **Interactivité** : Symfony UX Turbo, Stimulus, Live Components.
+- **Styling** : Tailwind CSS 4
 - **Gestion des Assets** : Symfony AssetMapper.
 
 ### DevOps & Infrastructure
-- **Hébergement** : Hébergé chez OVH sur un VPS (Ubuntu).
-- **CI/CD** : GitHub Actions pour les **workflows** de build et déploiement.
-- **Déploiement** : **Deployer PHP** configuré pour des déploiements atomiques.
+* **Hébergement** : VPS hébergé chez OVH sous Ubuntu.
+* **Provisioning :** Configuration manuelle (Nginx, ufw, SSH, PHP-FPM, Supervisor, SSL) dans le but d'apprentissage.
+* **CI/CD** : GitHub Actions pour les **workflows** de build et déploiement.
+* **Déploiement** : **Deployer PHP** configuré pour des déploiements atomiques.
+
+
+[//]: # (## ✨ Fonctionnalités Clés)
+
+[//]: # ()
+[//]: # (- **Itinéraire Interactif** : Planification par glisser-déposer pour les activités quotidiennes, vols et hébergements.)
+
+[//]: # (- **Planification Collaborative** : Invitez des amis à rejoindre votre voyage &#40;Système de Membres de Voyage&#41;.)
+
+[//]: # (- **Connexion Sociale** : Authentification transparente via Google et Discord.)
+
+[//]: # (- **Destinations Intelligentes** : Logique de gestion des chevauchements de destinations et continuité du voyage.)

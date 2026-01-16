@@ -31,7 +31,7 @@ class TripType extends AbstractType
 
         $builder
             ->add('name', TextType::class, [
-                'label' => $isEdit ? 'Nom' : 'Nommez votre voyage',
+                'label' => $isEdit ? 'common.name' : 'form.trip.name',
                 'attr' => [
                     'placeholder' => 'Ex: Escapade à Paris',
                     'icon' => 'mynaui:tag',

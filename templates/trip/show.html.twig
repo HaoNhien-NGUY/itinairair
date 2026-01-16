@@ -56,12 +56,12 @@
 
     {% macro navTabBtn(title, active, path) %}
         <a href="{{ path }}"
-           class="{{ active ? 'active' }} md:fond-medium font-bold [&.active]:border-indigo-300 border-b-2 [&.active,&:hover]:text-indigo-400
+           class="{{ active ? 'active' }} md:fond-medium max-md:flex-1 justify-center md:justify-start font-bold [&.active]:border-indigo-300 border-b-2 [&.active,&:hover]:text-indigo-400
            py-2.5 px-2 inline-flex items-center gap-x-2 border-transparent text-sm md:text-sm whitespace-nowrap text-gray-400">
             {{ title }}
         </a>
     {% endmacro %}
-    <div class="sticky md:border-b border-indigo-100 select-none top-0 z-30 mt-6 bg-white">
+    <div class="sticky select-none top-0 z-30 mt-6 bg-white">
         {% set currentRoute = app.request.attributes.get('_route') %}
 
         <div class="border-b border-indigo-100 bg-white overflow-hidden">
@@ -72,7 +72,7 @@
             </nav>
         </div>
         {% if currentRoute == 'app_trip_show' %}
-            <div class="bg-indigo-50/50 md:bg-white">
+            <div class="bg-indigo-50/70 md:bg-white md:border-b border-indigo-100">
                 <div class="relative flex overflow-hidden">
                     <div {{ stimulus_controller('scrollspy-nav')}}
                         data-hs-scrollspy="#scrollspy-days"
@@ -99,11 +99,11 @@
 
     <main class="grow">
         {% block content %}
-            <div class="pt-2 md:py-6 pb-5 bg-indigo-50/50 md:bg-indigo-50/25">
+            <div class="pt-2 md:py-6 pb-5 bg-indigo-50/70 md:bg-indigo-50/25">
                 <div id="drag-container" class="max-w-7xl container grid grid-cols-1 lg:grid-cols-3">
                     <div class="lg:col-span-2 -mx-4 md:mx-0">
                         <div id="scrollspy-days"
-                             class="rounded-2xl md:rounded-2xl md:border-2 border-0 border-indigo-200 overflow-hidden">
+                             class="rounded-2xl md:rounded-2xl md:border-2  border-0 border-indigo-200 overflow-hidden">
                             {% set displayEmptyRange = true %}
                             {% for day in trip.days %}
 
@@ -125,7 +125,7 @@
                                 {% if isTravelDay %}
                                     <div
                                         class="flex justify-center items-center flex-col bg-white lg:px-10 md:px-8 px-3 py-3.5">
-                                        <h3 class="text-slate-500 font-extrabold text-2xl">{{ 'common.departure'|trans }}</h3>
+                                        <h3 class="text-gray-600 font-extrabold text-2xl">{{ 'common.departure'|trans }}</h3>
                                         <div>
                                             <div
                                                 class="text-gray-500 text-sm">{{ day.date|date_short|capitalize }} {{ trip.startDate|date('Y') }}</div>

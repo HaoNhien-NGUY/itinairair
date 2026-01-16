@@ -5,6 +5,8 @@ travel_items:
         booking_needed: À réserver
         booked: Réservé
 form:
+    trip:
+        name: Nom du voyage
     user_account:
         bio: Bio
         bio_placeholder: Dites-nous en un peu plus sur vous...
@@ -63,7 +65,7 @@ trip:
         past: Passés
         days_message:
             ongoing: >-
-                {days, plural, one {1 jour restant} other {# jours restant}}
+                {days, plural, one {Se termine dans 1 jour} other {Se termine dans # jours}}
             coming: >-
                 {days, plural, one {Dans # jour} other {Dans # jours}}
     my_trip: Mon voyage
@@ -87,6 +89,7 @@ landing:
             title: Multi-Destinations
             subtitle: Road trip en vue ? Gérez plusieurs étapes et destinations au sein d'un seul voyage.
 common:
+    name: Nom
     overnight_flight: Vol de nuit
     search_destination: Rechercher une ville
     search_by_name_address: Rechercher par nom ou adresse

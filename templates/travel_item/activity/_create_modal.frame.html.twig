@@ -1,6 +1,12 @@
 <twig:Modal>
     {% block title %}<span class="modal-header">{{ 'common.place'|trans }}</span>{% endblock %}
 
+    {% block header %}
+        {% if not item.place %}
+            {{ parent() }}
+        {% endif %}
+    {% endblock %}
+
     {% set googlePlaceOptions = {primaryTypes: ['food', 'tourist_attraction', 'point_of_interest', 'store', 'cafe']} %}
     {% if destination|default %}
         {% set googlePlaceOptions = googlePlaceOptions|merge({'location': destination.place.location}) %}
@@ -12,25 +18,26 @@
 
         <gmp-place-autocomplete
             id="place-autocomplete"
-            class="{{ place ? 'hidden' }} mb-6 bg-white rounded-xl border focus:ring-0 placeholder:text-slate-400 shadow-sm text-slate-600 border-indigo-200 hover:border-indigo-300 ease-in transition duration-300 focus:outline-none focus:border-indigo-400 focus:shadow"
+            class="{{ place ? 'hidden' }} mb-8 bg-white rounded-xl border focus:ring-0 placeholder:text-slate-400 shadow-sm text-slate-600 border-indigo-200 hover:border-indigo-300 ease-in transition duration-300 focus:outline-none focus:border-indigo-400 focus:shadow"
             placeholder="{{ 'common.search_by_name_address'|trans }}"
             {{ stimulus_target('google-place-widget', 'placeInput') }}>
         </gmp-place-autocomplete>
-        <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="-mt-1 mb-5 {{ not place ? 'hidden' }}">
-            <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-52 rounded-xl shrink-0 object-cover mb-4" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
-            <div class="font-medium text-base/5 md:text-lg/5 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}>{{ place ? place.name }}</div>
-{#            <p {{ stimulus_target('google-place-widget', 'typeDisplay') }} class="text-xs/snug text-indigo-500 {{ place ? 'hidden' }}">{{ place ? place.type }}</p>#}
-            <a {{ stimulus_target('google-place-widget', 'addressDisplay addressLinkDisplay') }}
-                href="{{ place ? place.googleMapsURI }}"
-                target="_blank"
-                class="text-xs/snug md:text-sm/snug text-slate-400 hover:text-blue-400 mt-1">{{ place ? place.address }}</a>
+        <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="-mt-2 relative mb-18 -mx-5 {{ not place ? 'hidden' }}">
+            <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-56 shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
+            <div class="mx-5 shadow-md bg-white rounded-xl border border-indigo-200 p-4 absolute left-0 right-0 -bottom-11">
+                <div class="font-medium text-base/5 mb-2 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}>{{ place ? place.name }}</div>
+                <a {{ stimulus_target('google-place-widget', 'addressDisplay addressLinkDisplay') }}
+                    href="{{ place ? place.googleMapsURI }}"
+                    target="_blank"
+                    class="text-xs/snug text-slate-400 hover:text-blue-400 block">{{ place ? place.address }}</a>
+            </div>
         </div>
 
 
         {{ form_start(form) }}
-        <div class="space-y-2 mb-8">
-            {{ form_row(form.notes) }}
-            <div class="grid grid-cols-2 gap-2 mb-3">
+        <div class="space-y-5 mb-10">
+            {{ form_widget(form.notes) }}
+            <div class="grid grid-cols-2 gap-2">
                 <div class="col-span-1">
                     {{ form_row(form.startTime) }}
                 </div>

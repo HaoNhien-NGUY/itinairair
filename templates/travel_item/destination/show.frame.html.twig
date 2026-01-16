@@ -83,23 +83,23 @@
                         </div>
 
                         <div class="px-4 py-2 bg-white">
-                            <div class="grid grid-cols-3 max-w-md">
-                                <div class="col-span-1">
+                            <div class="grid grid-cols-5 max-w-md">
+                                <div class="col-span-2">
                                     {{ destination.startDay.date|date_short }} -
                                     {{ destination.startTime ? destination.startTime|date("H:i") : 'TBD' }}
                                 </div>
-                                <div class="col-span-1 col-start-3">
+                                <div class="col-span-2 col-start-4">
                                     {{ destination.endDay.date|date_short }} -
                                     {{ destination.endTime ? destination.endTime|date("H:i") : 'TBD' }}
                                 </div>
-                                <div class="col-span-1 row-start-2">
+                                <div class="col-span-2 row-start-2">
                                     <span class="font-semibold">{{ destination.departureAirport.code ?? 'TBD' }}</span>
                                     <span class="pl-1">{{ destination.departureAirport.terminal ?? '' }}</span>
                                 </div>
                                 <div class="col-span-1 row-start-2 flex items-center justify-center">
                                     <twig:ux:icon name="bi:arrow-right" class="size-3 mr-5"/>
                                 </div>
-                                <div class="col-span-1 row-start-2">
+                                <div class="col-span-2 row-start-2">
                                     <span class="font-semibold">{{ destination.arrivalAirport.code ?? 'TBD' }}</span>
                                     <span class="pl-1">{{ destination.arrivalAirport.terminal ?? '' }}</span>
                                 </div>

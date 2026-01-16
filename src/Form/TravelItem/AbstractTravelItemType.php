@@ -39,7 +39,7 @@ class AbstractTravelItemType extends AbstractType
                 'class' => ItemStatus::class,
                 'required' => false,
                 'placeholder' => null,
-                'label' => 'form.label.status',
+//                'label' => 'form.label.status',
                 'attr' => ['icon' => 'mdi:list-status'],
             ]);
 

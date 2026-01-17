@@ -8,7 +8,7 @@
                     <h3 class="font-semibold">{{ 'common.flight'|trans }}</h3>
                     <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").FLIGHT.value}) }}"
                        class="btn btn-animate py-1" data-turbo-frame="modal">
-                        {{ 'common.add'|trans }} +
+                        + {{ 'common.add'|trans }}
                     </a>
                 </div>
                 <div class="space-y-4 mt-8">
@@ -61,7 +61,7 @@
                     <h3 class="font-semibold">{{ 'common.hotels_and_accommodations'|trans }}</h3>
                     <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").ACCOMMODATION.value}) }}"
                        class="btn btn-animate py-1" data-turbo-frame="modal">
-                        Ajouter +
+                        + {{ 'common.add'|trans }}
                     </a>
                 </div>
                 <div class="space-y-4 mt-8">

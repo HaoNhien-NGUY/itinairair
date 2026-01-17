@@ -1,7 +1,7 @@
 <div class="draggable relative [.is-dragging_.day-itinerary_&]:py-3.5 [.day-itinerary_&:not(.is-dragging)]:pt-7 [.is-dragging_&]:last-of-type:!pb-0 [.is-dragging_.day-itinerary_&]:first-of-type:!pt-7 "
      data-item-id="{{ item.id }}">
     <turbo-frame id="item_{{ item.id }}}">
-        <div class="relative text-sm p-2 pl-5 [.day-itinerary_&]:min-h-20 outline-indigo-200 [.sortable-chosen_&]:bg-indigo-50 rounded-xl group/item {% block card_css %}outline hover:bg-gray-50{% endblock %}">
+        <div class="relative min-h-10 text-sm p-2 pl-5 [.day-itinerary_&]:min-h-20 outline-indigo-200 [.sortable-chosen_&]:bg-indigo-50 rounded-xl group/item {% block card_css %}outline hover:bg-gray-50{% endblock %}">
             {% block open_details %}
                 <a href="{{ path('app_travelitem_idea_details', {'item': item.id, 'trip': trip.id}) }}" class="cursor-pointer absolute w-full h-full top-0 left-0">
                 </a>

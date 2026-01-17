@@ -33,12 +33,11 @@ export default class extends Controller {
     }
 
     disconnect() {
-        this.placeAutocomplete.removeEventListener('gmp-select', this.handleSelection);
+        this.placeAutocomplete?.removeEventListener('gmp-select', this.handleSelection);
     }
 
     initializeGooglePlaces() {
-        if (typeof google === 'undefined' || !google.maps) {
-            console.error('Google Maps JavaScript API not loaded');
+        if (typeof google === 'undefined' || !google.maps || !this.hasPlaceInputTarget) {
             return;
         }
 

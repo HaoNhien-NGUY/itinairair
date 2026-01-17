@@ -24,6 +24,8 @@ export default class extends Controller {
             draggable: '.draggable',
             animation: 250,
             dataIdAttr: 'data-item-id',
+            scrollSensitivity: 200,
+            scrollSpeed: 90,
             handle: this.withHandleValue ? '.handle' : null,
             sort: this.allowSortValue,
             emptyInsertThreshold: 60,

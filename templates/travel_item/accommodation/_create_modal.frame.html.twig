@@ -61,7 +61,7 @@
                 <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-56 shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
                 <div class="mx-5 shadow-md bg-white rounded-xl border border-indigo-200 p-4 absolute left-0 right-0 -bottom-25">
                     {% if place %}
-                        <div {{ stimulus_target('calendar', 'calendar') }} class="select-none text-sm flex items-center justify-between cursor-pointer">
+                        <div {{ stimulus_target('calendar', 'calendar') }} class="select-none text-sm flex -mx-4.5 px-4.5 items-center justify-between cursor-pointer">
                             <div class="flex justify-center items-center text-gray-600">
                                 <twig:ux:icon name="mage:calendar-2" class="size-6 mr-2" />
                                 Dates
@@ -97,7 +97,7 @@
             <div class="space-y-5 mb-10">
                 {{ form_widget(form.notes) }}
                 {% if form.status is defined %}
-                    {{ form_row(form.status) }}
+                    {{ form_widget(form.status) }}
                 {% endif %}
             </div>
 

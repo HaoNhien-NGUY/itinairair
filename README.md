@@ -1,13 +1,13 @@
 # Itinairair - Projet Fullstack Symfony
 
-ItinairAir est une application SaaS collaborative de gestion de voyage, elle offre une interface fluide pour gérer des itinéraires jour par jour et gérer des réservations.
+ItinairAir est une application SaaS collaborative de gestion de voyage, elle offre une interface fluide pour construire des itinéraires jour par jour et gérer des réservations.
 
-> [https://itinairair.com](https://itinairair.com) - Démo avec compte temporaire d'une heure sans inscription
+> [https://itinairair.com](https://itinairair.com) - Démo avec compte temporaire d'une heure **sans inscription** nécessaire.
 
 ## 🎯 Objectifs du projet
 J'ai créé ce projet pour maîtriser le cycle de vie d'un SaaS, de la conception et de l'architecture jusqu'au déploiement en production sur un VPS.
 
-L'objectif principal était d'utiliser l'écosystème Symfony en minimisant la dépendance au JavaScript, le tout en gardant une interface fluide **SPA-like** grâce à l'utilisation de Symfony UX / Turbo / Stimulus.
+L'objectif principal était d'utiliser l'écosystème Symfony en minimisant la dépendance au JavaScript, le tout en gardant une interface fluide et responsive **SPA-like** grâce à l'utilisation de Symfony UX / Turbo / Stimulus.
 
 ## 🛠️ Stack Technique
 
@@ -22,7 +22,7 @@ L'objectif principal était d'utiliser l'écosystème Symfony en minimisant la d
 - **Interactivité** : Symfony UX Turbo, Stimulus, Live Components.
 - **Styling** : Tailwind CSS 4
 - **Gestion des Assets** : Symfony AssetMapper.
-- **Responsive** : Interface responsive et optimisée pour le tactile.
+- **Responsive** : Interface responsive et optimisée pour mobile.
 
 ### DevOps & Infrastructure
 * **Hébergement** : VPS hébergé chez OVH sous Ubuntu.

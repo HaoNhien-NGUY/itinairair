@@ -18,13 +18,13 @@
 
         <gmp-place-autocomplete
             id="place-autocomplete"
-            class="{{ place ? 'hidden' }} mb-8 bg-white rounded-xl border focus:ring-0 placeholder:text-slate-400 shadow-sm text-slate-600 border-indigo-200 hover:border-indigo-300 ease-in transition duration-300 focus:outline-none focus:border-indigo-400 focus:shadow"
+            class="{{ place ? 'hidden' }} mb-10 bg-white rounded-xl border focus:ring-0 placeholder:text-slate-400 shadow-sm text-slate-600 border-indigo-200 hover:border-indigo-300 ease-in transition duration-300 focus:outline-none focus:border-indigo-400 focus:shadow"
             placeholder="{{ 'common.search_by_name_address'|trans }}"
             {{ stimulus_target('google-place-widget', 'placeInput') }}>
         </gmp-place-autocomplete>
         <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="-mt-2 relative mb-18 -mx-5 {{ not place ? 'hidden' }}">
-            <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-56 shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
-            <div class="mx-5 shadow-md bg-white rounded-xl border border-indigo-200 p-4 absolute left-0 right-0 -bottom-11">
+            <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-60 shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
+            <div class="mx-5 shadow-md bg-white rounded-xl border border-slate-300 p-4 absolute left-0 right-0 -bottom-11">
                 <div class="font-medium text-base/5 mb-2 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}>{{ place ? place.name }}</div>
                 <a {{ stimulus_target('google-place-widget', 'addressDisplay addressLinkDisplay') }}
                     href="{{ place ? place.googleMapsURI }}"
@@ -46,7 +46,7 @@
                 </div>
             </div>
             {% if form.status is defined %}
-                {{ form_row(form.status) }}
+                {{ form_widget(form.status) }}
             {% endif %}
         </div>
 

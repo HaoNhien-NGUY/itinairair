@@ -68,7 +68,15 @@
                 {% if flightEndDay|length > 0 %}
                     <div class="mb-4">
                         {% for item in flightEndDay %}
-                            {{ _self.multiDayFlight(item, trip, day, false) }}
+                            <div class="-mt-4">
+                                <div class="flex items-center group">
+                                    <div class="relative flex items-center ml-6">
+                                        <div class="h-5.5 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:border-l-2 before:border-dashed before:border-indigo-200 before:-translate-x-1/2"></div>
+                                        <div class="size-5"></div>
+                                    </div>
+                                </div>
+                                {{ _self.multiDayFlight(item, trip, day, false) }}
+                            </div>
                         {% endfor %}
                     </div>
 
@@ -126,7 +134,15 @@
                 {% if flightStartDay|length > 0 %}
                     <div class="{{ not isTravelDay ? 'mt-6' }}">
                         {% for item in flightStartDay %}
-                            {{ _self.multiDayFlight(item, trip, day) }}
+                            <div class="-mb-4">
+                                {{ _self.multiDayFlight(item, trip, day) }}
+                                <div class="flex items-center group">
+                                    <div class="relative flex items-center ml-6">
+                                        <div class="h-5.5 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:border-l-2 before:border-dashed before:border-indigo-200 before:-translate-x-1/2"></div>
+                                        <div class="size-5"></div>
+                                    </div>
+                                </div>
+                            </div>
                         {% endfor %}
                     </div>
                 {% endif %}

@@ -71,7 +71,7 @@ class FlightType extends AbstractType
                 'choice_label' => fn(Day $day) => $day->getPosition(),
             ])
             ->add('departureAirportCode', TextType::class, [
-                'attr' => ['placeholder' => 'Code IATA (ex: CDG)', 'maxLength' => 4],
+                'attr' => ['placeholder' => 'common.airport', 'maxLength' => 4],
                 'property_path' => 'departureAirport[code]',
                 'required' => false,
             ])
@@ -81,7 +81,7 @@ class FlightType extends AbstractType
                 'required' => false,
             ])
             ->add('arrivalAirportCode', TextType::class, [
-                'attr' => ['placeholder' => 'Code IATA (ex: CDG)', 'maxLength' => 4],
+                'attr' => ['placeholder' => 'common.airport', 'maxLength' => 4],
                 'property_path' => 'arrivalAirport[code]',
                 'required' => false,
             ])
@@ -101,7 +101,8 @@ class FlightType extends AbstractType
                 'widget' => 'single_text',
                 'required' => false,
                 'attr' => ['class' => 'form-input py-1.5'],
-            ]);
+            ])
+            ->remove('status');
 
 
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {

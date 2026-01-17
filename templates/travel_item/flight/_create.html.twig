@@ -12,67 +12,54 @@
         <div class="mb-3">
             {{ form_row(form.flightNumber) }}
         </div>
-
-        <div class="mb-3 grid grid-cols-2 space-x-3">
-            <div class="col-span-1">
-                    <h3 class="form-label">{{ 'common.departure'|trans }}</h3>
-
-                <div class="grid grid-cols-2 space-x-1">
-                    <div {{  stimulus_controller('calendar', {dayMapping: dayMapping, startDate: startDate, isRange: false, autoHide: true, inputMode: true, inModal: true, displayWeekDay: false}) }}
+        <div class="space-y-2">
+            <div>
+                <h3 class="form-label">{{ 'common.departure'|trans }}</h3>
+                <div class="grid grid-cols-4 gap-2">
+                    <div {{ stimulus_controller('calendar', {dayMapping: dayMapping, startDate: startDate, isRange: false, autoHide: true, inputMode: true, inModal: true, displayWeekDay: false}) }}
                         {{ stimulus_target('calendar', 'calendar') }}
                         class="col-span-1"
                     >
                         {{ form_widget(form.startDay) }}
-                        <div class="form-input {{ not form.startDay.vars.valid ? 'border-red-400'}} cursor-pointer py-1.5">
-                            <div {{ stimulus_target('calendar', 'startDayDisplay') }}><span class="italic text-gray-500 text-sm">Date</span></div>
+                        <div
+                            class="form-input {{ not form.startDay.vars.valid ? 'border-red-400' }} cursor-pointer py-1.5">
+                            <div {{ stimulus_target('calendar', 'startDayDisplay') }}><span
+                                    class="italic text-gray-500 text-sm">Date</span></div>
                         </div>
                     </div>
                     <div class="col-span-1">
                         {{ form_widget(form.startTime) }}
                     </div>
+                    {{ form_widget(form.departureAirportCode, {'attr': {'class': 'col-span-1 py-1.5'}}) }}
+                    {{ form_widget(form.departureTerminal, {'attr': {'class': 'col-span-1 py-1.5'}}) }}
                 </div>
             </div>
-            <div class="col-span-1">
+            <div>
                 <h3 class="form-label">{{ 'common.arrival'|trans }}</h3>
-                <div class="grid grid-cols-2 space-x-1">
-                    <div {{  stimulus_controller('calendar', {dayMapping: dayMapping, startDate: endDate, isRange: false, autoHide: true, inputMode: true, inModal: true, displayWeekDay: false}) }}
+                <div class="grid grid-cols-4 gap-2">
+                    <div {{ stimulus_controller('calendar', {dayMapping: dayMapping, startDate: endDate, isRange: false, autoHide: true, inputMode: true, inModal: true, displayWeekDay: false}) }}
                         {{ stimulus_target('calendar', 'calendar') }}
                         class="col-span-1"
                     >
-
-                            {{ form_widget(form.endDay) }}
+                        {{ form_widget(form.endDay) }}
                         <div class="form-input cursor-pointer py-1.5">
-                            <div {{ stimulus_target('calendar', 'startDayDisplay') }}><span class="italic text-gray-500 text-sm">Date</span></div>
+                            <div {{ stimulus_target('calendar', 'startDayDisplay') }}><span
+                                    class="italic text-gray-500 text-sm">Date</span></div>
                         </div>
                     </div>
                     <div class="col-span-1">
                         {{ form_widget(form.endTime) }}
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mb-3 grid grid-cols-2 space-x-3">
-            <div class="col-span-1">
-                <div class="grid grid-cols-2 gap-1">
-                    {{ form_widget(form.departureAirportCode, {'attr': {'class': 'col-span-1 py-1.5'}}) }}
-                    {{ form_widget(form.departureTerminal, {'attr': {'class': 'col-span-1 py-1.5'}}) }}
-                </div>
-            </div>
-            <div class="col-span-1">
-                <div class="grid grid-cols-2 space-x-1">
                     {{ form_widget(form.arrivalAirportCode, {'attr': {'class': 'col-span-1 py-1.5'}}) }}
                     {{ form_widget(form.arrivalTerminal, {'attr': {'class': 'col-span-1 py-1.5'}}) }}
                 </div>
             </div>
         </div>
 
-
-
-        <div class="space-y-2 mt-6">
-            {{ form_row(form.notes) }}
+        <div class="space-y-2 mt-8">
+            {{ form_widget(form.notes) }}
             {% if form.status is defined %}
-                {{ form_row(form.status) }}
+                {{ form_widget(form.status) }}
             {% endif %}
         </div>
     </div>

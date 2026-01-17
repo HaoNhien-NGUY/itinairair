@@ -19,7 +19,7 @@ class AccommodationRepository extends ServiceEntityRepository
     public function findAccommodationsByTrip(Trip $trip): array
     {
         return $this->createQueryBuilder('a')
-            ->join('a.startDay', 'sd')
+            ->leftJoin('a.startDay', 'sd')
             ->where('sd.trip = :trip')
             ->setParameter('trip', $trip)
             ->orderBy('sd.position', 'ASC')

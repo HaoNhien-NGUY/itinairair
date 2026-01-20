@@ -6,8 +6,9 @@
     <section class="relative pt-12 pb-20 lg:pt-24 lg:pb-32 overflow-hidden" data-turbo-prefetch="false">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8 text-center">
             <h1 class="text-5xl font-black tracking-tight text-gray-900 sm:text-7xl mb-6">
-                {{ 'landing.title_1'|trans }}<br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">{{ 'landing.title_2'|trans|lower }}.</span>
+                {{ 'landing.title_1'|trans }}  <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">{{ 'landing.title_2'|trans|lower }}</span> {{ 'landing.title_3'|trans|lower }}.
+{#                <br>#}
+{#                <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">{{ 'landing.title_2'|trans|lower }}.</span>#}
             </h1>
             <p class="mt-6 text-lg text-gray-500 max-w-2xl mx-auto mb-10">
                 {{ 'landing.subtitle'|trans }}
@@ -24,7 +25,7 @@
                             <twig:ux:icon name="maki:arrow" class="size-4" />
                         </div>
                         <div class="text-xs text-slate-500 mt-1 font-normal">
-                            Génère un compte temporaire avec itinéraire interactif
+                            {{ 'landing.cta_demo_subtitle'|trans }}
                         </div>
                     </a>
                 {% endif %}
@@ -38,7 +39,7 @@
                     <div class="w-3 h-3 rounded-full bg-green-400"></div>
                 </div>
                 <div class="bg-indigo-10 aspect-video flex items-center justify-center text-gray-300">
-                    <img src="{{ asset('images/hero-banner.png') }}"/>
+                    <img src="{{ asset('images/hero-banner.png') }}" alt="demo-planning"/>
                 </div>
             </div>
         </div>
@@ -46,28 +47,28 @@
 
 
 
-    <section class="py-24 bg-white relative">
+    <section class="py-12 max-w-7xl mx-auto bg-white relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-yellow-50 p-8 rounded-3xl border-2 border-yellow-200">
-                    <div class="text-4xl mb-4">🏨</div>
+                <div class="zbg-yellow-50 p-4 rounded-3xl border-2z border-yellow-200">
+                    <div class="text-4xl mb-6">🏨</div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2">{{ 'landing.features.one.title'|trans }}</h3>
                     <p class="text-gray-700">
                         {{ 'landing.features.one.subtitle'|trans }}
                     </p>
                 </div>
 
-                <div class="bg-blue-50 p-8 rounded-3xl border-2 border-blue-200">
-                    <div class="text-4xl mb-4">🗓️</div>
+                <div class="zbg-blue-50 p-4 rounded-3xl border-2z border-blue-200">
+                    <div class="text-4xl mb-6">🗓️</div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2">{{ 'landing.features.two.title'|trans }}</h3>
                     <p class="text-gray-700">
                         {{ 'landing.features.two.subtitle'|trans }}
                     </p>
                 </div>
 
-                <div class="bg-pink-50 p-8 rounded-3xl border-2 border-pink-200">
-                    <div class="text-4xl mb-4">🌍</div>
+                <div class="zbg-pink-50 p-4 rounded-3xl border-2z border-pink-200">
+                    <div class="text-4xl mb-6">🌍</div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2">{{ 'landing.features.three.title'|trans }}</h3>
                     <p class="text-gray-700">
                         {{ 'landing.features.three.subtitle'|trans }}

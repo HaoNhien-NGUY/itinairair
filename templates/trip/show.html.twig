@@ -72,7 +72,7 @@
             </nav>
         </div>
         {% if currentRoute == 'app_trip_show' %}
-            <div class="bg-indigo-50/70 md:bg-white md:border-b border-indigo-100">
+            <div class="bg-indigo-50/90 md:bg-white md:border-b border-indigo-100">
                 <div class="relative flex overflow-hidden">
                     <div {{ stimulus_controller('scrollspy-nav')}}
                         data-hs-scrollspy="#scrollspy-days"
@@ -99,7 +99,7 @@
 
     <main class="grow">
         {% block content %}
-            <div class="pt-2 md:py-6 pb-5 bg-indigo-50/70 md:bg-indigo-50/25">
+            <div class="pt-2 md:py-6 pb-5 bg-indigo-50/90 md:bg-indigo-50/25">
                 <div id="drag-container" class="max-w-7xl container grid grid-cols-1 md:grid-cols-3">
                     <div class="md:col-span-2 -mx-4 md:mx-0">
                         <twig:PlanningDashboard trip="{{ trip }}" />

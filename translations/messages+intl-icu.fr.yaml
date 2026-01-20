@@ -37,6 +37,7 @@ transport:
     train: Train
     bus: Bus
 trip:
+    go_to_today: Aller au programme du jour
     demo:
         username: Visiteur
         name: Voyage d'essai au japon
@@ -77,11 +78,13 @@ trip:
     new_trip: Nouveau voyage
     no_destination: Aucune destination
 landing:
-    title_1: Planifiez vos voyages
-    title_2: simplement
-    subtitle: Une solution simple pour gérer vos itinéraires quotidiens, vos réservations de vols et d'hôtels. Fini la dispersion, place à l'organisation.
+    title_1: Votre
+    title_2: itinéraire
+    title_3: en plus léger
+    subtitle: Une application simple pour planifier vos voyages. Créez votre itinéraire jour par jour et gardez vos réservations au même endroit.
     cta: Planifier mon voyage
     cta_demo: Lancer la démo sans inscription
+    cta_demo_subtitle: Génèrer un compte temporaire avec itinéraire interactif
     features:
         one:
             title: Réservations Centralisées
@@ -93,6 +96,8 @@ landing:
             title: Multi-Destinations
             subtitle: Road trip en vue ? Gérez plusieurs étapes et destinations au sein d'un seul voyage.
 common:
+    on: sur
+    day: Jour
     airport: Aéroport
     name: Nom
     overnight_flight: Vol de nuit

@@ -38,8 +38,9 @@ transport:
     bus: Bus
 trip:
     demo:
-        name: Voyage demo au japon
-        temporary_account_alert: Bienvenue en mode Démo. Ce compte temporaire et ses données seront automatiquement supprimés dans 1 heure
+        username: Visiteur
+        name: Voyage d'essai au japon
+        temporary_account_alert: Bienvenue en mode démo. Ce compte temporaire et ses données seront automatiquement supprimés dans 1 heure
     join_token:
         share_link: Partage par lien
         create: Créer un lien
@@ -69,6 +70,8 @@ trip:
                 {days, plural, one {Se termine dans 1 jour} other {Se termine dans # jours}}
             coming: >-
                 {days, plural, one {Dans # jour} other {Dans # jours}}
+            coming_full: >-
+                {days, plural, one {Le voyage commence dans # jour} other {Le voyage commence dans # jours}}
     my_trip: Mon voyage
     my_trips: Mes voyages
     new_trip: Nouveau voyage

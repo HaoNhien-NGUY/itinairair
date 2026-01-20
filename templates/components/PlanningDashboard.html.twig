@@ -1,0 +1,37 @@
+<div{{ attributes }}>
+    {% set currentDay = this.currentDay %}
+
+    {% if currentDay %}
+        <div class="md:bg-indigo-400 bg-white md:border-1z border-indigo-200/70 md:py-2 md:pl-4 md:pr-2 p-3 rounded-2xl text-sm mb-5 mt-2 md:mt-0 mx-2 md:mx-0">
+            <div class="md:flex md:justify-between max-md:space-y-5">
+                <div class="md:col-span-3 max-md:text-gray-500 text-indigo-500 md:text-white md:font-bold font-semibold flex items-center">
+                    <twig:ux:icon name="mage:calendar-2" class="size-7 mr-2 mb-0.5" />
+                    {#                    <span class="font-semibold">Nous sommes le {{ currentDay.date|format_date('long') }}  (jour {{ currentDay.position  }} / {{ trip.getDurationInDays }})</span>#}
+                    <span class="leading-none">{{ currentDay.date|format_date('full')|capitalize }}</span>
+                    <span class="text-whitez mx-3 mb-0.5 md:mb-0 text-xs">•</span>
+                    <span class="leading-none">Jour {{ currentDay.position  }} / {{ trip.getDurationInDays }}</span>
+                </div>
+                <div class="md:col-span-2 [--scrollspy-offset:200px]" data-hs-scrollspy="#scrollspy-days">
+                    <a href="#scrollspy-day-{{ currentDay.id }}" class="py-2 px-4 rounded-2xl flex items-center justify-around bg-indigo-500 hover:bg-indigo-600 text-white text-center">
+                        <div class="flex items-center font-semibold gap-4">
+                            Aller au programme de la journée
+                            <twig:ux:icon name="solar:arrow-up-broken" class="size-5 rotate-180"/>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+{#    {% else %}#}
+{#        {% set today = date('today') %}#}
+{#        {% set coming = today < trip.startDate %}#}
+
+{#        {% if coming %}#}
+{#            <div class="text-indigo-400 border bg-white md:bg-indigo-200/20 border-indigo-200 font-semibold py-3 md:pl-4 md:pr-2 p-3 rounded-2xl text-sm mb-5 mt-2 md:mt-0 mx-2 md:mx-0">#}
+{#                <span class="">{{ 'trip.status.days_message.coming_full'|trans({days: trip.startDate.diff(today).days}) }}.</span>#}
+{#            </div>#}
+{#        {% endif %}#}
+
+
+    {% endif %}
+
+</div>

@@ -15,7 +15,7 @@
         <div class="space-y-2">
             <div>
                 <h3 class="form-label">{{ 'common.departure'|trans }}</h3>
-                <div class="grid grid-cols-4 gap-2">
+                <div class="grid grid-cols-4 gap-1">
                     <div {{ stimulus_controller('calendar', {dayMapping: dayMapping, startDate: startDate, isRange: false, autoHide: true, inputMode: true, inModal: true, displayWeekDay: false}) }}
                         {{ stimulus_target('calendar', 'calendar') }}
                         class="col-span-1"
@@ -36,7 +36,7 @@
             </div>
             <div>
                 <h3 class="form-label">{{ 'common.arrival'|trans }}</h3>
-                <div class="grid grid-cols-4 gap-2">
+                <div class="grid grid-cols-4 gap-1">
                     <div {{ stimulus_controller('calendar', {dayMapping: dayMapping, startDate: endDate, isRange: false, autoHide: true, inputMode: true, inModal: true, displayWeekDay: false}) }}
                         {{ stimulus_target('calendar', 'calendar') }}
                         class="col-span-1"

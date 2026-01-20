@@ -3,7 +3,7 @@
 {% block content %}
     <div class="bg-indigo-50/25 min-h-[65vh]">
         <div class="container mx-auto max-w-7xl py-8 max-md:px-0  gap-4 grid grid-cols-1 lg:grid-cols-2">
-            <div class="border-2 border-indigo-100 bg-white md:rounded-2xl p-4">
+            <div class="border border-indigo-100 bg-white md:rounded-2xl p-4">
                 <div class="flex justify-between items-center mb-3">
                     <h3 class="font-semibold">{{ 'common.flight'|trans }}</h3>
                     <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").FLIGHT.value}) }}"
@@ -56,7 +56,7 @@
 
 
             </div>
-            <div class="border-2 border-indigo-100 bg-white md:rounded-2xl p-4">
+            <div class="border border-indigo-100 bg-white md:rounded-2xl p-4">
                 <div class="flex justify-between items-center">
                     <h3 class="font-semibold">{{ 'common.hotels_and_accommodations'|trans }}</h3>
                     <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").ACCOMMODATION.value}) }}"

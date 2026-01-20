@@ -30,8 +30,8 @@ class DemoGeneratorService
         $trip = (new Trip())
             ->setName($this->translator->trans('trip.demo.name'))
             ->setIsTemporary(true)
-            ->setStartDate(new \DateTime('+3 days'))
-            ->setEndDate(new \DateTime('+16 days'));
+            ->setStartDate(new \DateTime('-4 days'))
+            ->setEndDate(new \DateTime('+12 days'));
         $tripMembership = (new TripMembership($trip, $user, TripRole::ADMIN));
 
         $this->entityManager->persist($trip);

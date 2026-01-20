@@ -27,7 +27,7 @@
                 {% macro multiDayFlight(item, trip, day, start = true) %}
                     <div class="rounded-xl btn-animate text-sm overflow-hidden relative">
                         <div class="px-4 py-0.5 bg-indigo-100 flex justify-between items-center">
-                            <div class="flex items-center font-bold text-gray-700">
+                            <div class="flex items-center font-semibold text-gray-600">
                                 {% if start %}
                                     <twig:ux:icon name="entypo:aircraft-take-off" class="size-6 mr-3"/>
                                 {% else %}
@@ -87,8 +87,8 @@
                     <div class="space-y-4 mb-4">
                         {% for item in flightSameDay %}
                             <div class="rounded-2xl btn-animate text-sm overflow-hidden relative">
-                                <div class="px-4 py-0.5 bg-indigo-100 flex items-center font-bold text-gray-700">
-                                    <twig:ux:icon name="entypo:aircraft-take-off" class="size-6 text-gray-700 mr-3"/>
+                                <div class="px-4 py-0.5 bg-indigo-100 flex items-center font-bold text-gray-600">
+                                    <twig:ux:icon name="entypo:aircraft-take-off" class="size-6 mr-3"/>
                                     {{ item.flightNumber ?? 'TBD' }}
                                 </div>
 

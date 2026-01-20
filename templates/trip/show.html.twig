@@ -39,7 +39,7 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="flex items-center md:text-sm text-xs justify-between md:gap-6 md:justify-start mt-7">
+            <div class="flex items-center md:text-sm text-xs justify-between md:gap-6 md:justify-start mt-4">
                 <div class="flex space-x-1 select-none">
                     {% for membership in trip.tripMemberships %}
                         <div class="flex items-center">
@@ -100,10 +100,11 @@
     <main class="grow">
         {% block content %}
             <div class="pt-2 md:py-6 pb-5 bg-indigo-50/70 md:bg-indigo-50/25">
-                <div id="drag-container" class="max-w-7xl container grid grid-cols-1 lg:grid-cols-3">
-                    <div class="lg:col-span-2 -mx-4 md:mx-0">
+                <div id="drag-container" class="max-w-7xl container grid grid-cols-1 md:grid-cols-3">
+                    <div class="md:col-span-2 -mx-4 md:mx-0">
+                        <twig:PlanningDashboard trip="{{ trip }}" />
                         <div id="scrollspy-days"
-                             class="rounded-2xl md:rounded-2xl md:border-2  border-0 border-indigo-200 overflow-hidden">
+                             class="rounded-3xl md:border-2  border-0 border-indigo-200/70 overflow-hidden">
                             {% set displayEmptyRange = true %}
                             {% for day in trip.days %}
 
@@ -179,7 +180,7 @@
                                     <div class="text-sm flex items-center">
                                         {% macro destination_link(trip, item, suffix = false) %}
                                             <a href="{{ path('app_trip_itinerary', {id: trip.id }) }}"
-                                               class="hover:text-indigo-500 text-xs text-indigo-400/70">
+                                               class="hover:text-indigo-500 text-xs text-gray-400/70">
                                                 {{- item.name -}}
                                             </a>
                                             {%- if suffix -%}<span class="pl-0.5 pr-1 text-indigo-400">,</span>{%- endif -%}
@@ -203,7 +204,7 @@
                     </div>
 
 
-                    <div class="max-lg:hidden">
+                    <div class="max-md:hidden">
                         <div class="space-y-4 px-4 pb-20 sticky top-28 max-h-screen no-scrollbar overflow-y-auto">
                             <div class="p-2 text-sm bg-white border-gray-200 border rounded-2xl">
                                 <a href="{{ path('app_trip_bookings', {'id': trip.id}) }}"

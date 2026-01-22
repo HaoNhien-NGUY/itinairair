@@ -23,6 +23,9 @@ class MailerService
             ->text('');
         $email->getHeaders()->addTextHeader('templateId', 1);
 
-        $this->mailer->send($email);
+        try {
+            $this->mailer->send($email);
+        } catch( \Exception) {
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Service\DemoGeneratorService;
+use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -18,7 +19,8 @@ final class DemoController extends AbstractController
         EntityManagerInterface $entityManager,
         DemoGeneratorService   $demoGenerator,
         Security               $security,
-        TranslatorInterface $translator,
+        TranslatorInterface    $translator,
+        MailerService          $mailer,
     ): Response {
         if($this->getUser()) {
             return $this->redirectToRoute('app_trip');
@@ -33,6 +35,8 @@ final class DemoController extends AbstractController
 
         $demoGenerator->generateDemoTrip($user);
         $entityManager->flush();
+
+        $mailer->sendNewDemoCreated();
 
         $security->login($user, 'form_login', 'main');
 

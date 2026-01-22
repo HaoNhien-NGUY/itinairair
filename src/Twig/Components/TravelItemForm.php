@@ -40,16 +40,5 @@ final class TravelItemForm extends AbstractController
     public function placeSelected(#[LiveArg] array $placeData): void
     {
         $this->placeData = $placeData;
-
-//        $this->formValues['name'] = $placeData['name'];
-//        $this->formValues['place'] = [
-//            'name' => $placeData['name'] ?? '',
-//            'address' => $placeData['address'] ?? '',
-//            'location' => json_encode($placeData['location'] ?? []),
-//            'googleMapsURI' => $placeData['googleMapsURI'] ?? '',
-//            'photoURI' => $placeData['photoURI'] ?? '',
-//            'placeId' => $placeData['placeId'] ?? null,
-//            'type' => $placeData['type'] ?? '',
-//        ];
     }
 }

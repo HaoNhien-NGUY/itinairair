@@ -26,6 +26,7 @@ class MailerService
         try {
             $this->mailer->send($email);
         } catch( \Exception) {
+            dump('error');
         }
     }
 }

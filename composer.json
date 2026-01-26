@@ -95,6 +95,24 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "importmap:install": "symfony-cmd"
         },
+        "test:prepare:db": [
+            "@php bin/console doctrine:database:drop --force --env=test || true",
+            "@php bin/console doctrine:database:create --env=test",
+            "@php bin/console doctrine:schema:create --env=test",
+            "@php bin/console doctrine:fixtures:load -n --env=test"
+        ],
+        "test:prepare:asset": [
+            "@php bin/console importmap:install --env=test"
+        ],
+        "test": [
+            "@php bin/phpunit"
+        ],
+        "test:ci": [
+            "@php bin/console cache:clear --env=test",
+            "@test:prepare:db",
+            "@test:prepare:asset",
+            "@php bin/phpunit"
+        ],
         "post-install-cmd": [
             "@auto-scripts"
         ],
@@ -113,6 +131,7 @@
     },
     "require-dev": {
         "deployer/deployer": "^7.5",
+        "doctrine/doctrine-fixtures-bundle": "^4.3",
         "friendsofphp/php-cs-fixer": "*",
         "phpstan/phpstan": "*",
         "phpunit/phpunit": "^12.3",

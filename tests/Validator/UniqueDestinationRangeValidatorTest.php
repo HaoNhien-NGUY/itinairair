@@ -5,15 +5,21 @@ namespace App\Tests\Validator;
 use App\Entity\Day;
 use App\Entity\Destination;
 use App\Entity\Trip;
+use App\Repository\DestinationRepository;
 use App\Validator\UniqueDestinationRange;
 use App\Validator\UniqueDestinationRangeValidator;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 class UniqueDestinationRangeValidatorTest extends ConstraintValidatorTestCase
 {
+    private MockObject $repositoryMock;
+
     protected function createValidator(): UniqueDestinationRangeValidator
     {
-        return new UniqueDestinationRangeValidator();
+        $this->repositoryMock = $this->createMock(DestinationRepository::class);
+
+        return new UniqueDestinationRangeValidator($this->repositoryMock);
     }
 
     private function createDay(Trip $trip, int $position): Day
@@ -21,6 +27,7 @@ class UniqueDestinationRangeValidatorTest extends ConstraintValidatorTestCase
         $day = new Day();
         $day->setTrip($trip);
         $day->setPosition($position);
+
         return $day;
     }
 
@@ -28,15 +35,13 @@ class UniqueDestinationRangeValidatorTest extends ConstraintValidatorTestCase
     {
         $trip = new Trip();
 
-        $d1 = new Destination($trip);
-        $d1->setStartDay($this->createDay($trip, 1));
-        $d1->setEndDay($this->createDay($trip, 6));
-
         $d2 = new Destination($trip);
         $d2->setStartDay($this->createDay($trip, 6));
         $d2->setEndDay($this->createDay($trip, 12));
-        $trip->addTravelItem($d1);
-        $trip->addTravelItem($d2);
+
+        $this->repositoryMock->expects($this->once())
+            ->method('countOverlappingDestinations')
+            ->willReturn(0);
         $this->validator->validate($d2, new UniqueDestinationRange());
 
         $this->assertNoViolation();
@@ -45,59 +50,19 @@ class UniqueDestinationRangeValidatorTest extends ConstraintValidatorTestCase
     public function testOverlap()
     {
         $trip = new Trip();
-
-        $d1 = new Destination($trip);
-        $d1->setStartDay($this->createDay($trip, 1));
-        $d1->setEndDay($this->createDay($trip, 7));
-
         $d2 = new Destination($trip);
         $d2->setStartDay($this->createDay($trip, 6));
         $d2->setEndDay($this->createDay($trip, 12));
-        $trip->addTravelItem($d1);
-        $trip->addTravelItem($d2);
-        $this->validator->validate($d2, new UniqueDestinationRange());
 
-        $this->buildViolation('Les dates de cette destination chevauchent une autre destination de ce voyage.')
-            ->atPath('property.path.startDay')
-            ->assertRaised();
-    }
+        $constraint = new UniqueDestinationRange();
 
-    public function testOverlapReverseOrder()
-    {
-        $trip = new Trip();
+        $this->repositoryMock->expects($this->once())
+            ->method('countOverlappingDestinations')
+            ->willReturn(1);
 
-        $d1 = new Destination($trip);
-        $d1->setStartDay($this->createDay($trip, 6));
-        $d1->setEndDay($this->createDay($trip, 12));
+        $this->validator->validate($d2, $constraint);
 
-        $d2 = new Destination($trip);
-        $d2->setStartDay($this->createDay($trip, 1));
-        $d2->setEndDay($this->createDay($trip, 7));
-        $trip->addTravelItem($d1);
-        $trip->addTravelItem($d2);
-        $this->validator->validate($d2, new UniqueDestinationRange());
-
-        $this->buildViolation('Les dates de cette destination chevauchent une autre destination de ce voyage.')
-            ->atPath('property.path.startDay')
-            ->assertRaised();
-    }
-
-    public function testContainedOverlap()
-    {
-        $trip = new Trip();
-
-        $d1 = new Destination($trip);
-        $d1->setStartDay($this->createDay($trip, 1));
-        $d1->setEndDay($this->createDay($trip, 10));
-
-        $d2 = new Destination($trip);
-        $d2->setStartDay($this->createDay($trip, 3));
-        $d2->setEndDay($this->createDay($trip, 5));
-        $trip->addTravelItem($d1);
-        $trip->addTravelItem($d2);
-        $this->validator->validate($d2, new UniqueDestinationRange());
-
-        $this->buildViolation('Les dates de cette destination chevauchent une autre destination de ce voyage.')
+        $this->buildViolation($constraint->message)
             ->atPath('property.path.startDay')
             ->assertRaised();
     }

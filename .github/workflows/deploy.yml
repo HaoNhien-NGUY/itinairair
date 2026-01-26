@@ -3,11 +3,47 @@ name: deploy
 on:
     push:
         branches: [ master ]
-
-concurrency: production_environment
+    pull_request:
+        branches: [ master ]
 
 jobs:
+    tests:
+        name: Run Tests
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.3'
+                  extensions: pdo_sqlite
+                  coverage: none
+
+            - name: Cache Composer packages
+              id: composer-cache
+              uses: actions/cache@v3
+              with:
+                  path: vendor
+                  key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-php-
+
+            - name: Install Dependencies
+              run: composer install -q --prefer-dist --no-progress --no-interaction --no-scripts --no-ansi
+
+            - name: Run Tests
+              env:
+                  APP_ENV: test
+                  DATABASE_URL: "sqlite:///%kernel.project_dir%/var/test.db"
+              run: composer test:ci
+
     deploy:
+        name: Deploy
+        needs: tests
+        if: github.ref == 'refs/heads/master'
+        concurrency: production_environment
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout code

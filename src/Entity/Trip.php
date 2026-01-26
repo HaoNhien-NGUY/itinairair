@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
+use App\Exception\InvalidTripDatesException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
@@ -152,8 +153,8 @@ class Trip
 
     public function getDurationInDays(): int
     {
-        if (!$this->startDate || !$this->endDate) {
-            return 0;
+        if (!$this->startDate || !$this->endDate || $this->endDate <= $this->startDate) {
+            throw new InvalidTripDatesException();
         }
 
         $diff = $this->startDate->diff($this->endDate);

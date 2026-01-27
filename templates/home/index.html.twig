@@ -19,15 +19,18 @@
                     {{ 'landing.cta'|trans }}
                 </a>
                 {% if not app.user %}
-                    <a href="{{ path('app_demo_start') }}" class="px-6 py-2 btn-animate font-semibold text-base text-indigo-500 rounded-full inline-flex flex-col justify-center items-center hover:bg-indigo-50 transition">
-                        <div class="flex items-center justify-center gap-2">
-                            {{ 'landing.cta_demo'|trans }}
-                            <twig:ux:icon name="maki:arrow" class="size-4" />
-                        </div>
-                        <div class="text-xs text-slate-500 mt-1 font-normal">
-                            {{ 'landing.cta_demo_subtitle'|trans }}
-                        </div>
-                    </a>
+                    <form action="{{ path('app_demo_start') }}" method="post" class="">
+                        <input type="hidden" name="_token" value="{{ csrf_token('start_demo') }}">
+                        <button type="submit" class="cursor-pointer px-6 py-2 btn-animate font-semibold text-base text-indigo-500 rounded-full inline-flex flex-col justify-center items-center hover:bg-indigo-50 transition">
+                            <span class="flex items-center justify-center gap-2">
+                                {{ 'landing.cta_demo'|trans }}
+                                <twig:ux:icon name="maki:arrow" class="size-4" />
+                            </span>
+                            <span class="text-xs text-slate-500 mt-1 font-normal">
+                                {{ 'landing.cta_demo_subtitle'|trans }}
+                            </span>
+                        </button>
+                    </form>
                 {% endif %}
             </div>
 

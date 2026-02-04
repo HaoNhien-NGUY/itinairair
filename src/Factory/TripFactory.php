@@ -34,6 +34,10 @@ readonly class TripFactory
         foreach ($days as $day) {
             if (isset($groupedDestinations['byStartDay'][$day->getPosition()])) {
                 $currentDestination = $groupedDestinations['byStartDay'][$day->getPosition()];
+            } elseif (isset($groupedDestinations['byEndDay'][$day->getPosition()])
+                && ($day->getPosition() + 1 < $nbDays)
+                && !isset($groupedDestinations['byStartDay'][$day->getPosition() + 1])) {
+                $currentDestination = null;
             }
 
             if ($prevDestination !== $currentDestination) {
@@ -50,10 +54,6 @@ readonly class TripFactory
             );
 
             $prevDestination = $currentDestination;
-
-            if (($day->getPosition() + 1 < $nbDays) && isset($groupedDestinations['byEndDay'][$day->getPosition() + 1])) {
-                $currentDestination = null;
-            }
         }
 
         return new PlanningView(

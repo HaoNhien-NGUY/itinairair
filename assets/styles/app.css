@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Averia+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
 
 @import "tailwindcss";
 @import "../../node_modules/preline/variants.css";
@@ -67,7 +67,7 @@ gmp-place-autocomplete {
     --color-indigo-25: #F5F7FF;
 
     --font-sans: "Nunito Sans";
-    --font-brand: "Caveat", "serif";
+    --font-brand: "Averia Libre", "serif";
 }
 
 @layer utilities {

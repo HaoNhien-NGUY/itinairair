@@ -1,0 +1,73 @@
+<div {{ attributes.defaults({class: 'border border-gray-200 bg-white rounded-2xl py-4', id: 'idea_list'}) }}>
+    {% set statusIdea = enum('App\\Enum\\ItemStatus').IDEA.value %}
+    {% set noteEnum = enum("App\\Enum\\TravelItemType").NOTE.value %}
+
+    <div class="px-3 mb-3">
+        <h3 class="font-semibold text-gray-600">{{ 'trip.idea_box.title'|trans }}</h3>
+        <p class="text-gray-500 text-sm">{{ 'trip.idea_box.subtitle'|trans }}</p>
+    </div>
+    <div class="p-2">
+        <div
+             class="space-y-2 rounded-xl [.is-dragging_&]:outline-2 [.is-dragging_&]:outline-dashed p-2 [.is-dragging_&]:outline-indigo-100 idea-container min-h-10"
+            {{ stimulus_controller('draggable', {group: 'itinerary', allowSort: false, toIdeas: true}) }}>
+
+            <form action="{{ path('app_travelitem_item_to_idea', {trip: trip.id}) }}" class="hidden"
+                  method="POST" {{ stimulus_target('draggable', 'form') }}>
+                <input type="hidden" name="item" {{ stimulus_target('draggable', 'formInput') }}>
+                <input type="hidden" name="_token" value="{{ csrf_token('item_to_idea') }}">
+            </form>
+
+            {% for item in this.ideas %}
+                <div
+                    class="draggable btn-animate relative [.is-dragging_.day-itinerary_&]:py-3.5 [.day-itinerary_&:not(.is-dragging)]:pt-7 [.is-dragging_&]:last-of-type:!pb-0 [.is-dragging_.day-itinerary_&]:first-of-type:!pt-7 "
+                    data-item-id="{{ item.id }}">
+                        <div
+                            class="relative min-h-10 text-sm p-2 pl-5 [.day-itinerary_&]:min-h-20 outline-indigo-200 [.sortable-chosen_&]:bg-indigo-50 rounded-xl group/item {% block card_css %}outline hover:bg-gray-50{% endblock %}">
+                            <div class="">
+                                <div class="line-clamp-2 font-medium text-gray-700">{{ item.name }}</div>
+                            </div>
+
+                            {% if item.place.type|default %}
+                                <div class="flex justify-between">
+                                    <span class="px-1.5py-0.5 rounded-lg text-xs text-gray-500">
+                                        {{ item.place.type }}
+                                    </span>
+                                </div>
+                            {% endif %}
+
+                            <div
+                                class="absolute handle cursor-grabbing z-20 -ml-1 pl-1 -mr-1 pr-1 -mt-2 pt-2 -mb-3 pb-3 top-2 -start-3">
+                                <div class="bg-white rounded-md flex justify-center">
+                                    <twig:ux:icon name="ic:baseline-drag-indicator" class="size-7 mr-1 text-indigo-300/70"/>
+                                </div>
+                            </div>
+                            {% if item.notes is not empty %}
+                                <div class="mt-1 text-sm flex">
+                                    <twig:ux:icon name="wpf:note" class="size-3.5 mt-1 inline shrink-0 text-yellow-500 mr-1.5"/>
+                                    <span class="text-gray-600 line-clamp-1">
+                                        {{ item.notes }}
+                                    </span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="cursor-pointer z-10 absolute w-full h-full top-0 left-0"></a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="mt-4 px-4 flex space-x-2">
+        <a href="{{ path('app_travelitem_create', {trip: trip.id, status: statusIdea }) }}"
+           class="flex flex-2 items-center border border-slate-300/70 rounded-xl btn-animate text-slate-400 transition-colors text-sm px-4 py-2 hover:bg-slate-50"
+           data-turbo-frame="modal">
+            <twig:ux:icon name="bxs:map" class="size-4 mr-2 text-slate-400"/>
+            {{ 'trip.idea_box.add_idea'|trans }}
+        </a>
+        <a href="{{ path('app_travelitem_create', {trip: trip.id, type: noteEnum, status: statusIdea }) }}"
+           data-turbo-frame="modal"
+           class="text-slate-400 border border-slate-300/70 flex btn-animate items-center rounded-2xl px-4 py-2 hover:bg-slate-50 transition-colors"
+        >
+            <twig:ux:icon name="wpf:note" class="size-4"/>
+        </a>
+    </div>
+</div>

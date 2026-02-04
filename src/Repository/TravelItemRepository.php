@@ -6,7 +6,6 @@ use App\Entity\Day;
 use App\Entity\TravelItem;
 use App\Entity\Trip;
 use App\Enum\ItemStatus;
-use App\Enum\TravelItemType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -25,6 +24,7 @@ class TravelItemRepository extends ServiceEntityRepository
      */
     public function findItemDayPairsForTrip(Trip $trip): array
     {
+        /** @var array<int, array{itemId: int, dayId: int}> $scalarRows */
         $scalarRows = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('i.id AS itemId', 'd.id AS dayId')
@@ -47,26 +47,51 @@ class TravelItemRepository extends ServiceEntityRepository
             return [];
         }
 
-        $ids = array_values(array_unique(array_map(static fn(array $r) => (int) $r['itemId'], $scalarRows)));
+        /** @var array<int, TravelItem> $itemsById */
         $itemsById = $this->createQueryBuilder('it', 'it.id')
             ->addSelect('p')
             ->leftJoin('it.place', 'p')
             ->where('it.id IN (:ids)')
-            ->setParameter('ids', $ids)
+            ->setParameter('ids', array_unique(array_map(static fn(array $r) => (int) $r['itemId'], $scalarRows)))
             ->getQuery()
             ->getResult();
 
         $out = [];
+
         foreach ($scalarRows as $row) {
             $dayId = $row['dayId'];
-            /** @var TravelItem $item */
-            $item = $itemsById[$row['itemId']];
+            $itemId = $row['itemId'];
 
-            $itemType = $item->getItemType();
-            $out[$dayId][$itemType->isPositionable() ? 'itinerary' : $itemType->value][] = $item;
+            if (isset($itemsById[$itemId])) {
+                $out[$dayId][] = $itemsById[$itemId];
+            }
         }
 
         return $out;
+    }
+
+    /**
+     * Retourne les TravelItems pour un jour spécifique, groupés par type.
+     * Format: [ 'itinerary' => [...], 'accommodation' => [...], 'flight' => [...] ]
+     * @param ItemStatus[]|null $statuses
+     */
+    public function findItemsForDay(Day $day, ?array $statuses = null): array
+    {
+        return $this->createQueryBuilder('i')
+            ->addSelect('sd', 'ed', 'p')
+            ->join('i.startDay', 'sd')
+            ->leftJoin('i.endDay', 'ed')
+            ->leftJoin('i.place', 'p')
+            ->where(':day_date BETWEEN sd.date AND COALESCE(ed.date, sd.date)')
+            ->andWhere('sd.trip = :trip')
+            ->andWhere('i.status IN (:statuses)')
+            ->setParameter('day_date', $day->getDate())
+            ->setParameter('trip', $day->getTrip())
+            ->setParameter('statuses', $statuses ?? ItemStatus::committed())
+            ->addOrderBy('i.position', 'ASC')
+            ->addOrderBy('sd.position', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -86,44 +111,6 @@ class TravelItemRepository extends ServiceEntityRepository
             ->addOrderBy('i.position', 'ASC')
             ->getQuery()
             ->getResult();
-    }
-
-    /**
-     * Retourne les TravelItems pour un jour spécifique, groupés par type.
-     * Format: [ 'itinerary' => [...], 'accommodation' => [...], 'flight' => [...] ]
-     * @param ItemStatus[]|null $statuses
-     */
-    public function findItemsForDay(Day $day, ?array $statuses = null): array
-    {
-        // On récupère directement les entités TravelItem qui correspondent à notre critère
-        $items = $this->createQueryBuilder('i')
-            ->addSelect('sd', 'ed', 'p')
-            ->join('i.startDay', 'sd')
-            ->leftJoin('i.endDay', 'ed')
-            ->leftJoin('i.place', 'p')
-            ->where(':day_date BETWEEN sd.date AND COALESCE(ed.date, sd.date)')
-            ->andWhere('sd.trip = :trip')
-            ->andWhere('i.status IN (:statuses)')
-            ->setParameter('day_date', $day->getDate())
-            ->setParameter('trip', $day->getTrip())
-            ->setParameter('statuses', $statuses ?? ItemStatus::committed())
-            ->addOrderBy('i.position', 'ASC')
-            ->addOrderBy('sd.position', 'ASC')
-            ->getQuery()
-            ->getResult();
-
-        if (empty($items)) {
-            return [];
-        }
-
-        $groupedItems = [];
-        foreach ($items as $item) {
-            /** @var TravelItemType $itemType */
-            $itemType = $item->getItemType();
-            $groupedItems[$itemType->isPositionable() ? 'itinerary' : $itemType->value][] = $item;
-        }
-
-        return $groupedItems;
     }
 
     public function makeSpaceAtPosition(Day $day, int $position): void

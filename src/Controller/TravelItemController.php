@@ -42,7 +42,6 @@ final class TravelItemController extends AbstractController
     #[Route('/travel-item/trip/{trip}/day/{day}', name: 'app_travelitem_create_day_item', methods: ['POST', 'GET'])]
     public function createDayItem(
         Request $request,
-        TravelItemRepository $travelItemRepository,
         DestinationRepository $destinationRepository,
         ItineraryService $itineraryService,
         Trip $trip,
@@ -63,7 +62,6 @@ final class TravelItemController extends AbstractController
             $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
 
             return $this->render('trip/day/_day_update.html.twig', [
-                'items'      => $travelItemRepository->findItemsForDay($day),
                 'trip'       => $trip,
                 'day'        => $day,
                 'newItem'    => $item,
@@ -85,7 +83,6 @@ final class TravelItemController extends AbstractController
         Request $request,
         TravelItemRepository $itemRepository,
         EntityManagerInterface $entityManager,
-        ItineraryService $itineraryService,
         Trip $trip,
         Day $day,
     ): Response {
@@ -136,7 +133,7 @@ final class TravelItemController extends AbstractController
 
         return $this->render('trip/day/_batch_day_update.stream.html.twig', [
             'trip' => $trip,
-            ...$itineraryService->daysWithItems($daysToUpdate),
+            'daysToUpdate' => $daysToUpdate,
         ]);
     }
 
@@ -146,8 +143,6 @@ final class TravelItemController extends AbstractController
         Request $request,
         TravelItemRepository $itemRepository,
         EntityManagerInterface $entityManager,
-        TravelItemRepository $travelItemRepository,
-        ItineraryService $itineraryService,
         Trip $trip,
     ): Response {
         if (!$this->isCsrfTokenValid('item_to_idea', $request->request->get('_token'))) {
@@ -171,9 +166,8 @@ final class TravelItemController extends AbstractController
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
 
         return $this->render('trip/day/_item_to_idea.stream.html.twig', [
-            ...$itineraryService->daysWithItems($daysToUpdate),
+            'daysToUpdate' => $daysToUpdate,
             'trip' => $trip,
-            'ideas' => $travelItemRepository->findBy(['trip' => $trip, 'status' => ItemStatus::draft()],  ['id' => 'ASC']),
         ]);
     }
 

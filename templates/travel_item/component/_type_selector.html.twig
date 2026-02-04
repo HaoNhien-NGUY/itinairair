@@ -1,9 +1,0 @@
-<div>
-    {% for itemType in enum("App\\Enum\\TravelItemType").cases %}
-        <a href="{{ path('app_travelitem_create', { trip: trip.id, type: itemType.value, status: status.value, prevItemId, target }) }}"
-           data-turbo-frame="travel-item-form"
-           class="{{ itemType is same as(type) ? 'underline underline-offset-4' }}">
-            {{ itemType.value }}
-        </a>
-    {% endfor %}
-</div>

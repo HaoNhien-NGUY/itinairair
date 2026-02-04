@@ -32,19 +32,4 @@ class ItineraryService
             $this->entityManager->flush();
         });
     }
-
-    /**
-     * @param array<Day> $days
-     * @return array{days: array<Day>, itemsByDayId: array}
-     */
-    public function daysWithItems(array $days): array
-    {
-        $itemsByDayId = [];
-        foreach ($days as $day) $itemsByDayId[$day->getId()] = $this->travelItemRepository->findItemsForDay($day);
-
-        return [
-            'days' => $days,
-            'itemsByDayId' => $itemsByDayId,
-        ];
-    }
 }

@@ -8,33 +8,30 @@ use App\Entity\Trip;
 use App\Repository\DestinationRepository;
 use App\Repository\FlightRepository;
 
-class TripService
+readonly class TripService
 {
     public function __construct(
-        private readonly DestinationRepository $destinationRepository,
-        private readonly FlightRepository $flightRepository,
+        private DestinationRepository $destinationRepository,
+        private FlightRepository      $flightRepository,
     ) {
     }
 
     /**
      * @param Trip $trip
-     * @return array
+     * @return array{duration: int, countries: string[], cities: string[], country_count: int, city_count: int}
      */
     public function getTripStatistics(Trip $trip): array
     {
         $countries = $this->destinationRepository->findDestinationCountriesByTrip($trip);
         $cities = $this->destinationRepository->findDestinationCitiesByTrip($trip);
 
-        $stats = [
+        return [
             'duration' => $trip->getDays()->count(),
             'countries' => $countries,
             'cities' => $cities,
             'country_count' => count($countries),
             'city_count' => count($cities),
-
         ];
-
-        return $stats;
     }
 
     public function getTripItinerary(Trip $trip): array

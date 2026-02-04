@@ -72,6 +72,34 @@ class DestinationRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return array{byStartDay: Destination[], byEndDay: Destination[], all: Destination[]}
+     */
+    public function findDestinationsMappedByDayPosition(Trip $trip): array
+    {
+        $destinations = $this->findDestinationByTrip($trip);
+
+        $map = [
+            'byStartDay' => [],
+            'byEndDay'   => [],
+            'all'       => [],
+        ];
+
+        foreach ($destinations as $dest) {
+            $map['all'][] = $dest;
+
+            if ($dest->getStartDay()) {
+                $map['byStartDay'][$dest->getStartDay()->getPosition()] = $dest;
+            }
+
+            if ($dest->getEndDay()) {
+                $map['byEndDay'][$dest->getEndDay()->getPosition()] = $dest;
+            }
+        }
+
+        return $map;
+    }
+
+    /**
      * @return string[]
      */
     public function findDestinationCountriesByTrip(Trip $trip): array

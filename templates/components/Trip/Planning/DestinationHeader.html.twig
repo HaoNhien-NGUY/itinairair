@@ -1,0 +1,47 @@
+{% props  planning, isFirstSegment = false, destination = null %}
+
+<div{{ attributes }}>
+    {% set startWithTravel = planning.startWithTravel %}
+    {% set trip = planning.trip %}
+
+    {% if destination %}
+        <div class="flex justify-between bg-linear-to-r from-indigo-400 to-indigo-200 p-3 pl-5">
+            <div>
+                <div>
+                    <span class="text-white font-extrabold text-2xl">{{ destination.place.city }}</span>
+                </div>
+                <div class="mt-1.5 space-x-2 flex items-center">
+                    <a href="{{ path('app_trip_itinerary', {id: trip.id }) }}"
+                       class="bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-2 py-0.5 rounded-2xl text-sm">
+                        {{ destination.startDay.date|date_xs }}
+                        - {{ destination.endDay.date|date_xs }}
+                    </a>
+
+                    <a href="{{ path('app_trip_bookings', {'id': trip.id}) }}"
+                       class="bg-indigo-500 hover:bg-indigo-600 transition-colors text-white px-2 py-0.5 flex items-center rounded-2xl text-sm">
+                        <twig:ux:icon name="material-symbols:hotel" class="size-4 mr-1.5"/>
+                        {{ destination.accommodationCount }}
+                    </a>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+            </div>
+        </div>
+    {% elseif isFirstSegment and planning.startWithTravel  %}
+        <div class="flex justify-center items-center flex-col bg-white lg:px-10 md:px-8 px-3 py-5">
+            <h3 class="text-gray-600 font-extrabold text-2xl">{{ 'common.departure'|trans }}</h3>
+            <div>
+                <div class="text-gray-500 text-sm">{{ trip.startDate|date_short|capitalize }} {{ trip.startDate|date('Y') }}</div>
+            </div>
+        </div>
+    {% else %}
+        <div class="flex items-center {{ planning.hasDestinations|default(false) ? 'bg-gray-400' : 'bg-indigo-400' }} ">
+            <a href="{{ path('app_trip_itinerary', {'id': trip.id}) }}"
+               class="text-white p-5 group hover:underline font-medium transition-colors flex items-center">
+                {{ planning.hasDestinations|default(false) ? 'trip.add_a_step'|trans : 'trip.no_destination_yet'|trans }}
+                <twig:ux:icon name="iconoir:nav-arrow-right" class="size-5 ml-2 transition-transform group-hover:translate-x-2"/>
+            </a>
+        </div>
+    {% endif %}
+
+</div>

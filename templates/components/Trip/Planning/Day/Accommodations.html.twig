@@ -1,0 +1,48 @@
+{% props trip, dayView, items %}
+
+<div {{ attributes.defaults({class: items is empty ? 'hidden'}) }}>
+    {% set day = dayView.day %}
+
+    {% if items is not empty %}
+        <div class="space-y-2 mb-2">
+            {% for item in items %}
+                {% set isStartDay = item.startDay is same as(day) %}
+                {% set isEndDay = item.endDay is same as(day) %}
+                <div>
+                    <div class="bg-indigo-50 btn-animate rounded-xl relative py-2 px-4">
+                        <div class="flex justify-between">
+                            <div class="flex items-center text-gray-600">
+                                <twig:ux:icon name="material-symbols:hotel" class="size-5 mr-2"/>
+                                <span class="line-clamp-1 text-sm">{{ item.name }}</span>
+                                <twig:ux:icon name="bi:dash-lg" class="size-3 text-gray-400 mx-3"/>
+                                {% set totalDays = item.endDay.position - item.startDay.position + 1 %}
+                                {% set currentDay =  day.position - item.startDay.position + 1 %}
+                                <div class="text-gray-400 text-xs text-nowrap">
+                                    {{ currentDay }} / {{ totalDays }}
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                {% if day %}
+                                    {% set isStartDay = isStartDay|default(item.startDay is same as(day)) %}
+                                    {% set isEndDay = isEndDay|default(item.endDay is same as(day)) %}
+
+                                    {% if isStartDay %}
+                                        <span class="inline-flex items-center rounded-lg px-2 text-sm text-gray-600">{{ 'common.arrival'|trans }}</span>
+                                    {% elseif isEndDay %}
+                                        <span class="inline-flex items-center rounded-md px-2 text-sm text-gray-600">{{ 'common.departure'|trans }}</span>
+                                    {% endif %}
+                                {% endif %}
+                                {% if item.notes is not empty %}
+                                    <twig:ux:icon name="wpf:note" class="size-4 text-gray-400 ml-2" />
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% block details %}
+                        {% endblock %}
+                        <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}" class="cursor-pointer z-20 absolute w-full h-full top-0 left-0" data-turbo-frame="modal"></a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

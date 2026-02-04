@@ -1,0 +1,118 @@
+{% props trip, dayView, flightEndDay = null, flightStartDay = null, flightSameDay = null %}
+
+{% macro multiDayFlight(item, trip, day, start = true) %}
+    <div class="rounded-xl btn-animate text-sm overflow-hidden relative">
+        <div class="px-4 py-0.5 bg-indigo-100 flex justify-between items-center">
+            <div class="flex items-center font-semibold text-gray-600">
+                {% if start %}
+                    <twig:ux:icon name="entypo:aircraft-take-off" class="size-6 mr-3"/>
+                {% else %}
+                    <twig:ux:icon name="entypo:aircraft-landing" class="size-6 mr-3"/>
+                {% endif %}
+                {{ item.flightNumber ?? 'TBD' }}
+            </div>
+        </div>
+
+        <div class="px-4 py-3 bg-indigo-50 flex justify-between items-center text-sm">
+            <div class="flex items-center">
+                <div>
+                    <span class="font-semibold">{{ item.departureAirport.code ?? 'TBD' }}</span>
+                    <span class="pl-1">{{ item.departureAirport.terminal ?? '' }}</span>
+                </div>
+                <twig:ux:icon name="bi:arrow-right" class="size-3 mx-5"/>
+                <div>
+                    <span class="font-semibold">{{ item.arrivalAirport.code ?? 'TBD' }}</span>
+                    <span class="pl-1">{{ item.arrivalAirport.terminal ?? '' }}</span>
+                </div>
+            </div>
+            <div class="flex items-center text-gray-600">
+                {{ start ? 'common.departure'|trans : (item.endDay is not null and item.endDay is same as(day) ? 'common.arrival'|trans) }}
+                <twig:ux:icon name="bi:dash-lg" class="mx-2.5 size-4" />
+                {% if start %}
+                    <span class="font-medium text-indigo-600">{{ item.startTime ? item.startTime|date("H:i") : 'TBD' }}</span>
+                {% else %}
+                    <span class="font-medium text-indigo-600">{{ item.endTime ? item.endTime|date("H:i") : 'TBD' }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="cursor-pointer z-20 absolute w-full h-full top-0 left-0">
+        </a>
+    </div>
+{% endmacro %}
+
+<div {{ attributes.defaults({class: not flightEndDay and not flightStartDay and not flightSameDay ? 'hidden'}) }}>
+    {% if flightEndDay %}
+        <div class="space-y-4 -mt-4">
+            {% for item in flightEndDay %}
+                <div class="">
+                    <div class="flex items-center group">
+                        <div class="relative flex items-center ml-6">
+                            <div
+                                class="h-5.5 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:border-l-2 before:border-dashed before:border-indigo-200 before:-translate-x-1/2"></div>
+                            <div class="size-5"></div>
+                        </div>
+                    </div>
+                    {{ _self.multiDayFlight(item, trip, dayView.day, false) }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+    {% if flightSameDay %}
+        <div class="space-y-4">
+            {% for item in flightSameDay %}
+                <div class="rounded-2xl btn-animate text-sm overflow-hidden relative">
+                    <div class="px-4 py-0.5 bg-indigo-100 flex items-center font-bold text-gray-600">
+                        <twig:ux:icon name="entypo:aircraft-take-off" class="size-6 mr-3"/>
+                        {{ item.flightNumber ?? 'TBD' }}
+                    </div>
+
+                    <div class="px-4 py-1 bg-indigo-50">
+                        <div class="grid grid-cols-3 max-w-md">
+                            <div class="col-span-1">
+                                {{ item.startTime ? item.startTime|date("H:i") : 'TBD' }}
+                            </div>
+                            <div class="col-span-1 col-start-3">
+                                {{ item.endTime ? item.endTime|date("H:i") : 'TBD' }}
+                                {{ item.endDay is not null and item.endDay is not same as(dayView.day) ? '+1' }}
+                            </div>
+                            <div class="col-span-1 row-start-2">
+                                <span class="font-semibold">{{ item.departureAirport.code ?? 'TBD' }}</span>
+                                <span class="pl-1">{{ item.departureAirport.terminal ?? '' }}</span>
+                            </div>
+                            <div class="col-span-1 row-start-2">
+                                <twig:ux:icon name="bi:arrow-right" class="size-3 mr-5"/>
+                            </div>
+                            <div class="col-span-1 row-start-2">
+                                <span class="font-semibold">{{ item.arrivalAirport.code ?? 'TBD' }}</span>
+                                <span class="pl-1">{{ item.arrivalAirport.terminal ?? '' }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="{{ path('app_travelitem_edit', {'item': item.id, 'trip': trip.id}) }}" data-turbo-frame="modal" class="cursor-pointer z-20 absolute w-full h-full top-0 left-0">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if flightStartDay %}
+        <div class="space-y-4 -mb-4">
+            {% for item in flightStartDay %}
+                <div>
+                    {{ _self.multiDayFlight(item, trip, dayView.day) }}
+                    <div class="flex items-center group">
+                        <div class="relative flex items-center ml-6">
+                            <div
+                                class="h-5.5 before:absolute before:left-1/2 before:top-0 before:bottom-0 before:border-l-2 before:border-dashed before:border-indigo-200 before:-translate-x-1/2"></div>
+                            <div class="size-5"></div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

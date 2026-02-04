@@ -53,17 +53,16 @@ class FlightRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findFirstDayOverNightFlight(Trip $trip): ?Flight
+    public function countFirstDayOverNightFlight(Trip $trip): int
     {
         return $this->createQueryBuilder('f')
+            ->select('count(f.id)')
             ->join('f.startDay', 'sd')
             ->where('sd.trip = :trip')
             ->andWhere('f.startDay != f.endDay')
             ->andWhere('sd.position = 1')
             ->setParameter('trip', $trip)
-            ->orderBy('sd.position', 'ASC')
-            ->addOrderBy('f.startTime', 'ASC')
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getSingleScalarResult();
     }
 }

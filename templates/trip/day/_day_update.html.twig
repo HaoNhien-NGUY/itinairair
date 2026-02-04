@@ -1,4 +1,4 @@
 <twig:Modal:Close/>
 <twig:Turbo:Stream:Replace target="#day_{{ day.id }}">
-    {{ include('trip/day.html.twig') }}
+    <twig:Trip:Planning:Day :trip="trip" :day="day" :newItem="newItem" />
 </twig:Turbo:Stream:Replace>

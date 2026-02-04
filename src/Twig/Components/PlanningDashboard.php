@@ -5,7 +5,6 @@ namespace App\Twig\Components;
 use App\Entity\Day;
 use App\Entity\Trip;
 use App\Repository\DayRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]

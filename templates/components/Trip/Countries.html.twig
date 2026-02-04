@@ -1,0 +1,9 @@
+<div {{ attributes.defaults({class: 'flex flex-wrap items-center'})}}>
+    <twig:ux:icon name="bxs:map" class="size-4 text-gray-400 mr-1" />
+    {% for country in this.countries %}
+        {% if not loop.first %}<span class="inline-block mx-1 text-gray-400">•</span>{% endif %}
+        <span class="text-gray-500">{{ country }}</span>
+    {% else %}
+        <span class="text-gray-400">{{ 'trip.no_destination'|trans }}</span>
+    {% endfor %}
+</div>

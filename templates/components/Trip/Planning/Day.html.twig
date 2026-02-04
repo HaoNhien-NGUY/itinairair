@@ -1,0 +1,30 @@
+<div {{ attributes.defaults({id: 'day_' ~ dayView.day.id}) }}>
+    <div id="scrollspy-day-{{ dayView.day.id }}">
+        {% if not dayView.isTripStart %}
+            <div class="{{ dayView.isToday ? 'bg-indigo-50' : 'bg-slate-100' }} text-gray-700 px-4 py-1 flex justify-between">
+                <div class="flex items-end">
+                    <div class="{{ dayView.isToday ? 'text-indigo-500' : 'text-gray-500' }} text-sm">{{ dayView.day.date|format_datetime(pattern='EEE') }}
+                        <span class="font-bold">{{ dayView.day.date|format_datetime(pattern='d MMM') }}</span>
+                    </div>
+                </div>
+                <div class="text-sm flex items-center">
+                    <span class="text-gray-400 text-xs">{{ dayView.destinations|join(', ') }}</span>
+                </div>
+            </div>
+        {% endif %}
+
+        <div>
+            <div class="">
+                <div class="scroll-margin lg:px-10 md:px-8 px-3 pb-4 pt-4 bg-white">
+                    <div class="space-y-3">
+                        <twig:Trip:Planning:Day:Flights :trip="trip" :dayView="dayView" :flightEndDay="dayView.flightEndDay"/>
+                        <twig:Trip:Planning:Day:Flights :trip="trip" :dayView="dayView" :flightSameDay="dayView.flightSameDay"/>
+                        <twig:Trip:Planning:Day:Accommodations :trip="trip" :dayView="dayView" :items="dayView.accommodations"/>
+                        <twig:Trip:Planning:Day:Positionable :trip="trip" :dayView="dayView" :items="dayView.positionable" :newItem="newItem" />
+                        <twig:Trip:Planning:Day:Flights :trip="trip" :dayView="dayView" :flightStartDay="dayView.flightStartDay"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

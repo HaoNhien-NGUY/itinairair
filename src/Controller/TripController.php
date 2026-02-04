@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Entity\Trip;
 use App\Entity\TripMembership;
 use App\Entity\User;
-use App\Enum\ItemStatus;
 use App\Enum\TripRole;
+use App\Factory\TripFactory;
 use App\Form\TripType;
 use App\Repository\AccommodationRepository;
 use App\Repository\DestinationRepository;
@@ -93,25 +93,13 @@ final class TripController extends AbstractController
     #[isGranted('TRIP_VIEW', 'trip')]
     #[Route('/{id}', name: 'app_trip_show', methods: ['GET'])]
     public function show(
-        Trip $trip,
-        TravelItemRepository $travelItemRepository,
-        AccommodationRepository $accommodationRepository,
-        FlightRepository $flightRepository,
-        DestinationRepository $destinationRepository,
-        TripService $tripService,
+        Trip                    $trip,
+        TripFactory             $tripViewService,
     ): Response
     {
-        $ideas = $travelItemRepository->findItemsForTrip($trip, [ItemStatus::draft()]);
-
         return $this->render('trip/show.html.twig', [
             'trip'  => $trip,
-            'items' => $travelItemRepository->findItemDayPairsForTrip($trip),
-            'destinations' => $destinationRepository->findDestinationByTrip($trip),
-            'accommodationCount' => $accommodationRepository->countAccommodationsByTrip($trip),
-            'flightCount' => $flightRepository->countFlightsByTrip($trip),
-            'statistics' => $tripService->getTripStatistics($trip),
-            'ideas' => $ideas,
-            'flightTripStart' => $flightRepository->findFirstDayOverNightFlight($trip),
+            'planning' => $tripViewService->planningView($trip),
         ]);
     }
 
@@ -186,7 +174,6 @@ final class TripController extends AbstractController
     public function join(
         ?Trip $trip,
         EntityManagerInterface $entityManager,
-        TripRepository $tripRepository,
         TripMembershipRepository $tripMembershipRepository,
     ): Response {
         if (!$trip) {

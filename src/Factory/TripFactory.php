@@ -2,6 +2,7 @@
 
 namespace App\Factory;
 
+use App\Entity\Destination;
 use App\Entity\Trip;
 use App\Model\PlanningSegmentView;
 use App\Model\PlanningView;
@@ -24,34 +25,47 @@ readonly class TripFactory
         $groupedDestinations = $this->destinationRepository->findDestinationsMappedByDayPosition($trip);
         $items = $this->travelItemRepository->findItemDayPairsForTrip($trip);
         $flightTripStart = $this->flightRepository->countFirstDayOverNightFlight($trip);
-        $days = $trip->getDays();
-        $nbDays = count($days);
 
+        $days = $trip->getDays();
         $segments = [];
+
+        $prevDestinationId = 'INIT';
+        /** @var Destination|null $currentDestination */
         $currentDestination = null;
-        $prevDestination = 'INIT';
+        /** @var PlanningSegmentView|null $currentSegment */
+        $currentSegment = null;
 
         foreach ($days as $day) {
-            if (isset($groupedDestinations['byStartDay'][$day->getPosition()])) {
-                $currentDestination = $groupedDestinations['byStartDay'][$day->getPosition()];
+            $position = $day->getPosition();
+
+            if (isset($groupedDestinations['byStartDay'][$position])) {
+                $currentDestination = $groupedDestinations['byStartDay'][$position];
             }
 
-            if ($prevDestination !== $currentDestination) {
-                $segments[] = new PlanningSegmentView(
+            $currentDestId = $currentDestination?->getId();
+
+            if ($prevDestinationId !== $currentDestId) {
+                $currentSegment =  new PlanningSegmentView(
                     trip: $trip,
                     destination: $currentDestination,
                     days: [],
                 );
+
+                $segments[] = $currentSegment;
+                $prevDestinationId = $currentDestId;
             }
 
-            $segments[array_key_last($segments)]->days[] = $this->dayFactory->dayView(
-                day: $day,
-                travelItems: $items[$day->getId()] ?? [],
-            );
+            if ($currentSegment) {
+                $currentSegment->days[] = $this->dayFactory->createDayView(
+                    day: $day,
+                    travelItems: $items[$day->getId()] ?? [],
+                );
+            }
 
-            $prevDestination = $currentDestination;
-
-            if (($day->getPosition() + 1 < $nbDays) && isset($groupedDestinations['byEndDay'][$day->getPosition() + 1])) {
+            if ($currentDestId !== null
+                && isset($groupedDestinations['byEndDay'][$position])
+                && $groupedDestinations['byEndDay'][$position]->getId() === $currentDestId
+            ) {
                 $currentDestination = null;
             }
         }
@@ -59,7 +73,7 @@ readonly class TripFactory
         return new PlanningView(
             trip: $trip,
             segments: $segments,
-            hasDestinations: !empty($groupedDestinations['all']),
+            hasDestinations: !empty($groupedDestinations['byStartDay']),
             startWithTravel: $flightTripStart,
         );
     }

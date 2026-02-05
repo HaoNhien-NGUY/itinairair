@@ -20,7 +20,7 @@ class DayFactory
      * @param ?array<TravelItem> $travelItems
      * @return DayView
      */
-    public function dayView(Day $day, ?array $travelItems = null): DayView
+    public function createDayView(Day $day, ?array $travelItems = null): DayView
     {
         if (null === $travelItems) {
             $travelItems = $this->travelItemRepository->findItemsForDay($day);

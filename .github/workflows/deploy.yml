@@ -22,7 +22,6 @@ jobs:
                   coverage: none
 
             - name: Cache Composer packages
-              id: composer-cache
               uses: actions/cache@v3
               with:
                   path: vendor
@@ -39,9 +38,39 @@ jobs:
                   DATABASE_URL: "sqlite:///%kernel.project_dir%/var/test.db"
               run: composer test:ci
 
+    phpstan:
+        name: Run static code analysis
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v4
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.3'
+                    coverage: none
+
+            -   name: Cache Composer packages
+                uses: actions/cache@v3
+                with:
+                    path: vendor
+                    key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-php-
+
+            -   name: Install Dependencies
+                run: composer install -q --prefer-dist --no-progress --no-interaction --no-scripts --no-ansi
+
+            -   name: Warmup Dev Cache
+                run: php bin/console cache:warmup --env=dev
+
+            -   name: Run PHPStan
+                run: vendor/bin/phpstan analyse --no-progress
+
     deploy:
         name: Deploy
-        needs: tests
+        needs: [tests, phpstan]
         if: github.ref == 'refs/heads/master'
         concurrency: production_environment
         runs-on: ubuntu-latest

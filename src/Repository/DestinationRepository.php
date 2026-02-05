@@ -72,7 +72,7 @@ class DestinationRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array{byStartDay: Destination[], byEndDay: Destination[], all: Destination[]}
+     * @return array{byStartDay: Destination[], byEndDay: Destination[]}
      */
     public function findDestinationsMappedByDayPosition(Trip $trip): array
     {
@@ -114,15 +114,15 @@ class DestinationRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Trip[] $trips
+     * @param int[] $tripsIds
      * @return array<int, string[]>
      */
-    public function findDestinationCountriesByTrips(array $trips): array
+    public function findDestinationCountriesByTrips(array $tripsIds): array
     {
         $result = $this->createQueryBuilder('d')
             ->select('IDENTITY(d.trip) AS trip_id, p.country')
             ->where('d.trip in (:trips)')
-            ->setParameter('trips', $trips)
+            ->setParameter('trips', $tripsIds)
             ->join('d.trip', 't')
             ->leftJoin('d.place', 'p')
             ->leftJoin('d.startDay', 'sd')

@@ -74,7 +74,7 @@ readonly class TripFactory
             trip: $trip,
             segments: $segments,
             hasDestinations: !empty($groupedDestinations['byStartDay']),
-            startWithTravel: $flightTripStart,
+            startWithTravel: $flightTripStart > 0,
         );
     }
 }

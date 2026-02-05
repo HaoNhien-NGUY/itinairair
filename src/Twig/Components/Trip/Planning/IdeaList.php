@@ -19,6 +19,6 @@ final class IdeaList
 
     public function getIdeas(): array
     {
-        return $this->travelItemRepository->findItemsForTrip($this->trip, [ItemStatus::draft()]);
+        return $this->travelItemRepository->findItemsForTrip($this->trip, ItemStatus::draft());
     }
 }

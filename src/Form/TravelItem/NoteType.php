@@ -41,7 +41,7 @@ class NoteType extends AbstractType
 
             if (!$note->getName()) $note->setName('');
 
-            /** @var User $user */
+            /** @var ?User $user */
             $user = $this->security->getUser();
 
             if ($user) $note->setAuthor($user);

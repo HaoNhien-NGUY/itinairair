@@ -50,7 +50,7 @@ class AbstractTravelItemType extends AbstractType
             $form = $event->getForm();
 
             // when created
-            if ($entity && null === $entity->getId() && $entity->getStatus() === ItemStatus::IDEA) {
+            if (null === $entity->getId() && $entity->getStatus() === ItemStatus::IDEA) {
                 $form->remove('status');
             }
         });

@@ -6,7 +6,6 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,7 +49,7 @@ class DiscordAuthenticator extends OAuth2Authenticator
         $discordUser = $client->fetchUser();
 
         return new SelfValidatingPassport(
-            new UserBadge($discordUser->getEmail(), function() use ($discordUser, $client) {
+            new UserBadge($discordUser->getEmail(), function() use ($discordUser) {
                 $email = $discordUser->getEmail();
 
                 if (!$email) {

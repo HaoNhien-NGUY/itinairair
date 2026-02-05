@@ -25,7 +25,7 @@ class TripType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var Trip $trip */
+        /** @var ?Trip $trip */
         $trip = $options['data'];
         $isEdit = $trip && $trip->getId();
 
@@ -84,7 +84,7 @@ class TripType extends AbstractType
 
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
-            /** @var Trip $trip */
+            /** @var ?Trip $trip */
             $trip = $event->getData();
 
             if (!$trip) {

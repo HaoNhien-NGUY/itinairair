@@ -21,10 +21,6 @@ class AccommodationType extends AbstractType
         /** @var Trip $trip */
         $trip = $options['trip'];
 
-        /** @var Accommodation $acc */
-        $acc = $options['data'];
-        $isEdit = $acc && $acc->getId();
-
         $builder
             ->add('startDay', EntityType::class, [
                 'class' => Day::class,

@@ -22,7 +22,7 @@ class TripRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array{ongoing: Trip[], coming: Trip[], past: Trip[]}
+     * @return array{ongoing: Trip[], coming: Trip[], past: Trip[], ids: int[], count: int}
      */
     public function findByUser(UserInterface $user): array
     {
@@ -46,6 +46,7 @@ class TripRepository extends ServiceEntityRepository
 
         $now = new DateTime();
 
+        /** @var Trip $trip */
         foreach ($trips as $trip) {
             $results['ids'][] = $trip->getId();
             $results['count']++;

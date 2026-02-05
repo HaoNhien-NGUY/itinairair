@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Enum\AccommodationType;
-use App\Enum\TripRole;
 use App\Repository\AccommodationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -45,12 +44,12 @@ class Accommodation extends TravelItem
         return $this;
     }
 
-    public function getType(): TripRole
+    public function getType(): AccommodationType
     {
         return $this->type;
     }
 
-    public function setType(TripRole $type): static
+    public function setType(AccommodationType $type): static
     {
         $this->type = $type;
 

@@ -53,7 +53,6 @@ class DemoGeneratorService
 
             foreach (($itineraryData[$i]['end'] ??= []) as $travelItem) {
                 $this->entityManager->persist($travelItem);
-                $travelItem->setPosition($key);
                 $travelItem->setEndDay($day);
                 $trip->addTravelItem($travelItem);
             };

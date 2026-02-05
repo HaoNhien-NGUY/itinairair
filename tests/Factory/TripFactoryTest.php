@@ -31,7 +31,6 @@ class TripFactoryTest extends TestCase
         $this->flightRepo = $this->createMock(FlightRepository::class);
 
         $this->itemRepo->method('findItemDayPairsForTrip')->willReturn([]);
-        $this->flightRepo->method('countFirstDayOverNightFlight')->willReturn(0);
 
         $this->tripFactory = new TripFactory(
             $this->itemRepo,
@@ -49,20 +48,11 @@ class TripFactoryTest extends TestCase
     ): void {
         $trip = $this->createMock(Trip::class);
         [$days, $dayViews] = $this->createDays($nbDays);
+
         $trip->method('getDays')->willReturn($days);
-
-        $groupedDestinations = ['byStartDay' => [], 'byEndDay' => []];
-
-        foreach ($destinations as $id => $range) {
-            [$startDay, $endDay] = $range;
-
-            $dest = $this->mockDestination($id);
-            $groupedDestinations['byStartDay'][$startDay] = $dest;
-            $groupedDestinations['byEndDay'][$endDay] = $dest;
-        }
-
+        $this->flightRepo->method('countFirstDayOverNightFlight')->willReturn(1);
         $this->destinationRepo->method('findDestinationsMappedByDayPosition')
-            ->willReturn($groupedDestinations);
+            ->willReturn($this->createGroupedDestinations($destinations));
 
         $this->dayFactory->expects($this->exactly($nbDays))
             ->method('createDayView')
@@ -71,7 +61,9 @@ class TripFactoryTest extends TestCase
         $view = $this->tripFactory->planningView($trip);
         $segments = $view->segments;
 
+        $this->assertSame($trip, $view->trip);
         $this->assertCount(count($expectedSegments), $segments);
+        $this->assertTrue($view->startWithTravel);
 
         foreach ($segments as $i => $segment) {
             [$startDay, $endDay] = $expectedSegments[$i]['dayRange'];
@@ -112,6 +104,27 @@ class TripFactoryTest extends TestCase
                 ['destId' => 1, 'dayCount' => 3, 'dayRange' => [2, 4]],
             ]
         ];
+        yield 'Empty trip' => [
+            'nbDays' => 0,
+            'destinations' => [],
+            'expectedSegments' => []
+        ];
+        yield 'Days but no destinations' => [
+            'nbDays' => 3,
+            'destinations' => [],
+            'expectedSegments' => [
+                ['destId' => null, 'dayCount' => 3, 'dayRange' => [1, 3]],
+            ]
+        ];
+        yield 'Gap at the start and end' => [
+            'nbDays' => 6,
+            'destinations' => [0 => [2, 4]],
+            'expectedSegments' => [
+                ['destId' => null, 'dayCount' => 1, 'dayRange' => [1, 1]],
+                ['destId' => 0, 'dayCount' => 3, 'dayRange' => [2, 4]],
+                ['destId' => null, 'dayCount' => 2, 'dayRange' => [5, 6]],
+            ]
+        ];
     }
 
     /**
@@ -124,7 +137,7 @@ class TripFactoryTest extends TestCase
         $dayViews = [];
 
         for ($i = 1; $i <= $count; $i++) {
-            $day = $this->mockDay($i);
+            $day = $this->stubDay($i);
             $days[$i] = $day;
             $dayView = $this->createStub(DayView::class);
             $dayView->day = $day;
@@ -133,19 +146,34 @@ class TripFactoryTest extends TestCase
         return [new ArrayCollection($days), $dayViews];
     }
 
-    private function mockDay(int $position): Day
+    private function stubDay(int $position): Day
     {
-        $day = $this->createMock(Day::class);
+        $day = $this->createStub(Day::class);
         $day->method('getPosition')->willReturn($position);
         $day->method('getId')->willReturn($position);
 
         return $day;
     }
 
-    private function mockDestination(int $id): Destination
+    private function stubDestination(int $id): Destination
     {
-        $dest = $this->createMock(Destination::class);
+        $dest = $this->createStub(Destination::class);
         $dest->method('getId')->willReturn($id);
         return $dest;
+    }
+
+    private function createGroupedDestinations(array $destinations): array
+    {
+        $groupedDestinations = ['byStartDay' => [], 'byEndDay' => []];
+
+        foreach ($destinations as $id => $range) {
+            [$startDay, $endDay] = $range;
+
+            $dest = $this->stubDestination($id);
+            $groupedDestinations['byStartDay'][$startDay] = $dest;
+            $groupedDestinations['byEndDay'][$endDay] = $dest;
+        }
+
+        return $groupedDestinations;
     }
 }

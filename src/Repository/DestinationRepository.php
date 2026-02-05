@@ -81,12 +81,9 @@ class DestinationRepository extends ServiceEntityRepository
         $map = [
             'byStartDay' => [],
             'byEndDay'   => [],
-            'all'       => [],
         ];
 
         foreach ($destinations as $dest) {
-            $map['all'][] = $dest;
-
             if ($dest->getStartDay()) {
                 $map['byStartDay'][$dest->getStartDay()->getPosition()] = $dest;
             }

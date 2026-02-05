@@ -26,7 +26,7 @@ final class Day
     public function mount(\App\Entity\Day $day, ?DayView $dayView = null): void
     {
         if (!$dayView) {
-            $this->dayView = $this->dayFactory->dayView($day);
+            $this->dayView = $this->dayFactory->createDayView($day);
         }
     }
 }

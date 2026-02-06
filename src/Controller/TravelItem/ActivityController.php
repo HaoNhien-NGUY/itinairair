@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class activityController extends AbstractController
+final class ActivityController extends AbstractController
 {
     #[Route('/travel-item/trip/{trip}/activity/{item}', name: 'app_travelitem_activity_show', methods: ['GET'])]
     public function show(

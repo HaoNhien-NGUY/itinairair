@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use App\Entity\Day;
+use App\Entity\Destination;
+use App\Entity\Flight;
 use App\Entity\TravelItem;
 use App\Entity\Trip;
 use App\Repository\DestinationRepository;
@@ -34,6 +36,9 @@ readonly class TripService
         ];
     }
 
+    /**
+     * @return array<Flight|Destination>
+     */
     public function getTripItinerary(Trip $trip): array
     {
         $destinations = $this->destinationRepository->findDestinationByTrip($trip);

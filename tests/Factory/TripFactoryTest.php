@@ -5,6 +5,8 @@ namespace App\Tests\Factory;
 use App\Model\DayView;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use App\Factory\TripFactory;
 use App\Entity\Trip;
@@ -17,29 +19,35 @@ use App\Factory\DayFactory;
 
 class TripFactoryTest extends TestCase
 {
-    private $destinationRepo;
-    private $itemRepo;
-    private $flightRepo;
-    private $dayFactory;
-    private $tripFactory;
+    private DestinationRepository&MockObject $destinationRepo;
+    private FlightRepository&MockObject $flightRepo;
+    private DayFactory&MockObject $dayFactory;
+    private TripFactory $tripFactory;
 
     protected function setUp(): void
     {
-        $this->itemRepo = $this->createMock(TravelItemRepository::class);
+        $itemRepo = $this->createMock(TravelItemRepository::class);
         $this->dayFactory = $this->createMock(DayFactory::class);
         $this->destinationRepo = $this->createMock(DestinationRepository::class);
         $this->flightRepo = $this->createMock(FlightRepository::class);
 
-        $this->itemRepo->method('findItemDayPairsForTrip')->willReturn([]);
+        $itemRepo->method('findItemDayPairsForTrip')->willReturn([]);
 
         $this->tripFactory = new TripFactory(
-            $this->itemRepo,
+            $itemRepo,
             $this->dayFactory,
             $this->destinationRepo,
             $this->flightRepo,
         );
     }
 
+    /**
+     * @param int $nbDays
+     * @param array<int, array{int, int}> $destinations
+     * @param list<array{destId: int|null, dayCount: int, dayRange: array{int, int}}> $expectedSegments
+     * @return void
+     * @throws Exception
+     */
     #[DataProvider('segmentationProvider')]
     public function testSegmentation(
         int $nbDays,
@@ -72,7 +80,7 @@ class TripFactoryTest extends TestCase
             $this->assertCount($expectedSegments[$i]['dayCount'], $segment->days);
 
             foreach (range($startDay, $endDay) as $dayI => $expectedPos) {
-                $this->assertEquals($expectedPos, $segment->days[$dayI]?->day->getPosition());
+                $this->assertEquals($expectedPos, ($segment->days[$dayI] ?? null)?->day->getPosition());
             }
         }
     }
@@ -129,7 +137,7 @@ class TripFactoryTest extends TestCase
 
     /**
      * @param int $count
-     * @return array{0: ArrayCollection<int, Day>, 1: array<int, DayView>}
+     * @return array{ArrayCollection<int, Day>, array<int, DayView>}
      */
     private function createDays(int $count): array
     {
@@ -162,6 +170,10 @@ class TripFactoryTest extends TestCase
         return $dest;
     }
 
+    /**
+     * @param array<int, array{int, int}> $destinations
+     * @return array{byStartDay: array<int, Destination>, byEndDay: array<int, Destination>}
+     */
     private function createGroupedDestinations(array $destinations): array
     {
         $groupedDestinations = ['byStartDay' => [], 'byEndDay' => []];

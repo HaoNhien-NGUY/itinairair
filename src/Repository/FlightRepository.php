@@ -28,6 +28,7 @@ class FlightRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    /** @return Flight[] */
     public function findFlightsByTrip(Trip $trip): array
     {
         return $this->createQueryBuilder('f')
@@ -40,6 +41,7 @@ class FlightRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /** @return Flight[] */
     public function findOverNightFlightsByTrip(Trip $trip): array
     {
         return $this->createQueryBuilder('f')

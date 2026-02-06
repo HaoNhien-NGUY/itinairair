@@ -14,6 +14,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/**
+ * @extends AbstractType<Place>
+ */
 class PlaceType extends AbstractType
 {
     public function __construct(private readonly HttpClientInterface $httpClient)

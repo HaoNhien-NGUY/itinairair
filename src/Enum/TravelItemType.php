@@ -45,6 +45,7 @@ enum TravelItemType: string
         };
     }
 
+    /** @param array<mixed> $params */
     public function createInstance(array $params = []): TravelItem
     {
         return new ($this->getClass())(...$params);

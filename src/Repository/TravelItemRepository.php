@@ -20,7 +20,7 @@ class TravelItemRepository extends ServiceEntityRepository
     }
 
     /**
-     * Returns TravelItems grouped by day within the given trip.
+     * @return array<int, TravelItem[]>
      */
     public function findItemDayPairsForTrip(Trip $trip): array
     {
@@ -71,9 +71,8 @@ class TravelItemRepository extends ServiceEntityRepository
     }
 
     /**
-     * Retourne les TravelItems pour un jour spécifique, groupés par type.
-     * Format: [ 'itinerary' => [...], 'accommodation' => [...], 'flight' => [...] ]
      * @param ItemStatus[]|null $statuses
+     * @return TravelItem[]
      */
     public function findItemsForDay(Day $day, ?array $statuses = null): array
     {

@@ -11,6 +11,9 @@ use App\Validator\UniqueDestinationRangeValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
+/**
+ * @extends ConstraintValidatorTestCase<UniqueDestinationRangeValidator>
+ */
 class UniqueDestinationRangeValidatorTest extends ConstraintValidatorTestCase
 {
     private MockObject $repositoryMock;
@@ -31,7 +34,7 @@ class UniqueDestinationRangeValidatorTest extends ConstraintValidatorTestCase
         return $day;
     }
 
-    public function testNoOverlap()
+    public function testNoOverlap(): void
     {
         $trip = new Trip();
 
@@ -47,7 +50,7 @@ class UniqueDestinationRangeValidatorTest extends ConstraintValidatorTestCase
         $this->assertNoViolation();
     }
 
-    public function testOverlap()
+    public function testOverlap(): void
     {
         $trip = new Trip();
         $d2 = new Destination($trip);

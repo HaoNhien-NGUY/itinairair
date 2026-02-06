@@ -16,6 +16,8 @@ class AccommodationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Accommodation::class);
     }
+
+    /** @return Accommodation[] */
     public function findAccommodationsByTrip(Trip $trip): array
     {
         return $this->createQueryBuilder('a')

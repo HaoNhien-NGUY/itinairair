@@ -192,6 +192,7 @@ class Trip
         return $this;
     }
 
+    /** @return array<string, int> */
     public function getDayMapping(): array
     {
         $mapping = [];
@@ -252,13 +253,6 @@ class Trip
         }
 
         return $this;
-    }
-
-    public function getDestinations(): ?array
-    {
-        return $this->travelItems->filter(function (TravelItem $item) {
-            return $item instanceof Destination;
-        })->getValues();
     }
 
     public function isTemporary(): ?bool

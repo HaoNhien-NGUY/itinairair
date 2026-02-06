@@ -12,6 +12,7 @@ enum ItemStatus: string implements TranslatableInterface
     case BOOKING_NEEDED = 'booking_needed';
     case BOOKED = 'booked';
 
+    /** @return array<self> */
     public static function committed(): array
     {
         return [
@@ -21,6 +22,7 @@ enum ItemStatus: string implements TranslatableInterface
         ];
     }
 
+    /** @return array<self> */
     public static function draft(): array
     {
         return [self::IDEA];

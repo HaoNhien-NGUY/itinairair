@@ -228,7 +228,7 @@ abstract class TravelItem
     }
 
 
-    public function getDurationInDays($nightCount = false): int
+    public function getDurationInDays(bool $nightCount = false): int
     {
         if (!$this->startDay || !$this->endDay) {
             return 0;

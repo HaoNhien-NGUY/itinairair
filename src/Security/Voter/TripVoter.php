@@ -9,6 +9,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * @extends Voter<string, Trip|TripMembership>
+ */
 final class TripVoter extends Voter
 {
     public const EDIT = 'TRIP_EDIT';

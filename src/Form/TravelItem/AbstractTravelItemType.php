@@ -15,6 +15,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @extends AbstractType<TravelItem>
+ */
 class AbstractTravelItemType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -29,10 +32,7 @@ class AbstractTravelItemType extends AbstractType
                     'icon' => 'subway:paragraph-2',
                 ],
                 'constraints' => [
-                    new Assert\Length([
-                        'max' => 1000,
-                        'maxMessage' => 'La description ne peut pas dépasser {{ limit }} caractères'
-                    ])
+                    new Assert\Length(max: 1000, maxMessage: 'La description ne peut pas dépasser {{ limit }} caractères')
                 ]
             ])
             ->add('status', EnumType::class, [
@@ -58,8 +58,7 @@ class AbstractTravelItemType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-        ]);
+        $resolver->setDefaults([]);
         $resolver->setRequired('trip');
         $resolver->setAllowedTypes('trip', Trip::class);
 

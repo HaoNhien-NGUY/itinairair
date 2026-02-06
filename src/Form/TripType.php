@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Day;
 use App\Entity\Trip;
 use App\Service\TripService;
 use Symfony\Component\Form\AbstractType;
@@ -16,6 +15,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @extends AbstractType<Trip>
+ */
 class TripType extends AbstractType
 {
 

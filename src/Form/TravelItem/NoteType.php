@@ -13,6 +13,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @extends AbstractType<Note>
+ */
 class NoteType extends AbstractType
 {
     public function __construct(private readonly Security $security) {

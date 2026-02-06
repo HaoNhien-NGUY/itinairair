@@ -22,6 +22,7 @@ class Place
     #[ORM\Column(length: 500, nullable: true)]
     private ?string $googleMapsURI = null;
 
+    /** @var array{lat: float, lng: float}|array{} $location */
     #[ORM\Column]
     private array $location = [];
 
@@ -84,11 +85,13 @@ class Place
         return $this;
     }
 
+    /** @return array{lat: float, lng: float}|array{} */
     public function getLocation(): array
     {
         return $this->location;
     }
 
+    /** @param array{lat: float, lng: float}|array{} $location */
     public function setLocation(array $location): static
     {
         $this->location = $location;

@@ -2,10 +2,22 @@
 
 namespace App\Model;
 
+use App\Entity\Accommodation;
 use App\Entity\Day;
+use App\Entity\Destination;
+use App\Entity\Flight;
+use App\Entity\TravelItem;
 
 class DayView
 {
+    /**
+     * @param Accommodation[] $accommodations
+     * @param TravelItem[] $positionable
+     * @param Flight[] $flightStartDay
+     * @param Flight[] $flightEndDay
+     * @param Flight[] $flightSameDay
+     * @param Destination[] $destinations
+     */
     public function __construct(
         public Day $day,
         public array $accommodations,

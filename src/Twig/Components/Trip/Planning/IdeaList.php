@@ -2,6 +2,7 @@
 
 namespace App\Twig\Components\Trip\Planning;
 
+use App\Entity\TravelItem;
 use App\Entity\Trip;
 use App\Enum\ItemStatus;
 use App\Repository\TravelItemRepository;
@@ -17,6 +18,9 @@ final class IdeaList
     ) {
     }
 
+    /**
+     * @return TravelItem[]
+     */
     public function getIdeas(): array
     {
         return $this->travelItemRepository->findItemsForTrip($this->trip, ItemStatus::draft());

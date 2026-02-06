@@ -114,7 +114,7 @@ class DestinationRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int[] $tripsIds
+     * @param int[]|Trip[] $tripsIds
      *
      * @return array<int, string[]>
      */

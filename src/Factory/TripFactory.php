@@ -93,12 +93,12 @@ readonly class TripFactory
         $coming = [];
         $past = [];
         $ongoing = [];
-        $ids = [];
 
         $now = $this->clock->now()->setTime(0, 0);
+        $countriesByTrip = $this->destinationRepository->findDestinationCountriesByTrips($trips);
 
         foreach ($trips as $trip) {
-            $ids[] = $trip->getId();
+            $trip->setCountryNames($countriesByTrip[$trip->getId()] ?? []);
 
             if ($trip->getStartDate() > $now) {
                 $trip->setDaysDifferenceFromNow($trip->getStartDate()->diff($now)->days);
@@ -118,7 +118,6 @@ readonly class TripFactory
             ongoing: $ongoing,
             coming: $coming,
             past: $past,
-            countriesByTrip: $this->destinationRepository->findDestinationCountriesByTrips($ids),
         );
     }
 }

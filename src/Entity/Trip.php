@@ -63,6 +63,9 @@ class Trip
 
     private ?int $daysDifferenceFromNow = null;
 
+    /** @var string[] */
+    private array $countryNames = [];
+
     public function __construct()
     {
         $this->days = new ArrayCollection();
@@ -277,6 +280,20 @@ class Trip
     public function setDaysDifferenceFromNow(int $daysDifferenceFromNow): self
     {
         $this->daysDifferenceFromNow = $daysDifferenceFromNow;
+
+        return $this;
+    }
+
+    /** @return string[] */
+    public function getCountryNames(): array
+    {
+        return $this->countryNames;
+    }
+
+    /** @param string[] $countryNames */
+    public function setCountryNames(array $countryNames): self
+    {
+        $this->countryNames = $countryNames;
 
         return $this;
     }

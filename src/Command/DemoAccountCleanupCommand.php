@@ -45,7 +45,7 @@ class DemoAccountCleanupCommand extends Command
 
         $io->success(sprintf('%s demo trips removed.', count($expiredDemoTrips)));
 
-        /** @var User[] $usersToDelete * */
+        /** @var User[] $usersToDelete */
         $usersToDelete = $this->userRepository->createQueryBuilder('u')
             ->andWhere('u.expiresAt < :now')
             ->andWhere('u.expiresAt IS NOT NULL')

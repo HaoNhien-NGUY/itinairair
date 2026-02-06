@@ -123,6 +123,7 @@ final class TravelItemController extends AbstractController
             if (!$newItem) {
                 continue;
             }
+
             if ($dayToUpdate = $newItem->getStartDay()) {
                 $daysToUpdate[] = $dayToUpdate;
             }

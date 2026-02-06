@@ -8,10 +8,8 @@ use App\Entity\Trip;
 class PlanningSegmentView
 {
     /**
-     * @param Trip $trip
-     * @param Destination|null $destination
      * @param array<DayView> $days
-     * @param bool $isStartTravel Define if the trip starts with a multiday travel
+     * @param bool           $isStartTravel Define if the trip starts with a multiday travel
      */
     public function __construct(
         public Trip $trip,

@@ -17,11 +17,10 @@ final class AccommodationController extends AbstractController
 {
     #[Route('/travel-item/trip/{trip}/accommodation/{item}/{day}', name: 'app_travelitem_accommodation_show', methods: ['GET'])]
     public function show(
-        Trip                   $trip,
-        Accommodation          $item,
-        ?Day                   $day = null,
-    ): Response
-    {
+        Trip $trip,
+        Accommodation $item,
+        ?Day $day = null,
+    ): Response {
         return $this->render('travel_item/accommodation/_show.frame.html.twig', [
             'item' => $item,
             'day'  => $day,
@@ -31,11 +30,10 @@ final class AccommodationController extends AbstractController
 
     #[Route('/travel-item/trip/{trip}/accommodation/{item}/details/{day}', name: 'app_travelitem_accommodation_details', methods: ['GET'])]
     public function details(
-        Trip                   $trip,
-        Accommodation          $item,
-        ?Day                   $day = null,
-    ): Response
-    {
+        Trip $trip,
+        Accommodation $item,
+        ?Day $day = null,
+    ): Response {
         return $this->render('travel_item/accommodation/_details.frame.html.twig', [
             'item' => $item,
             'day'  => $day,
@@ -45,14 +43,15 @@ final class AccommodationController extends AbstractController
 
     #[Route('/travel-item/trip/{trip}/accommodation/{item}/edit/{day}', name: 'app_travelitem_accommodation_edit', methods: ['POST', 'GET'])]
     public function edit(
-        Request                $request,
+        Request $request,
         EntityManagerInterface $entityManager,
-        Trip                   $trip,
-        Accommodation          $item,
-        ?Day                   $day = null,
-    ): Response
-    {
-        if ($item->getStartDay()->getTrip() !== $trip) throw $this->createAccessDeniedException();
+        Trip $trip,
+        Accommodation $item,
+        ?Day $day = null,
+    ): Response {
+        if ($item->getStartDay()->getTrip() !== $trip) {
+            throw $this->createAccessDeniedException();
+        }
 
         $form = $this->createForm(AccommodationType::class, $item, ['action' => $request->getUri(), 'trip' => $trip]);
         $form->handleRequest($request);

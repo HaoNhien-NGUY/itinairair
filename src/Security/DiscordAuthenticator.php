@@ -26,15 +26,15 @@ class DiscordAuthenticator extends OAuth2Authenticator
     use TargetPathTrait;
 
     public function __construct(
-        private readonly ClientRegistry         $clientRegistry,
+        private readonly ClientRegistry $clientRegistry,
         private readonly EntityManagerInterface $entityManager,
-        private readonly RouterInterface        $urlGenerator,
+        private readonly RouterInterface $urlGenerator,
     ) {
     }
 
     public function supports(Request $request): ?bool
     {
-        return $request->attributes->get('_route') === 'app_connect_discord_check';
+        return 'app_connect_discord_check' === $request->attributes->get('_route');
     }
 
     public function authenticate(Request $request): Passport
@@ -49,7 +49,7 @@ class DiscordAuthenticator extends OAuth2Authenticator
         $discordUser = $client->fetchUser();
 
         return new SelfValidatingPassport(
-            new UserBadge($discordUser->getEmail(), function() use ($discordUser) {
+            new UserBadge($discordUser->getEmail(), function () use ($discordUser) {
                 $email = $discordUser->getEmail();
 
                 if (!$email) {

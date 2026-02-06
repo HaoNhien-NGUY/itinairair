@@ -24,19 +24,19 @@ final class DestinationController extends AbstractController
         TripService $tripService,
         Trip $trip,
         Destination $item,
-    ): Response
-    {
-        if ($this->isCsrfTokenValid('update' . $item->getId(), $request->request->get('_token'))) {
+    ): Response {
+        if ($this->isCsrfTokenValid('update'.$item->getId(), $request->request->get('_token'))) {
             $direction = $request->request->get('direction', 'up');
             $newPos = $item->getEndDay()->getPosition() + ('up' === $direction ? 1 : -1);
             $newDay = $dayRepository->findOneBy(['position' => $newPos, 'trip' => $trip]);
             $item->setEndDay($newDay);
             $validator->validate($item);
 
-            if (count($validator->validate($item)) === 0) {
+            if (0 === count($validator->validate($item))) {
                 $entityManager->flush();
             }
         }
+
         return $this->render('travel_item/destination/show.frame.html.twig', [
             'trip' => $trip,
             'destinations' => $tripService->getTripItinerary($trip),

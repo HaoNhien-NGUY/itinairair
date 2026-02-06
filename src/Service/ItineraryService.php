@@ -6,18 +6,17 @@ use App\Entity\Day;
 use App\Entity\TravelItem;
 use App\Repository\TravelItemRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 
 class ItineraryService
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly TravelItemRepository   $travelItemRepository,
+        private readonly TravelItemRepository $travelItemRepository,
     ) {
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function insertTravelItem(TravelItem $item, Day $day, ?int $position = null): void
     {

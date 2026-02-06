@@ -31,8 +31,7 @@ final class TripController extends AbstractController
         TripRepository $tripRepository,
         TripMembershipRepository $membershipRepository,
         DestinationRepository $destinationRepository,
-    ): Response
-    {
+    ): Response {
         $user = $this->getUser();
         $memberships = $membershipRepository->findBy(['member' => $user]);
         $trips = $tripRepository->findByUser($user);
@@ -50,14 +49,14 @@ final class TripController extends AbstractController
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
         $trip = new Trip();
-        $form = $this->createForm(TripType::class, $trip,['action' => $request->getUri()]);
+        $form = $this->createForm(TripType::class, $trip, ['action' => $request->getUri()]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var User $user */
             $user = $this->getUser();
 
-            $trip->setIsTemporary($user->isTemporary());;
+            $trip->setIsTemporary($user->isTemporary());
             $tripMembership = (new TripMembership($trip, $user, TripRole::ADMIN));
             $entityManager->persist($trip);
             $entityManager->persist($tripMembership);
@@ -75,7 +74,7 @@ final class TripController extends AbstractController
     #[Route('/edit/{trip}', name: 'app_trip_edit', methods: ['POST', 'GET'])]
     public function edit(Request $request, EntityManagerInterface $entityManager, Trip $trip): Response
     {
-        $form = $this->createForm(TripType::class, $trip,['action' => $request->getUri()]);
+        $form = $this->createForm(TripType::class, $trip, ['action' => $request->getUri()]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -90,26 +89,24 @@ final class TripController extends AbstractController
         ]);
     }
 
-    #[isGranted('TRIP_VIEW', 'trip')]
+    #[IsGranted('TRIP_VIEW', 'trip')]
     #[Route('/{id}', name: 'app_trip_show', methods: ['GET'])]
     public function show(
-        Trip                    $trip,
-        TripFactory             $tripViewService,
-    ): Response
-    {
+        Trip $trip,
+        TripFactory $tripViewService,
+    ): Response {
         return $this->render('trip/show.html.twig', [
             'trip'  => $trip,
             'planning' => $tripViewService->planningView($trip),
         ]);
     }
 
-    #[isGranted('TRIP_VIEW', 'trip')]
+    #[IsGranted('TRIP_VIEW', 'trip')]
     #[Route('/{id}/itinerary', name: 'app_trip_itinerary', methods: ['GET'])]
     public function itinerary(
         Trip $trip,
         TripService $tripService,
-    ): Response
-    {
+    ): Response {
         return $this->render('trip/itinerary.html.twig', [
             'trip'  => $trip,
             'statistics' => $tripService->getTripStatistics($trip),
@@ -117,7 +114,7 @@ final class TripController extends AbstractController
         ]);
     }
 
-    #[isGranted('TRIP_VIEW', 'trip')]
+    #[IsGranted('TRIP_VIEW', 'trip')]
     #[Route('/{id}/bookings', name: 'app_trip_bookings', methods: ['GET'])]
     public function bookings(
         Trip $trip,
@@ -125,8 +122,7 @@ final class TripController extends AbstractController
         AccommodationRepository $accommodationRepository,
         FlightRepository $flightRepository,
         TripService $tripService,
-    ): Response
-    {
+    ): Response {
         return $this->render('trip/bookings.html.twig', [
             'trip'  => $trip,
             'items' => $travelItemRepository->findItemDayPairsForTrip($trip),
@@ -136,12 +132,11 @@ final class TripController extends AbstractController
         ]);
     }
 
-    #[isGranted('TRIP_EDIT', 'trip')]
+    #[IsGranted('TRIP_EDIT', 'trip')]
     #[Route('/{trip}/share-link', name: 'app_trip_share_link', methods: ['GET'])]
     public function shareLink(
         Trip $trip,
-    ): Response
-    {
+    ): Response {
         if (!$trip->getInviteToken()) {
             return $this->redirectToRoute('app_trip_share_create_link', ['trip' => $trip->getId()]);
         }
@@ -149,14 +144,13 @@ final class TripController extends AbstractController
         return $this->render('trip/share/_share_link_modal.frame.html.twig', ['trip' => $trip]);
     }
 
-    #[isGranted('TRIP_EDIT', 'trip')]
+    #[IsGranted('TRIP_EDIT', 'trip')]
     #[Route('/{trip}/create-share-link', name: 'app_trip_share_create_link', methods: ['GET', 'POST'])]
     public function shareCreateLink(
         Trip $trip,
         Request $request,
         EntityManagerInterface $entityManager,
-    ): Response
-    {
+    ): Response {
         if ($request->isMethod('POST') && !$trip->getInviteToken() && $this->isCsrfTokenValid('toggle_share_link', $request->request->get('_token'))) {
             $trip->setInviteToken(ByteString::fromRandom(32));
             $entityManager->flush();
@@ -177,7 +171,7 @@ final class TripController extends AbstractController
         TripMembershipRepository $tripMembershipRepository,
     ): Response {
         if (!$trip) {
-            //TODO: render page to suggest inviteToken has expired
+            // TODO: render page to suggest inviteToken has expired
             throw $this->createNotFoundException('This invite link is invalid or has expired.');
         }
 
@@ -196,11 +190,11 @@ final class TripController extends AbstractController
         return $this->redirectToRoute('app_trip_show', ['id' => $trip->getId()]);
     }
 
-    #[isGranted('TRIP_MANAGE', 'trip')]
+    #[IsGranted('TRIP_MANAGE', 'trip')]
     #[Route('/{id}/delete', name: 'app_trip_delete', methods: ['POST'])]
     public function delete(Request $request, Trip $trip, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $trip->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$trip->getId(), $request->request->get('_token'))) {
             $entityManager->remove($trip);
             $entityManager->flush();
 

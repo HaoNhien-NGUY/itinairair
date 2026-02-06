@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Form\TravelItem;
 
 use App\Entity\Day;
@@ -39,7 +38,7 @@ class DestinationType extends AbstractType
                     'data-calendar-target' => 'startDaySelect',
                     'class' => 'hidden',
                 ],
-                'choice_label' => fn(Day $day) => $day->getTitle(),
+                'choice_label' => fn (Day $day) => $day->getTitle(),
             ])
             ->add('endDay', EntityType::class, [
                 'class' => Day::class,
@@ -53,7 +52,7 @@ class DestinationType extends AbstractType
                     'data-calendar-target' => 'endDaySelect',
                     'class' => 'hidden',
                 ],
-                'choice_label' => fn(Day $day) => $day->getTitle(),
+                'choice_label' => fn (Day $day) => $day->getTitle(),
                 'required' => false,
             ])
             ->add('place', PlaceType::class, [

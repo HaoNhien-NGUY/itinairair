@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Form\TravelItem;
 
 use App\Entity\TravelItem;
@@ -32,8 +31,8 @@ class AbstractTravelItemType extends AbstractType
                     'icon' => 'subway:paragraph-2',
                 ],
                 'constraints' => [
-                    new Assert\Length(max: 1000, maxMessage: 'La description ne peut pas dépasser {{ limit }} caractères')
-                ]
+                    new Assert\Length(max: 1000, maxMessage: 'La description ne peut pas dépasser {{ limit }} caractères'),
+                ],
             ])
             ->add('status', EnumType::class, [
                 'class' => ItemStatus::class,
@@ -50,7 +49,7 @@ class AbstractTravelItemType extends AbstractType
             $form = $event->getForm();
 
             // when created
-            if (null === $entity->getId() && $entity->getStatus() === ItemStatus::IDEA) {
+            if (null === $entity->getId() && ItemStatus::IDEA === $entity->getStatus()) {
                 $form->remove('status');
             }
         });

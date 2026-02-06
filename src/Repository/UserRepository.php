@@ -34,7 +34,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-     * @param string $username
      * @return array<string>
      */
     public function findDiscriminatorsByUsername(string $username): array

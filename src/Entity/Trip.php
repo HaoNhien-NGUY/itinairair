@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
+use App\Exception\InvalidTripDatesException;
 use App\Repository\TripRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
-use App\Exception\InvalidTripDatesException;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TripRepository::class)]
 class Trip
@@ -41,7 +41,7 @@ class Trip
     #[Assert\GreaterThan(propertyPath: 'startDate')]
     private ?\DateTime $endDate = null;
 
-    //TODO: assert callback, if endDate is set, check that it is after startDate, diff no more than 90 days
+    // TODO: assert callback, if endDate is set, check that it is after startDate, diff no more than 90 days
 
     /**
      * @var Collection<int, TripMembership>

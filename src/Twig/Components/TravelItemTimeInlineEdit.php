@@ -26,7 +26,9 @@ final class TravelItemTimeInlineEdit
     #[LiveProp(writable: true)]
     public ?string $endTime = null;
 
-    public function __construct(private readonly EntityManagerInterface $entityManager) {}
+    public function __construct(private readonly EntityManagerInterface $entityManager)
+    {
+    }
 
     public function mount(TravelItem $item): void
     {

@@ -20,7 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class TripType extends AbstractType
 {
-
     public function __construct(private readonly TripService $tripService)
     {
     }
@@ -41,8 +40,8 @@ class TripType extends AbstractType
                 ],
                 'constraints' => [
                     new Assert\NotBlank(message: 'Le nom du voyage est obligatoire'),
-                    new Assert\Length(min: 3, max: 100, minMessage: 'Le nom doit faire au moins {{ limit }} caractères', maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères')
-                ]
+                    new Assert\Length(min: 3, max: 100, minMessage: 'Le nom doit faire au moins {{ limit }} caractères', maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères'),
+                ],
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
@@ -53,8 +52,8 @@ class TripType extends AbstractType
                     'icon' => 'subway:paragraph-2',
                 ],
                 'constraints' => [
-                    new Assert\Length(max: 1000, maxMessage: 'La description ne peut pas dépasser {{ limit }} caractères')
-                ]
+                    new Assert\Length(max: 1000, maxMessage: 'La description ne peut pas dépasser {{ limit }} caractères'),
+                ],
             ])
             ->add('startDate', DateType::class, [
                 'label' => false,
@@ -64,7 +63,7 @@ class TripType extends AbstractType
                     'data-calendar-target' => 'startDaySelect',
                     'class' => 'hidden',
                 ],
-                'help' => 'Si vous connaissez déjà la date de début de votre voyage'
+                'help' => 'Si vous connaissez déjà la date de début de votre voyage',
             ])
             ->add('endDate', DateType::class, [
                 'label' => false,
@@ -74,13 +73,13 @@ class TripType extends AbstractType
                     'data-calendar-target' => 'endDaySelect',
                     'class' => 'hidden',
                 ],
-                'help' => 'Si vous connaissez déjà la date de début de votre voyage'
+                'help' => 'Si vous connaissez déjà la date de début de votre voyage',
             ])
             ->add('save', SubmitType::class, [
                 'label' => $isEdit ? 'Modifier mon voyage' : 'Créer mon voyage',
                 'attr' => [
-                    'class' => 'block w-full py-2'
-                ]
+                    'class' => 'block w-full py-2',
+                ],
             ]);
 
 

@@ -165,7 +165,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $data = (array) $this;
 
         if ($this->password) {
-            $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
+            $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
         }
 
         return $data;
@@ -245,7 +245,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserTag(): string
     {
-        return $this->username . '#' . $this->discriminator;
+        return $this->username.'#'.$this->discriminator;
     }
 
     public function getAvatarUrl(): ?string
@@ -322,6 +322,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isTemporary(): bool
     {
-        return $this->expiresAt !== null;
+        return null !== $this->expiresAt;
     }
 }

@@ -21,7 +21,7 @@ final class MainSchedule implements ScheduleProviderInterface
     {
         return (new Schedule())
             ->add(
-                 RecurringMessage::every('1 hour', new RunCommandMessage('app:demo:account-cleanup')),
+                RecurringMessage::every('1 hour', new RunCommandMessage('app:demo:account-cleanup')),
             )
             ->stateful($this->cache)
         ;

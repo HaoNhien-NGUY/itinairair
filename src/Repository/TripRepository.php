@@ -2,11 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\Destination;
-use App\Entity\TravelItem;
 use App\Entity\Trip;
 use App\Enum\TripRole;
-use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -44,12 +41,12 @@ class TripRepository extends ServiceEntityRepository
             'count'   => 0,
         ];
 
-        $now = new DateTime();
+        $now = new \DateTime();
 
         /** @var Trip $trip */
         foreach ($trips as $trip) {
             $results['ids'][] = $trip->getId();
-            $results['count']++;
+            ++$results['count'];
 
             if ($trip->getStartDate() > $now) {
                 $results['coming'][] = $trip;

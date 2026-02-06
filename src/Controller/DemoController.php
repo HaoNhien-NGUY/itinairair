@@ -17,14 +17,14 @@ final class DemoController extends AbstractController
 {
     #[Route('/demo/start', name: 'app_demo_start', methods: ['POST'])]
     public function start(
-        Request                $request,
+        Request $request,
         EntityManagerInterface $entityManager,
-        DemoGeneratorService   $demoGenerator,
-        Security               $security,
-        TranslatorInterface    $translator,
-        MailerService          $mailer,
+        DemoGeneratorService $demoGenerator,
+        Security $security,
+        TranslatorInterface $translator,
+        MailerService $mailer,
     ): Response {
-        if($this->getUser()) {
+        if ($this->getUser()) {
             return $this->redirectToRoute('app_trip');
         }
 
@@ -34,7 +34,7 @@ final class DemoController extends AbstractController
 
         $user = (new User())
             ->setExpiresAt(new \DateTimeImmutable('+1 hour'))
-            ->setEmail('demo_'.uniqid() . '@temp')
+            ->setEmail('demo_'.uniqid().'@temp')
             ->setUsername($translator->trans('trip.demo.username'));
         $entityManager->persist($user);
         $entityManager->flush();

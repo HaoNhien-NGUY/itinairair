@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: AccommodationRepository::class)]
 class Accommodation extends TravelItem
 {
-    //TravelItem startdatetime - enddatetime is the checkin - checkout
+    // TravelItem startdatetime - enddatetime is the checkin - checkout
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $address = null;

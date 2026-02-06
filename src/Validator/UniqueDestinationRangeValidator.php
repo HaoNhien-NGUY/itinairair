@@ -10,7 +10,9 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class UniqueDestinationRangeValidator extends ConstraintValidator
 {
-    public function __construct(private readonly DestinationRepository $destinationRepository) {}
+    public function __construct(private readonly DestinationRepository $destinationRepository)
+    {
+    }
 
     public function validate(mixed $value, Constraint $constraint): void
     {
@@ -30,7 +32,7 @@ class UniqueDestinationRangeValidator extends ConstraintValidator
         $startDay = $value->getStartDay();
         $endDay = $value->getEndDay();
 
-        if ($startDay === null || $endDay === null) {
+        if (null === $startDay || null === $endDay) {
             return;
         }
 

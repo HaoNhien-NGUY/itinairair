@@ -18,9 +18,7 @@ readonly class DayFactory
     }
 
     /**
-     * @param Day $day
      * @param ?array<TravelItem> $travelItems
-     * @return DayView
      */
     public function createDayView(Day $day, ?array $travelItems = null): DayView
     {
@@ -34,11 +32,17 @@ readonly class DayFactory
             } elseif ($item instanceof Destination) {
                 $destinations[] = $item;
             } elseif ($item instanceof Flight) {
-                if ($item->getEndDay() !== null && $day->getPosition() === 1) $isTripStart = true;
+                if (null !== $item->getEndDay() && 1 === $day->getPosition()) {
+                    $isTripStart = true;
+                }
 
-                if ($item->getEndDay() === null) $flightSameDay[] = $item;
-                else if ($item->getStartDay() === $day) $flightStartDay[] = $item;
-                else if ($item->getEndDay() === $day) $flightEndDay[] = $item;
+                if (null === $item->getEndDay()) {
+                    $flightSameDay[] = $item;
+                } elseif ($item->getStartDay() === $day) {
+                    $flightStartDay[] = $item;
+                } elseif ($item->getEndDay() === $day) {
+                    $flightEndDay[] = $item;
+                }
             } else {
                 $positionable[] = $item;
             }

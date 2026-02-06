@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Form\TravelItem;
 
 use App\Entity\Activity;

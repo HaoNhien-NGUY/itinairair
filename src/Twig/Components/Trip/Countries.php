@@ -16,6 +16,9 @@ final class Countries
     ) {
     }
 
+    /**
+     * @return string[]
+     * */
     public function getCountries(): array
     {
         return $this->destinationRepository->findDestinationCountriesByTrip($this->trip);

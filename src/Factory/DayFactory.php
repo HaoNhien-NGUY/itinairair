@@ -2,16 +2,18 @@
 
 namespace App\Factory;
 
+use App\Entity\Accommodation;
 use App\Entity\Day;
+use App\Entity\Destination;
+use App\Entity\Flight;
 use App\Entity\TravelItem;
-use App\Enum\TravelItemType;
 use App\Model\DayView;
 use App\Repository\TravelItemRepository;
 
-class DayFactory
+readonly class DayFactory
 {
     public function __construct(
-        private readonly TravelItemRepository $travelItemRepository,
+        private TravelItemRepository $travelItemRepository,
     ) {
     }
 
@@ -26,26 +28,19 @@ class DayFactory
             $travelItems = $this->travelItemRepository->findItemsForDay($day);
         }
 
-
         foreach ($travelItems as $item) {
-            switch ($item->getItemType()) {
-                case TravelItemType::ACCOMMODATION:
-                    $accommodations[] = $item;
-                    break;
-                case TravelItemType::DESTINATION:
-                    $destinations[] = $item;
-                    break;
-                case TravelItemType::FLIGHT:
-                    if ($item->getEndDay() !== null && $day->getPosition() === 1) $isTripStart = true;
+            if ($item instanceof Accommodation) {
+                $accommodations[] = $item;
+            } elseif ($item instanceof Destination) {
+                $destinations[] = $item;
+            } elseif ($item instanceof Flight) {
+                if ($item->getEndDay() !== null && $day->getPosition() === 1) $isTripStart = true;
 
-                    if ($item->getEndDay() === null) $flightSameDay[] = $item;
-                    else if ($item->getStartDay() === $day) $flightStartDay[] = $item;
-                    else if ($item->getEndDay() === $day) $flightEndDay[] = $item;
-
-                    break;
-                default:
-                    $positionable[] = $item;
-                    break;
+                if ($item->getEndDay() === null) $flightSameDay[] = $item;
+                else if ($item->getStartDay() === $day) $flightStartDay[] = $item;
+                else if ($item->getEndDay() === $day) $flightEndDay[] = $item;
+            } else {
+                $positionable[] = $item;
             }
         }
 

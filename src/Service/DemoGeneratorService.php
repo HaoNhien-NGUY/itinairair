@@ -8,24 +8,26 @@ use App\Entity\Day;
 use App\Entity\Destination;
 use App\Entity\Flight;
 use App\Entity\Note;
+use App\Entity\TravelItem;
 use App\Entity\Trip;
 use App\Entity\TripMembership;
+use App\Entity\User;
 use App\Enum\ItemStatus;
 use App\Enum\TripRole;
 use App\Repository\PlaceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class DemoGeneratorService
+readonly class DemoGeneratorService
 {
     public function __construct(
-        private readonly EntityManagerInterface $entityManager,
-        private readonly PlaceRepository        $placeRepository,
-        private readonly TranslatorInterface    $translator,
+        private EntityManagerInterface $entityManager,
+        private PlaceRepository        $placeRepository,
+        private TranslatorInterface    $translator,
     ) {
     }
 
-    public function generateDemoTrip($user): Trip
+    public function generateDemoTrip(User $user): Trip
     {
         $trip = (new Trip())
             ->setName($this->translator->trans('trip.demo.name'))
@@ -53,7 +55,6 @@ class DemoGeneratorService
 
             foreach (($itineraryData[$i]['end'] ??= []) as $travelItem) {
                 $this->entityManager->persist($travelItem);
-                $travelItem->setPosition($key);
                 $travelItem->setEndDay($day);
                 $trip->addTravelItem($travelItem);
             };
@@ -67,6 +68,9 @@ class DemoGeneratorService
         return $trip;
     }
 
+    /**
+     * @return list<array{start?: list<TravelItem>, end?: list<TravelItem>}>
+     */
     private function getItineraryData(Trip $trip): array
     {
         $places = $this->placeRepository->createQueryBuilder('p', 'p.placeId')

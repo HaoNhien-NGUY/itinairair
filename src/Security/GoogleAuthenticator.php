@@ -55,7 +55,7 @@ class GoogleAuthenticator extends AbstractAuthenticator
         $googleUser = $client->fetchUser();
 
         return new SelfValidatingPassport(
-            new UserBadge($googleUser->getEmail(), function() use ($googleUser, $client) {
+            new UserBadge($googleUser->getEmail(), function() use ($googleUser) {
                 $email = $googleUser->getEmail();
 
                 if (!$email) {

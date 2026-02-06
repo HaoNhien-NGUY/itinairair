@@ -50,7 +50,7 @@ class RegistrationController extends AbstractController
                 ->to((string) $user->getEmail())
 //                ->subject($translator->trans('registration.object', [], 'emails'))
                 ->htmlTemplate('registration/confirmation_email.html.twig');
-            $email->getHeaders()->addTextHeader('templateId', 2);
+            $email->getHeaders()->addTextHeader('templateId', "2");
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user, $email);
 
             return $security->login($user, 'form_login', 'main');

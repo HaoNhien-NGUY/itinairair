@@ -14,16 +14,15 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @extends AbstractType<Accommodation>
+ */
 class AccommodationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var Trip $trip */
         $trip = $options['trip'];
-
-        /** @var Accommodation $acc */
-        $acc = $options['data'];
-        $isEdit = $acc && $acc->getId();
 
         $builder
             ->add('startDay', EntityType::class, [

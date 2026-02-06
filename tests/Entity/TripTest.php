@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 class TripTest extends TestCase
 {
     #[DataProvider('durationInDaysData')]
-    public function testGetDurationInDays(DateTime $startDate, DateTime $endDate, int $expected)
+    public function testGetDurationInDays(DateTime $startDate, DateTime $endDate, int $expected): void
     {
         $trip = new Trip();
 
@@ -23,7 +23,7 @@ class TripTest extends TestCase
         $this->assertEquals($expected, $duration);
     }
 
-    public static function durationInDaysData(): iterable
+    public static function durationInDaysData(): \Generator
     {
         yield '5 days' => [new DateTime('2024-01-01'), new DateTime('2024-01-05'), 5];
         yield '2 days' => [new DateTime('2024-01-01'), new DateTime('2024-01-02'), 2];
@@ -31,7 +31,7 @@ class TripTest extends TestCase
     }
 
     #[DataProvider('invalidDaysData')]
-    public function testDurationThrowsException(?DateTime $startDate, ?DateTime $endDate)
+    public function testDurationThrowsException(?DateTime $startDate, ?DateTime $endDate): void
     {
         $trip = new Trip();
 
@@ -44,7 +44,7 @@ class TripTest extends TestCase
     }
 
 
-    public static function invalidDaysData(): iterable
+    public static function invalidDaysData(): \Generator
     {
         yield 'EndDate missing' => [new DateTime('2024-01-01'), null];
         yield 'StartDate missing' => [null, new DateTime('2024-01-02')];

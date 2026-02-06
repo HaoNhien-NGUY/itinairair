@@ -9,8 +9,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vich\UploaderBundle\Form\Type\VichImageType;
 
+/**
+ * @extends AbstractType<User>
+ */
 class UserAccountType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void

@@ -21,7 +21,7 @@ class MailerService
             ->from(new Address('contact@itinairair.com', 'Itinairair'))
             ->to($this->adminMail)
             ->text('');
-        $email->getHeaders()->addTextHeader('templateId', 1);
+        $email->getHeaders()->addTextHeader('templateId', "1");
 
         try {
             $this->mailer->send($email);

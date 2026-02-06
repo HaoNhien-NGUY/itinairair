@@ -1,138 +1,138 @@
 name: deploy
 
 on:
-    push:
-        branches: [ master ]
-    pull_request:
-        branches: [ master ]
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-    tests:
-        name: Run Tests
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+  tests:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: '8.3'
-                  extensions: pdo_sqlite
-                  coverage: none
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_sqlite
+          coverage: none
 
-            - name: Cache Composer packages
-              uses: actions/cache@v3
-              with:
-                  path: vendor
-                  key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-php-
+      - name: Cache Composer packages
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
 
-            - name: Install Dependencies
-              run: composer install -q --prefer-dist --no-progress --no-interaction --no-scripts --no-ansi
+      - name: Install Dependencies
+        run: composer install -q --prefer-dist --no-progress --no-interaction --no-scripts --no-ansi
 
-            - name: Run Tests
-              env:
-                  APP_ENV: test
-                  DATABASE_URL: "sqlite:///%kernel.project_dir%/var/test.db"
-              run: composer test:ci
+      - name: Run Tests
+        env:
+          APP_ENV: test
+          DATABASE_URL: "sqlite:///%kernel.project_dir%/var/test.db"
+        run: composer test:ci
 
-    phpstan:
-        name: Run static code analysis
-        runs-on: ubuntu-latest
-        steps:
-            -   name: Checkout code
-                uses: actions/checkout@v4
+  phpstan:
+    name: Run static code analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            -   name: Setup PHP
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: '8.3'
-                    coverage: none
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
 
-            -   name: Cache Composer packages
-                uses: actions/cache@v3
-                with:
-                    path: vendor
-                    key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-                    restore-keys: |
-                        ${{ runner.os }}-php-
+      - name: Cache Composer packages
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
 
-            -   name: Install Dependencies
-                run: composer install -q --prefer-dist --no-progress --no-interaction --no-scripts --no-ansi
+      - name: Install Dependencies
+        run: composer install -q --prefer-dist --no-progress --no-interaction --no-scripts --no-ansi
 
-            -   name: Warmup Dev Cache
-                run: php bin/console cache:warmup --env=dev
+      - name: Warmup Dev Cache
+        run: php bin/console cache:warmup --env=dev
 
-            -   name: Run PHPStan
-                run: vendor/bin/phpstan analyse --no-progress
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --no-progress
 
-    code-style:
-        name: Check Code Style
-        runs-on: ubuntu-latest
-        steps:
-            -   name: Checkout code
-                uses: actions/checkout@v4
+  code-style:
+    name: Check Code Style
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            -   name: Setup PHP
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: '8.3'
-                    coverage: none
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
 
-            -   name: Cache Composer packages
-                uses: actions/cache@v3
-                with:
-                    path: vendor
-                    key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-                    restore-keys: |
-                        ${{ runner.os }}-php-
+      - name: Cache Composer packages
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
 
-            -   name: Install Dependencies
-                run: composer install -q --prefer-dist --no-progress --no-interaction --no-scripts --no-ansi
+      - name: Install Dependencies
+        run: composer install -q --prefer-dist --no-progress --no-interaction --no-scripts --no-ansi
 
-            -   name: Run PHP CS Fixer
-                run: composer check-style
+      - name: Run PHP CS Fixer
+        run: composer check-style
 
-    deploy:
-        name: Deploy
-        needs: [tests, phpstan, code-style]
-        if: github.ref == 'refs/heads/master'
-        concurrency: production_environment
-        runs-on: ubuntu-latest
-        steps:
-            -   name: Checkout code
-                uses: actions/checkout@v4
+  deploy:
+    name: Deploy
+    needs: [ tests, phpstan, code-style ]
+    if: github.ref == 'refs/heads/master'
+    concurrency: production_environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            -   name: Setup PHP
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: '8.3'
-                    coverage: none
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
 
-            -   name: Install Node.js
-                uses: actions/setup-node@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
 
-            -   name: Install PHP dependencies
-                run: composer install --prefer-dist --no-progress --no-interaction --no-scripts
+      - name: Install PHP dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction --no-scripts
 
-            -   name: Install Node dependencies
-                run: npm install
+      - name: Install Node dependencies
+        run: npm install
 
-            -   name: Build Assets
-                env:
-                    APP_ENV: prod
-                run: |
-                    php bin/console importmap:install
-                    php bin/console tailwind:build --minify
-                    php bin/console asset-map:compile
+      - name: Build Assets
+        env:
+          APP_ENV: prod
+        run: |
+          php bin/console importmap:install
+          php bin/console tailwind:build --minify
+          php bin/console asset-map:compile
 
-            -   name: Deploy
-                uses: deployphp/action@v1
-                with:
-                    dep: deploy
-                    private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-                    known-hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
-                env:
-                    SSH_PORT: ${{ secrets.SSH_PORT }}
+      - name: Deploy
+        uses: deployphp/action@v1
+        with:
+          dep: deploy
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known-hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+        env:
+          SSH_PORT: ${{ secrets.SSH_PORT }}

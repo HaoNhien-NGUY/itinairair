@@ -5,7 +5,7 @@ namespace App\Twig\Components\Trip\Planning;
 use App\Entity\TravelItem;
 use App\Entity\Trip;
 use App\Factory\DayFactory;
-use App\Model\DayView;
+use App\Model\Trip\DayView;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]

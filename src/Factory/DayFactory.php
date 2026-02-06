@@ -7,7 +7,7 @@ use App\Entity\Day;
 use App\Entity\Destination;
 use App\Entity\Flight;
 use App\Entity\TravelItem;
-use App\Model\DayView;
+use App\Model\Trip\DayView;
 use App\Repository\TravelItemRepository;
 
 readonly class DayFactory

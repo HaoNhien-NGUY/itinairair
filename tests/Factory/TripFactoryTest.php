@@ -7,7 +7,7 @@ use App\Entity\Destination;
 use App\Entity\Trip;
 use App\Factory\DayFactory;
 use App\Factory\TripFactory;
-use App\Model\DayView;
+use App\Model\Trip\DayView;
 use App\Repository\DestinationRepository;
 use App\Repository\FlightRepository;
 use App\Repository\TravelItemRepository;
@@ -16,6 +16,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\MockClock;
 
 class TripFactoryTest extends TestCase
 {
@@ -24,12 +25,15 @@ class TripFactoryTest extends TestCase
     private DayFactory&MockObject $dayFactory;
     private TripFactory $tripFactory;
 
+    private MockClock $clock;
+
     protected function setUp(): void
     {
         $itemRepo = $this->createMock(TravelItemRepository::class);
         $this->dayFactory = $this->createMock(DayFactory::class);
         $this->destinationRepo = $this->createMock(DestinationRepository::class);
         $this->flightRepo = $this->createMock(FlightRepository::class);
+        $this->clock = new MockClock();
 
         $itemRepo->method('findItemDayPairsForTrip')->willReturn([]);
 
@@ -38,6 +42,7 @@ class TripFactoryTest extends TestCase
             $this->dayFactory,
             $this->destinationRepo,
             $this->flightRepo,
+            $this->clock,
         );
     }
 
@@ -65,7 +70,7 @@ class TripFactoryTest extends TestCase
             ->method('createDayView')
             ->willReturnOnConsecutiveCalls(...$dayViews);
 
-        $view = $this->tripFactory->planningView($trip);
+        $view = $this->tripFactory->createPlanningView($trip);
         $segments = $view->segments;
 
         $this->assertSame($trip, $view->trip);

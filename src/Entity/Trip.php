@@ -61,6 +61,8 @@ class Trip
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isTemporary = false;
 
+    private ?int $daysDifferenceFromNow = null;
+
     public function __construct()
     {
         $this->days = new ArrayCollection();
@@ -263,6 +265,18 @@ class Trip
     public function setIsTemporary(bool $isTemporary): static
     {
         $this->isTemporary = $isTemporary;
+
+        return $this;
+    }
+
+    public function getDaysDifferenceFromNow(): ?int
+    {
+        return $this->daysDifferenceFromNow;
+    }
+
+    public function setDaysDifferenceFromNow(int $daysDifferenceFromNow): self
+    {
+        $this->daysDifferenceFromNow = $daysDifferenceFromNow;
 
         return $this;
     }

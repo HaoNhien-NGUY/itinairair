@@ -4,11 +4,13 @@ namespace App\Factory;
 
 use App\Entity\Destination;
 use App\Entity\Trip;
-use App\Model\PlanningSegmentView;
-use App\Model\PlanningView;
+use App\Model\Trip\PlanningSegmentView;
+use App\Model\Trip\PlanningView;
+use App\Model\Trip\UserTripCollection;
 use App\Repository\DestinationRepository;
 use App\Repository\FlightRepository;
 use App\Repository\TravelItemRepository;
+use Symfony\Component\Clock\ClockInterface;
 
 readonly class TripFactory
 {
@@ -17,10 +19,11 @@ readonly class TripFactory
         private DayFactory $dayFactory,
         private DestinationRepository $destinationRepository,
         private FlightRepository $flightRepository,
+        private ClockInterface $clock,
     ) {
     }
 
-    public function planningView(Trip $trip): PlanningView
+    public function createPlanningView(Trip $trip): PlanningView
     {
         $groupedDestinations = $this->destinationRepository->findDestinationsMappedByDayPosition($trip);
         $items = $this->travelItemRepository->findItemDayPairsForTrip($trip);
@@ -75,6 +78,47 @@ readonly class TripFactory
             segments: $segments,
             hasDestinations: !empty($groupedDestinations['byStartDay']),
             startWithTravel: $flightTripStart > 0,
+        );
+    }
+
+    /**
+     * @param Trip[] $trips
+     */
+    public function createUserTripCollection(array $trips): UserTripCollection
+    {
+        if (empty($trips)) {
+            return new UserTripCollection();
+        }
+
+        $coming = [];
+        $past = [];
+        $ongoing = [];
+        $ids = [];
+
+        $now = $this->clock->now()->setTime(0, 0);
+
+        foreach ($trips as $trip) {
+            $ids[] = $trip->getId();
+
+            if ($trip->getStartDate() > $now) {
+                $trip->setDaysDifferenceFromNow($trip->getStartDate()->diff($now)->days);
+                $coming[] = $trip;
+            } elseif ($trip->getEndDate() < $now) {
+                $trip->setDaysDifferenceFromNow($now->diff($trip->getEndDate())->days);
+                $past[] = $trip;
+            } else {
+                $trip->setDaysDifferenceFromNow($trip->getEndDate()->diff($now)->days);
+                $ongoing[] = $trip;
+            }
+        }
+
+        usort($past, fn ($a, $b) => $b->getEndDate() <=> $a->getEndDate());
+
+        return new UserTripCollection(
+            ongoing: $ongoing,
+            coming: $coming,
+            past: $past,
+            countriesByTrip: $this->destinationRepository->findDestinationCountriesByTrips($ids),
         );
     }
 }

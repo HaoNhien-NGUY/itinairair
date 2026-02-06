@@ -9,11 +9,9 @@ use App\Enum\TripRole;
 use App\Factory\TripFactory;
 use App\Form\TripType;
 use App\Repository\AccommodationRepository;
-use App\Repository\DestinationRepository;
 use App\Repository\FlightRepository;
 use App\Repository\TravelItemRepository;
 use App\Repository\TripMembershipRepository;
-use App\Repository\TripRepository;
 use App\Service\TripService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,22 +25,9 @@ use Symfony\Component\String\ByteString;
 final class TripController extends AbstractController
 {
     #[Route('/', name: 'app_trip')]
-    public function index(
-        TripRepository $tripRepository,
-        TripMembershipRepository $membershipRepository,
-        DestinationRepository $destinationRepository,
-    ): Response {
-        $user = $this->getUser();
-        $memberships = $membershipRepository->findBy(['member' => $user]);
-        $trips = $tripRepository->findByUser($user);
-        $countriesByTrip = $destinationRepository->findDestinationCountriesByTrips($trips['ids']);
-
-        return $this->render('trip/index.html.twig', [
-            'memberships' => $memberships,
-            'statistics'  => $destinationRepository->findDestinationByUser($user),
-            'trips'       => $trips,
-            'countriesByTrip' => $countriesByTrip,
-        ]);
+    public function index(): Response
+    {
+        return $this->render('trip/index.html.twig');
     }
 
     #[Route('/create', name: 'app_trip_create', methods: ['POST', 'GET'])]
@@ -97,7 +82,7 @@ final class TripController extends AbstractController
     ): Response {
         return $this->render('trip/show.html.twig', [
             'trip'  => $trip,
-            'planning' => $tripViewService->planningView($trip),
+            'planning' => $tripViewService->createPlanningView($trip),
         ]);
     }
 

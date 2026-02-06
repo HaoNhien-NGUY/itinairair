@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\DayRepository;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DayRepository::class)]
@@ -47,7 +46,7 @@ class Day
     public function getTitle(): ?string
     {
         // TODO: use translation
-        return $this->title ?: "Jour " . $this->getPosition();
+        return $this->title ?: 'Jour '.$this->getPosition();
     }
 
     public function setTitle(string $title): static
@@ -74,6 +73,7 @@ class Day
         if (!$this->trip?->getStartDate()) {
             return null;
         }
+
         return (clone $this->trip->getStartDate())->modify(sprintf('+%d days', $this->position - 1));
     }
 

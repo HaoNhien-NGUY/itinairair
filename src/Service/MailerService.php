@@ -11,7 +11,7 @@ class MailerService
 {
     public function __construct(
         #[Autowire(env: 'APP_ADMIN_EMAIL')] private readonly string $adminMail,
-        private readonly MailerInterface                            $mailer,
+        private readonly MailerInterface $mailer,
     ) {
     }
 
@@ -21,11 +21,11 @@ class MailerService
             ->from(new Address('contact@itinairair.com', 'Itinairair'))
             ->to($this->adminMail)
             ->text('');
-        $email->getHeaders()->addTextHeader('templateId', "1");
+        $email->getHeaders()->addTextHeader('templateId', '1');
 
         try {
             $this->mailer->send($email);
-        } catch( \Exception) {
+        } catch (\Exception) {
         }
     }
 }

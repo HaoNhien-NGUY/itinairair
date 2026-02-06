@@ -1,21 +1,13 @@
 <?php
 
-
 namespace App\Form\TravelItem;
 
-use App\Entity\Accommodation;
-use App\Entity\Activity;
 use App\Entity\Day;
 use App\Entity\Flight;
 use App\Entity\Trip;
-use App\Enum\ItemStatus;
 use App\Repository\DayRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\EnumType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -53,9 +45,9 @@ class FlightType extends AbstractType
                 },
                 'attr' => [
                     'data-calendar-target' => 'startDaySelect',
-                    'class' => 'hidden'
+                    'class' => 'hidden',
                 ],
-                'choice_label' => fn(Day $day) => $day->getPosition(),
+                'choice_label' => fn (Day $day) => $day->getPosition(),
             ])
             ->add('endDay', EntityType::class, [
                 'class' => Day::class,
@@ -69,9 +61,9 @@ class FlightType extends AbstractType
                 },
                 'attr' => [
                     'data-calendar-target' => 'startDaySelect',
-                    'class' => 'hidden'
+                    'class' => 'hidden',
                 ],
-                'choice_label' => fn(Day $day) => $day->getPosition(),
+                'choice_label' => fn (Day $day) => $day->getPosition(),
             ])
             ->add('departureAirportCode', TextType::class, [
                 'attr' => ['placeholder' => 'common.airport', 'maxLength' => 4],

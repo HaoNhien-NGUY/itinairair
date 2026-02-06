@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Form\TravelItem;
 
 use App\Entity\Place;
@@ -65,7 +64,7 @@ class PlaceType extends AbstractType
                 }
             } catch (TransformationFailedException $e) {
                 return;
-            };
+            }
         });
 
         $builder->get('location')

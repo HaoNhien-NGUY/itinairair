@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\GoogleUser;
 use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +21,6 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
-use Wohali\OAuth2\Client\Provider\DiscordResourceOwner;
 
 /**
  * @see https://symfony.com/doc/current/security/custom_authenticator.html
@@ -32,15 +30,15 @@ class GoogleAuthenticator extends AbstractAuthenticator
     use TargetPathTrait;
 
     public function __construct(
-        private readonly ClientRegistry         $clientRegistry,
+        private readonly ClientRegistry $clientRegistry,
         private readonly EntityManagerInterface $entityManager,
-        private readonly RouterInterface        $urlGenerator,
+        private readonly RouterInterface $urlGenerator,
     ) {
     }
 
     public function supports(Request $request): ?bool
     {
-        return $request->attributes->get('_route') === 'app_connect_google_check';
+        return 'app_connect_google_check' === $request->attributes->get('_route');
     }
 
     public function authenticate(Request $request): Passport
@@ -55,7 +53,7 @@ class GoogleAuthenticator extends AbstractAuthenticator
         $googleUser = $client->fetchUser();
 
         return new SelfValidatingPassport(
-            new UserBadge($googleUser->getEmail(), function() use ($googleUser) {
+            new UserBadge($googleUser->getEmail(), function () use ($googleUser) {
                 $email = $googleUser->getEmail();
 
                 if (!$email) {

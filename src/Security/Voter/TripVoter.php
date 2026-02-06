@@ -57,17 +57,17 @@ final class TripVoter extends Voter
     private function canView(TripMembership $membership): bool
     {
         return $this->canEdit($membership)
-            || $membership->getRole() == TripRole::VIEWER;
+            || TripRole::VIEWER == $membership->getRole();
     }
 
     private function canEdit(TripMembership $membership): bool
     {
         return $this->canManage($membership)
-            || $membership->getRole() == TripRole::EDITOR;
+            || TripRole::EDITOR == $membership->getRole();
     }
 
     private function canManage(TripMembership $membership): bool
     {
-        return $membership->getRole() == TripRole::ADMIN;
+        return TripRole::ADMIN == $membership->getRole();
     }
 }

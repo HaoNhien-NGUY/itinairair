@@ -25,7 +25,7 @@ class TripMembership
     #[ORM\Column(length: 255, enumType: TripRole::class)]
     private TripRole $role;
 
-    //TODO: if read only mode, default to VIEWER role
+    // TODO: if read only mode, default to VIEWER role
     public function __construct(Trip $trip, User $member, TripRole $role = TripRole::EDITOR)
     {
         $this->trip = $trip;

@@ -18,7 +18,7 @@ enum ItemStatus: string implements TranslatableInterface
         return [
             self::PLANNED,
             self::BOOKING_NEEDED,
-            self::BOOKED
+            self::BOOKED,
         ];
     }
 
@@ -30,7 +30,7 @@ enum ItemStatus: string implements TranslatableInterface
 
     public function trans(TranslatorInterface $translator, ?string $locale = null): string
     {
-        return $translator->trans('travel_items.status.' . $this->value, locale: $locale);
+        return $translator->trans('travel_items.status.'.$this->value, locale: $locale);
 
     }
 }

@@ -22,8 +22,8 @@ readonly class DemoGeneratorService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private PlaceRepository        $placeRepository,
-        private TranslatorInterface    $translator,
+        private PlaceRepository $placeRepository,
+        private TranslatorInterface $translator,
     ) {
     }
 
@@ -42,7 +42,7 @@ readonly class DemoGeneratorService
         $requiredDays = $trip->getStartDate()->diff($trip->getEndDate())->days + 1;
         $itineraryData = $this->getItineraryData($trip);
 
-        for ($i = 0; $i < $requiredDays; $i++) {
+        for ($i = 0; $i < $requiredDays; ++$i) {
             $day = (new Day())->setPosition($i + 1);
             $trip->addDay($day);
 
@@ -57,7 +57,7 @@ readonly class DemoGeneratorService
                 $this->entityManager->persist($travelItem);
                 $travelItem->setEndDay($day);
                 $trip->addTravelItem($travelItem);
-            };
+            }
         }
 
 
@@ -75,19 +75,21 @@ readonly class DemoGeneratorService
     {
         $places = $this->placeRepository->createQueryBuilder('p', 'p.placeId')
             ->where('p.placeId IN (:ids)')
-            ->setParameter('ids', [
-                'ChIJS-MV5W_zGGARBMfDgNcz-u4',
-                'ChIJRY9wBDmPGGARQRD-fJ5Vnkc',
-                'ChIJXSModoWLGGARILWiCfeu2M0',
-                'ChIJ8cM8zdaoAWARPR27azYdlsA',
-                'ChIJP9eKBdeMGGAR0zzBXJNVj5A',
-                'ChIJPd37MMGOGGARvJ2hfxoiNVE',
-                'ChIJnctryNSMGGARLv4MknPFseU',
-                'ChIJjzOyEQCLGGAR8BA5HSSfpMo',
-                'ChIJSeco5wiJGGARItbTS8lQ5G0',
-                'ChIJw2qQRZuOGGARWmROEiM2y7E',
-                'ChIJd9pWqK8IAWAR1L-X_-4WKew',
-                'ChIJIW0uPRUPAWAR6eI6dRzKGns',
+            ->setParameter(
+                'ids',
+                [
+                    'ChIJS-MV5W_zGGARBMfDgNcz-u4',
+                    'ChIJRY9wBDmPGGARQRD-fJ5Vnkc',
+                    'ChIJXSModoWLGGARILWiCfeu2M0',
+                    'ChIJ8cM8zdaoAWARPR27azYdlsA',
+                    'ChIJP9eKBdeMGGAR0zzBXJNVj5A',
+                    'ChIJPd37MMGOGGARvJ2hfxoiNVE',
+                    'ChIJnctryNSMGGARLv4MknPFseU',
+                    'ChIJjzOyEQCLGGAR8BA5HSSfpMo',
+                    'ChIJSeco5wiJGGARItbTS8lQ5G0',
+                    'ChIJw2qQRZuOGGARWmROEiM2y7E',
+                    'ChIJd9pWqK8IAWAR1L-X_-4WKew',
+                    'ChIJIW0uPRUPAWAR6eI6dRzKGns',
                 ],
             )
             ->getQuery()
@@ -124,7 +126,7 @@ readonly class DemoGeneratorService
                 ],
                 'end' => [
                     $departureFlight,
-                ]
+                ],
             ],
             [
                 'start' => [
@@ -143,7 +145,7 @@ readonly class DemoGeneratorService
                 ],
                 'end' => [
                     $acc1,
-                ]
+                ],
             ],
             [
                 'start' => [
@@ -165,16 +167,16 @@ readonly class DemoGeneratorService
                 ],
                 'end' => [
                     $acc2,
-                    $dest1
-                ]
+                    $dest1,
+                ],
             ],
             [],
             [],
             [
                 'end' => [
                     $dest2,
-                ]
-            ]
+                ],
+            ],
         ];
 
     }

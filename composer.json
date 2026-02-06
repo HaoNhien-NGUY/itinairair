@@ -114,6 +114,15 @@
             "@test:prepare:asset",
             "@php bin/phpunit"
         ],
+        "fix": [
+            "php-cs-fixer fix"
+        ],
+        "check-style": [
+            "php-cs-fixer fix --dry-run --diff"
+        ],
+        "stan": [
+            "phpstan analyse"
+        ],
         "post-install-cmd": [
             "@auto-scripts"
         ],
@@ -133,7 +142,7 @@
     "require-dev": {
         "deployer/deployer": "^7.5",
         "doctrine/doctrine-fixtures-bundle": "^4.3",
-        "friendsofphp/php-cs-fixer": "*",
+        "friendsofphp/php-cs-fixer": "^3.93",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-doctrine": "^2.0",

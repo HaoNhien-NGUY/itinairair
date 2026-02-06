@@ -56,7 +56,6 @@ class ApplicationAvailabilityFunctionalTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
-
     public static function loggedInUrlProvider(): \Generator
     {
         yield ['/trip', null];

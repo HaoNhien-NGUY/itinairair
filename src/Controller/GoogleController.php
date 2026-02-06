@@ -15,14 +15,14 @@ final class GoogleController extends AbstractController
     {
         $options = [];
 
-//        if ($lastEmail = $request->cookies->get('last_google_login_email')) {
-//            $options['login_hint'] = $lastEmail;
-//        }
+        //        if ($lastEmail = $request->cookies->get('last_google_login_email')) {
+        //            $options['login_hint'] = $lastEmail;
+        //        }
 
         return $clientRegistry
             ->getClient('google')
             ->redirect([
-                'profile', 'email'
+                'profile', 'email',
             ], $options);
     }
 

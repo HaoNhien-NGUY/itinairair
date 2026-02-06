@@ -21,11 +21,11 @@ use Symfony\UX\Turbo\TurboBundle;
 
 final class TravelItemController extends AbstractController
 {
-    #[isGranted('TRIP_EDIT', 'trip')]
+    #[IsGranted('TRIP_EDIT', 'trip')]
     #[Route('/travel-item/trip/{trip}/delete', name: 'app_travelitem_delete', methods: ['POST'])]
     public function delete(Request $request, Trip $trip, TravelItemRepository $itemRepository, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete-item' . $trip->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete-item'.$trip->getId(), $request->request->get('_token'))) {
             $itemId = $request->request->get('item');
             $item = $itemRepository->findOneBy(['id' => $itemId]);
 
@@ -38,7 +38,7 @@ final class TravelItemController extends AbstractController
         return $this->redirect($request->headers->get('referer'));
     }
 
-    #[isGranted('TRIP_EDIT', 'trip')]
+    #[IsGranted('TRIP_EDIT', 'trip')]
     #[Route('/travel-item/trip/{trip}/day/{day}', name: 'app_travelitem_create_day_item', methods: ['POST', 'GET'])]
     public function createDayItem(
         Request $request,
@@ -50,10 +50,12 @@ final class TravelItemController extends AbstractController
         #[MapQueryParameter] ItemStatus $status = ItemStatus::PLANNED,
         #[MapQueryParameter] ?int $position = 0,
     ): Response {
-        if ($day->getTrip() !== $trip) throw $this->createAccessDeniedException();
+        if ($day->getTrip() !== $trip) {
+            throw $this->createAccessDeniedException();
+        }
 
         $item = $type->createInstance([$trip, $day, $status]);
-        $form = $this->createForm($type->getFormType(), $item, ['action' => $request->getUri(), 'trip' => $trip]);;
+        $form = $this->createForm($type->getFormType(), $item, ['action' => $request->getUri(), 'trip' => $trip]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -77,7 +79,7 @@ final class TravelItemController extends AbstractController
         ]);
     }
 
-    #[isGranted('TRIP_EDIT', 'trip')]
+    #[IsGranted('TRIP_EDIT', 'trip')]
     #[Route('/travel-item/trip/{trip}/day/{day}/reorder', name: 'app_travelitem_reorder_day_item', methods: ['POST'])]
     public function reorderDayItem(
         Request $request,
@@ -101,11 +103,13 @@ final class TravelItemController extends AbstractController
             [
                 'id' => $orderedItems,
                 'startDay' => $day,
-                'status' => ItemStatus::committed()
+                'status' => ItemStatus::committed(),
             ],
         );
         $itemsById = [];
-        foreach ($items as $item) $itemsById[$item->getId()] = $item;
+        foreach ($items as $item) {
+            $itemsById[$item->getId()] = $item;
+        }
 
         foreach ($orderedItems as $position => $id) {
             if (isset($itemsById[$id])) {
@@ -116,8 +120,13 @@ final class TravelItemController extends AbstractController
 
             $newItem = $itemRepository->findOneBy(['id' => $id, 'trip' => $trip]);
 
-            if (!$newItem) continue;
-            if ($dayToUpdate = $newItem->getStartDay()) $daysToUpdate[] = $dayToUpdate;
+            if (!$newItem) {
+                continue;
+            }
+
+            if ($dayToUpdate = $newItem->getStartDay()) {
+                $daysToUpdate[] = $dayToUpdate;
+            }
 
             $newItem->setPosition($position)
                 ->setStartDay($day);
@@ -137,7 +146,7 @@ final class TravelItemController extends AbstractController
         ]);
     }
 
-    #[isGranted('TRIP_EDIT', 'trip')]
+    #[IsGranted('TRIP_EDIT', 'trip')]
     #[Route('/travel-item/trip/{trip}/to-idea', name: 'app_travelitem_item_to_idea', methods: ['POST'])]
     public function itemToIdea(
         Request $request,
@@ -171,7 +180,7 @@ final class TravelItemController extends AbstractController
         ]);
     }
 
-    #[isGranted('TRIP_EDIT', 'trip')]
+    #[IsGranted('TRIP_EDIT', 'trip')]
     #[Route('_frame/travel-item/trip/{trip}/create/{type}/{day}', name: 'app_travelitem_create', methods: ['POST', 'GET'])]
     public function create(
         Request $request,
@@ -183,7 +192,9 @@ final class TravelItemController extends AbstractController
         #[MapQueryParameter] ItemStatus $status = ItemStatus::PLANNED,
         #[MapQueryParameter] bool $overnight = false,
     ): Response {
-        if ($day && $day->getTrip() !== $trip) throw $this->createAccessDeniedException();
+        if ($day && $day->getTrip() !== $trip) {
+            throw $this->createAccessDeniedException();
+        }
 
         $item = $type->createInstance([$trip, $day, $status]);
         $form = $this->createForm($type->getFormType(), $item, ['action' => $request->getUri(), 'trip' => $trip]);
@@ -194,6 +205,7 @@ final class TravelItemController extends AbstractController
             $entityManager->flush();
 
             $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+
             return $this->render('stream/refresh.stream.html.twig');
         }
 
@@ -211,7 +223,7 @@ final class TravelItemController extends AbstractController
         ]);
     }
 
-    #[isGranted('TRIP_EDIT', 'trip')]
+    #[IsGranted('TRIP_EDIT', 'trip')]
     #[Route('_frame/travel-item/trip/{trip}/{item}/edit', name: 'app_travelitem_edit', methods: ['POST', 'GET'])]
     public function edit(
         Request $request,
@@ -219,18 +231,21 @@ final class TravelItemController extends AbstractController
         Trip $trip,
         TravelItem $item,
     ): Response {
-        if ($item->getTrip() !== $trip) throw $this->createAccessDeniedException();
+        if ($item->getTrip() !== $trip) {
+            throw $this->createAccessDeniedException();
+        }
 
         $type = $item->getItemType();
         $form = $this->createForm($type->getFormType(), $item, [
             'action' => $request->getUri(),
-            'trip' => $trip
+            'trip' => $trip,
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
             $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+
             return $this->render('stream/refresh.stream.html.twig');
         }
 

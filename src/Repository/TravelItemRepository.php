@@ -52,7 +52,7 @@ class TravelItemRepository extends ServiceEntityRepository
             ->addSelect('p')
             ->leftJoin('it.place', 'p')
             ->where('it.id IN (:ids)')
-            ->setParameter('ids', array_unique(array_map(static fn(array $r) => (int) $r['itemId'], $scalarRows)))
+            ->setParameter('ids', array_unique(array_map(static fn (array $r) => (int) $r['itemId'], $scalarRows)))
             ->getQuery()
             ->getResult();
 
@@ -72,6 +72,7 @@ class TravelItemRepository extends ServiceEntityRepository
 
     /**
      * @param ItemStatus[]|null $statuses
+     *
      * @return TravelItem[]
      */
     public function findItemsForDay(Day $day, ?array $statuses = null): array
@@ -94,8 +95,8 @@ class TravelItemRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Trip $trip
      * @param ItemStatus[]|null $statuses
+     *
      * @return TravelItem[]
      */
     public function findItemsForTrip(Trip $trip, ?array $statuses = null): array

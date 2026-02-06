@@ -23,7 +23,9 @@ class TravelItemNoteInlineEdit
     #[LiveProp]
     public TravelItem $item;
 
-    public function __construct(private EntityManagerInterface $entityManager) {}
+    public function __construct(private EntityManagerInterface $entityManager)
+    {
+    }
 
     public function mount(TravelItem $item): void
     {

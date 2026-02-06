@@ -2,9 +2,7 @@
 
 namespace App\Twig\Extension;
 
-use App\Twig\Runtime\EnvExtensionRuntime;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class EnvExtension extends AbstractExtension

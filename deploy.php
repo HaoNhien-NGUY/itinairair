@@ -1,4 +1,5 @@
 <?php
+
 namespace Deployer;
 
 require 'recipe/symfony.php';
@@ -13,7 +14,7 @@ add('shared_dirs', [
     'var/log',
     'var/sessions',
     'public/media',
-    ]);
+]);
 add('writable_dirs', [
     'var',
     'public/uploads',

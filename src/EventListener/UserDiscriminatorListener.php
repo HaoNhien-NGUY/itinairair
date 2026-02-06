@@ -11,8 +11,9 @@ use Doctrine\ORM\Events;
 readonly class UserDiscriminatorListener
 {
     public function __construct(
-        private DiscriminatorGenerator $generator
-    ) {}
+        private DiscriminatorGenerator $generator,
+    ) {
+    }
 
     public function prePersist(User $user): void
     {

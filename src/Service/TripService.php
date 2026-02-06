@@ -14,12 +14,11 @@ readonly class TripService
 {
     public function __construct(
         private DestinationRepository $destinationRepository,
-        private FlightRepository      $flightRepository,
+        private FlightRepository $flightRepository,
     ) {
     }
 
     /**
-     * @param Trip $trip
      * @return array{duration: int, countries: string[], cities: string[], country_count: int, city_count: int}
      */
     public function getTripStatistics(Trip $trip): array
@@ -45,7 +44,7 @@ readonly class TripService
         $flights = $this->flightRepository->findOverNightFlightsByTrip($trip);
 
         $merged = array_merge($destinations, $flights);
-        usort($merged, fn(TravelItem $a, TravelItem  $b) => $a->getStartDay()->getPosition() <=> $b->getStartDay()->getPosition());
+        usort($merged, fn (TravelItem $a, TravelItem $b) => $a->getStartDay()->getPosition() <=> $b->getStartDay()->getPosition());
 
         return $merged;
     }
@@ -72,7 +71,7 @@ readonly class TripService
                 $trip->removeDay($day);
             }
         } elseif ($currentCount < $requiredCount) {
-            for ($i = $currentCount; $i < $requiredCount; $i++) {
+            for ($i = $currentCount; $i < $requiredCount; ++$i) {
                 $newDay = new Day();
                 $newDay->setPosition($i + 1);
                 $trip->addDay($newDay);

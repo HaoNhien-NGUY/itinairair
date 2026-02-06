@@ -17,7 +17,6 @@ class FlightRepository extends ServiceEntityRepository
         parent::__construct($registry, Flight::class);
     }
 
-
     public function countFlightsByTrip(Trip $trip): int
     {
         return (int) $this->createQueryBuilder('f')

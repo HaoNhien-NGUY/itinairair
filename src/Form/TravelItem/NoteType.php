@@ -18,8 +18,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class NoteType extends AbstractType
 {
-    public function __construct(private readonly Security $security) {
+    public function __construct(private readonly Security $security)
+    {
     }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -42,12 +44,16 @@ class NoteType extends AbstractType
             /** @var Note $note */
             $note = $event->getData();
 
-            if (!$note->getName()) $note->setName('');
+            if (!$note->getName()) {
+                $note->setName('');
+            }
 
             /** @var ?User $user */
             $user = $this->security->getUser();
 
-            if ($user) $note->setAuthor($user);
+            if ($user) {
+                $note->setAuthor($user);
+            }
         });
     }
 

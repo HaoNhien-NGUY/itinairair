@@ -12,11 +12,11 @@ class DayView
 {
     /**
      * @param Accommodation[] $accommodations
-     * @param TravelItem[] $positionable
-     * @param Flight[] $flightStartDay
-     * @param Flight[] $flightEndDay
-     * @param Flight[] $flightSameDay
-     * @param Destination[] $destinations
+     * @param TravelItem[]    $positionable
+     * @param Flight[]        $flightStartDay
+     * @param Flight[]        $flightEndDay
+     * @param Flight[]        $flightSameDay
+     * @param Destination[]   $destinations
      */
     public function __construct(
         public Day $day,

@@ -13,10 +13,10 @@ use App\Repository\TravelItemRepository;
 readonly class TripFactory
 {
     public function __construct(
-        private TravelItemRepository    $travelItemRepository,
-        private DayFactory              $dayFactory,
-        private DestinationRepository   $destinationRepository,
-        private FlightRepository        $flightRepository,
+        private TravelItemRepository $travelItemRepository,
+        private DayFactory $dayFactory,
+        private DestinationRepository $destinationRepository,
+        private FlightRepository $flightRepository,
     ) {
     }
 
@@ -62,7 +62,7 @@ readonly class TripFactory
                 );
             }
 
-            if ($currentDestId !== null
+            if (null !== $currentDestId
                 && isset($groupedDestinations['byEndDay'][$position])
                 && $groupedDestinations['byEndDay'][$position]->getId() === $currentDestId
             ) {

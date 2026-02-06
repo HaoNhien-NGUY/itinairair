@@ -2,20 +2,20 @@
 
 namespace App\Tests\Factory;
 
+use App\Entity\Day;
+use App\Entity\Destination;
+use App\Entity\Trip;
+use App\Factory\DayFactory;
+use App\Factory\TripFactory;
 use App\Model\DayView;
+use App\Repository\DestinationRepository;
+use App\Repository\FlightRepository;
+use App\Repository\TravelItemRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use App\Factory\TripFactory;
-use App\Entity\Trip;
-use App\Entity\Day;
-use App\Entity\Destination;
-use App\Repository\DestinationRepository;
-use App\Repository\TravelItemRepository;
-use App\Repository\FlightRepository;
-use App\Factory\DayFactory;
 
 class TripFactoryTest extends TestCase
 {
@@ -42,10 +42,9 @@ class TripFactoryTest extends TestCase
     }
 
     /**
-     * @param int $nbDays
-     * @param array<int, array{int, int}> $destinations
+     * @param array<int, array{int, int}>                                             $destinations
      * @param list<array{destId: int|null, dayCount: int, dayRange: array{int, int}}> $expectedSegments
-     * @return void
+     *
      * @throws Exception
      */
     #[DataProvider('segmentationProvider')]
@@ -94,7 +93,7 @@ class TripFactoryTest extends TestCase
                 ['destId' => 0, 'dayCount' => 2, 'dayRange' => [1, 2]],
                 ['destId' => null, 'dayCount' => 1, 'dayRange' => [3, 3]],
                 ['destId' => 1, 'dayCount' => 2, 'dayRange' => [4, 5]],
-            ]
+            ],
         ];
         yield 'Without gap' => [
             'nbDays' => 4,
@@ -102,7 +101,7 @@ class TripFactoryTest extends TestCase
             'expectedSegments' => [
                 ['destId' => 0, 'dayCount' => 2, 'dayRange' => [1, 2]],
                 ['destId' => 1, 'dayCount' => 2, 'dayRange' => [3, 4]],
-            ]
+            ],
         ];
         yield 'Overlap' => [
             'nbDays' => 4,
@@ -110,19 +109,19 @@ class TripFactoryTest extends TestCase
             'expectedSegments' => [
                 ['destId' => 0, 'dayCount' => 1, 'dayRange' => [1, 1]],
                 ['destId' => 1, 'dayCount' => 3, 'dayRange' => [2, 4]],
-            ]
+            ],
         ];
         yield 'Empty trip' => [
             'nbDays' => 0,
             'destinations' => [],
-            'expectedSegments' => []
+            'expectedSegments' => [],
         ];
         yield 'Days but no destinations' => [
             'nbDays' => 3,
             'destinations' => [],
             'expectedSegments' => [
                 ['destId' => null, 'dayCount' => 3, 'dayRange' => [1, 3]],
-            ]
+            ],
         ];
         yield 'Gap at the start and end' => [
             'nbDays' => 6,
@@ -131,12 +130,11 @@ class TripFactoryTest extends TestCase
                 ['destId' => null, 'dayCount' => 1, 'dayRange' => [1, 1]],
                 ['destId' => 0, 'dayCount' => 3, 'dayRange' => [2, 4]],
                 ['destId' => null, 'dayCount' => 2, 'dayRange' => [5, 6]],
-            ]
+            ],
         ];
     }
 
     /**
-     * @param int $count
      * @return array{ArrayCollection<int, Day>, array<int, DayView>}
      */
     private function createDays(int $count): array
@@ -144,13 +142,14 @@ class TripFactoryTest extends TestCase
         $days = [];
         $dayViews = [];
 
-        for ($i = 1; $i <= $count; $i++) {
+        for ($i = 1; $i <= $count; ++$i) {
             $day = $this->stubDay($i);
             $days[$i] = $day;
             $dayView = $this->createStub(DayView::class);
             $dayView->day = $day;
             $dayViews[] = $dayView;
         }
+
         return [new ArrayCollection($days), $dayViews];
     }
 
@@ -167,11 +166,13 @@ class TripFactoryTest extends TestCase
     {
         $dest = $this->createStub(Destination::class);
         $dest->method('getId')->willReturn($id);
+
         return $dest;
     }
 
     /**
      * @param array<int, array{int, int}> $destinations
+     *
      * @return array{byStartDay: array<int, Destination>, byEndDay: array<int, Destination>}
      */
     private function createGroupedDestinations(array $destinations): array

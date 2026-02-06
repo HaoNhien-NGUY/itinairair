@@ -115,6 +115,7 @@ class DestinationRepository extends ServiceEntityRepository
 
     /**
      * @param int[] $tripsIds
+     *
      * @return array<int, string[]>
      */
     public function findDestinationCountriesByTrips(array $tripsIds): array

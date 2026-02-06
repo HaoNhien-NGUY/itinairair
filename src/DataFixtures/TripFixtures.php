@@ -7,7 +7,6 @@ use App\Entity\TripMembership;
 use App\Entity\User;
 use App\Enum\TripRole;
 use App\Service\TripService;
-use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -27,8 +26,8 @@ class TripFixtures extends Fixture implements DependentFixtureInterface
 
         $trip
             ->setName(self::TITLE_PARIS)
-            ->setStartDate(new DateTime('2024-01-01'))
-            ->setEndDate(new DateTime('2024-01-05'));
+            ->setStartDate(new \DateTime('2024-01-01'))
+            ->setEndDate(new \DateTime('2024-01-05'));
 
         $this->tripService->addOrRemoveTripDays($trip, $trip->getDurationInDays());
 

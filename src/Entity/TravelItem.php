@@ -149,10 +149,12 @@ abstract class TravelItem
         if ($startDay
             && $this->trip
             && $this->trip !== $startDay->getTrip()) {
-                throw new \InvalidArgumentException('You cannot schedule an item on a day from a different trip!');
+            throw new \InvalidArgumentException('You cannot schedule an item on a day from a different trip!');
         }
 
-        if ($startDay && !$this->trip) $this->trip = $startDay->getTrip();
+        if ($startDay && !$this->trip) {
+            $this->trip = $startDay->getTrip();
+        }
 
         $this->startDay = $startDay;
 
@@ -172,7 +174,9 @@ abstract class TravelItem
             throw new \InvalidArgumentException('You cannot schedule an item on a day from a different trip!');
         }
 
-        if ($endDay && !$this->trip) $this->trip = $endDay->getTrip();
+        if ($endDay && !$this->trip) {
+            $this->trip = $endDay->getTrip();
+        }
 
         $this->endDay = $endDay;
 
@@ -227,7 +231,6 @@ abstract class TravelItem
         return $this;
     }
 
-
     public function getDurationInDays(bool $nightCount = false): int
     {
         if (!$this->startDay || !$this->endDay) {
@@ -236,5 +239,4 @@ abstract class TravelItem
 
         return $this->endDay->getPosition() - $this->startDay->getPosition() + ($nightCount ? 0 : 1);
     }
-
 }

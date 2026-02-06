@@ -26,14 +26,14 @@ class UserAccountType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'rows' => 3,
-                    'placeholder' => 'form.user_account.bio_placeholder'
-                ]
+                    'placeholder' => 'form.user_account.bio_placeholder',
+                ],
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'common.modify',
                 'attr' => [
-                    'class' => 'block w-full py-2'
-                ]
+                    'class' => 'block w-full py-2',
+                ],
             ]);
     }
 

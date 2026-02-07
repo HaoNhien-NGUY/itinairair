@@ -31,6 +31,10 @@ class TripMembership
         $this->trip = $trip;
         $this->member = $member;
         $this->role = $role;
+
+        if (!$trip->getTripMemberships()->contains($this)) {
+            $trip->addTripMembership($this);
+        }
     }
 
     public function getId(): ?int

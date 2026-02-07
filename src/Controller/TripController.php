@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\ByteString;
 
@@ -31,21 +32,17 @@ final class TripController extends AbstractController
     }
 
     #[Route('/create', name: 'app_trip_create', methods: ['POST', 'GET'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $trip = new Trip();
-        $form = $this->createForm(TripType::class, $trip, ['action' => $request->getUri()]);
+    public function create(
+        Request $request,
+        TripService $tripService,
+        #[CurrentUser] User $user,
+    ): Response {
+        $trip = Trip::create($user);
+        $form = $this->createForm(TripType::class, $trip);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var User $user */
-            $user = $this->getUser();
-
-            $trip->setIsTemporary($user->isTemporary());
-            $tripMembership = (new TripMembership($trip, $user, TripRole::ADMIN));
-            $entityManager->persist($trip);
-            $entityManager->persist($tripMembership);
-            $entityManager->flush();
+            $tripService->create($trip);
 
             return $this->redirectToRoute('app_trip_show', ['id' => $trip->getId()]);
         }

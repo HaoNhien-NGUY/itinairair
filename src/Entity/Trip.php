@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\TripRole;
 use App\Exception\InvalidTripDatesException;
 use App\Repository\TripRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -46,7 +47,7 @@ class Trip
     /**
      * @var Collection<int, TripMembership>
      */
-    #[ORM\OneToMany(targetEntity: TripMembership::class, mappedBy: 'trip', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: TripMembership::class, mappedBy: 'trip', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $tripMemberships;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -71,6 +72,20 @@ class Trip
         $this->days = new ArrayCollection();
         $this->tripMemberships = new ArrayCollection();
         $this->travelItems = new ArrayCollection();
+    }
+
+    public static function create(User $admin): self
+    {
+        return (new self())
+            ->setIsTemporary($admin->isTemporary())
+            ->addMember($admin, TripRole::ADMIN);
+    }
+
+    public function addMember(User $user, TripRole $role = TripRole::EDITOR): static
+    {
+        new TripMembership($this, $user, $role);
+
+        return $this;
     }
 
     public function getId(): ?int

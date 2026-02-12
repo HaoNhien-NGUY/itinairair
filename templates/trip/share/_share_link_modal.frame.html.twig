@@ -2,15 +2,21 @@
     {% block title %}
         <div class="flex items-center">
             {{ ux_icon('material-symbols:link', {class: 'size-5 mr-2'}) }}
-            {{ 'trip.join_token.share_link'|trans }}
+            {{ trip.inviteToken ? 'trip.join_token.share_link'|trans : 'trip.join_token.create_link'|trans }}
         </div>
     {% endblock %}
-
 
     {{ 'trip.join_token.allow_warning'|trans }}
     <hr class="my-8 text-gray-200" />
 
-    <span class="text-blue-500 text-sm">
-        {{ url('app_trip_join', {inviteToken: trip.inviteToken}) }}
-    </span>
+    {% if trip.inviteToken %}
+        <span class="text-blue-500 text-sm">
+            {{ url('app_trip_join', {inviteToken: trip.inviteToken}) }}
+        </span>
+    {% else %}
+        <form method="post" action="{{ path('app_trip_share_link', { trip: trip.id }) }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('toggle_share_link') }}">
+            <button type="submit" class="btn cursor-pointer">{{ 'trip.join_token.create'|trans }}</button>
+        </form>
+    {% endif %}
 </twig:Modal>

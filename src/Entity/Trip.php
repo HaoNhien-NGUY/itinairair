@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\String\ByteString;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TripRepository::class)]
@@ -241,6 +242,13 @@ class Trip
     public function setInviteToken(?string $inviteToken): static
     {
         $this->inviteToken = $inviteToken;
+
+        return $this;
+    }
+
+    public function generateInviteToken(): static
+    {
+        $this->inviteToken = ByteString::fromRandom(32);
 
         return $this;
     }

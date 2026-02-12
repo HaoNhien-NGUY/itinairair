@@ -7,11 +7,11 @@ use App\Entity\TravelItem;
 use App\Repository\TravelItemRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class ItineraryService
+readonly class ItineraryService
 {
     public function __construct(
-        private readonly EntityManagerInterface $entityManager,
-        private readonly TravelItemRepository $travelItemRepository,
+        private EntityManagerInterface $entityManager,
+        private TravelItemRepository $travelItemRepository,
     ) {
     }
 

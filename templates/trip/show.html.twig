@@ -32,18 +32,7 @@
         <div id="drag-container" class="max-w-7xl container grid grid-cols-1 md:grid-cols-3">
             <div class="md:col-span-2 -mx-4 md:mx-0">
                 <twig:PlanningDashboard trip="{{ trip }}" />
-
-                <div class="rounded-3xl md:border-2  border-0 border-indigo-200/70 overflow-hidden">
-                    {% for key, segment in planning.segments %}
-                        <div class="">
-                            <twig:Trip:Planning:DestinationHeader isFirstSegment="{{ key == 0 }}" :planning="planning" :destination="segment.destination" />
-
-                            {% for dayView in segment.days %}
-                                <twig:Trip:Planning:Day :day="dayView.day" :dayView="dayView" :trip="trip" />
-                            {% endfor %}
-                        </div>
-                    {% endfor %}
-                </div>
+                <twig:Trip:Planning :trip="trip" />
             </div>
 
             <div class="max-md:hidden">

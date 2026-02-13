@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Trip;
 use App\Entity\User;
 use App\Form\TripType;
-use App\Presenter\TripPresenter;
 use App\Repository\AccommodationRepository;
 use App\Repository\FlightRepository;
 use App\Repository\TravelItemRepository;
@@ -70,13 +69,10 @@ final class TripController extends AbstractController
 
     #[IsGranted('TRIP_VIEW', 'trip')]
     #[Route('/{id}', name: 'app_trip_show', methods: ['GET'])]
-    public function show(
-        Trip $trip,
-        TripPresenter $tripViewService,
-    ): Response {
+    public function show(Trip $trip): Response
+    {
         return $this->render('trip/show.html.twig', [
             'trip'  => $trip,
-            'planning' => $tripViewService->createPlanningViewModel($trip),
         ]);
     }
 

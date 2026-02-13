@@ -1,0 +1,11 @@
+<div {{ attributes.defaults({class: 'rounded-3xl md:border-2  border-0 border-indigo-200/70 overflow-hidden'})}}>
+    {% for key, segment in this.planning.segments %}
+        <div class="">
+            <twig:Trip:Planning:DestinationHeader isFirstSegment="{{ key == 0 }}" :planning="this.planning" :destination="segment.destination" />
+
+            {% for dayView in segment.days %}
+                <twig:Trip:Planning:Day :day="dayView.day" :dayView="dayView" :trip="trip" />
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>

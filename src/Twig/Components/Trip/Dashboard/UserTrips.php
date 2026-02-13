@@ -22,7 +22,7 @@ final class UserTrips
     ) {
     }
 
-    public function getUserTripCollection(): TripListViewModel
+    public function getTripList(): TripListViewModel
     {
         $trips = $this->tripRepository->findByUser($this->user);
 

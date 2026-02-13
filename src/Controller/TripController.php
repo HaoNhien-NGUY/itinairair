@@ -7,7 +7,6 @@ use App\Entity\User;
 use App\Form\TripType;
 use App\Repository\AccommodationRepository;
 use App\Repository\FlightRepository;
-use App\Repository\TravelItemRepository;
 use App\Repository\TripMembershipRepository;
 use App\Service\TripService;
 use Doctrine\ORM\EntityManagerInterface;

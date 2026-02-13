@@ -6,7 +6,7 @@
         {% set startDate = trip.startDate ? trip.startDate|date('Y-m-d') : null %}
         {% set endDate = trip.endDate ? trip.endDate|date('Y-m-d') : null %}
 
-        {{ form_start(form) }}
+        {{ form_start(form, {action: path('app_trip_create')}) }}
 
         <div {{ stimulus_controller('calendar', {startDate, endDate, fullWidth: true, inModal: true, isRange: true}) }} class="mb-8">
             <div {{ stimulus_target('calendar', 'calendar') }} class="border border-indigo-200 rounded-xl p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50">

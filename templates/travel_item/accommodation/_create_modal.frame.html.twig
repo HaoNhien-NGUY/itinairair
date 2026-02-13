@@ -59,7 +59,7 @@
             {% endif %}
             <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="-mt-2 relative mb-32 -mx-5 {{ not place ? 'hidden' }}">
                 <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-56 shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
-                <div class="mx-5 shadow-md bg-white rounded-xl border border-indigo-200 p-4 absolute left-0 right-0 -bottom-25">
+                <div class="mx-5 shadow bg-white rounded-xl border border-gray-200 p-4 absolute left-0 right-0 -bottom-25">
                     {% if place %}
                         <div {{ stimulus_target('calendar', 'calendar') }} class="select-none text-sm flex -mx-4.5 px-4.5 items-center justify-between cursor-pointer">
                             <div class="flex justify-center items-center text-gray-600">

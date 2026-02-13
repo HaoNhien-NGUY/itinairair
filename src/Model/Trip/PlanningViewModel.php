@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Model;
+namespace App\Model\Trip;
 
 use App\Entity\Trip;
 
-class PlanningView
+class PlanningViewModel
 {
     public function __construct(
         public Trip $trip,
-        /** @var PlanningSegmentView[] */
+        /** @var PlanningSegmentViewModel[] */
         public array $segments,
         public bool $hasDestinations,
         public bool $startWithTravel,

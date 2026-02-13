@@ -93,7 +93,7 @@ jobs:
         run: composer install -q --prefer-dist --no-progress --no-interaction --no-scripts --no-ansi
 
       - name: Run PHP CS Fixer
-        run: composer check-style
+        run: composer style-check
 
   deploy:
     name: Deploy

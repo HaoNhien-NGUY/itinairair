@@ -19,11 +19,11 @@ class TripRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array{ongoing: Trip[], coming: Trip[], past: Trip[], ids: int[], count: int}
+     * @return Trip[]
      */
     public function findByUser(UserInterface $user): array
     {
-        $trips = $this->createQueryBuilder('t')
+        return $this->createQueryBuilder('t')
             ->addSelect('tm')
             ->innerJoin('t.tripMemberships', 'm')
             ->leftJoin('t.tripMemberships', 'tm')
@@ -32,36 +32,6 @@ class TripRepository extends ServiceEntityRepository
             ->orderBy('t.startDate', 'ASC')
             ->getQuery()
             ->getResult();
-
-        $results = [
-            'ongoing' => [],
-            'coming'  => [],
-            'past'    => [],
-            'ids'     => [],
-            'count'   => 0,
-        ];
-
-        $now = new \DateTime();
-
-        /** @var Trip $trip */
-        foreach ($trips as $trip) {
-            $results['ids'][] = $trip->getId();
-            ++$results['count'];
-
-            if ($trip->getStartDate() > $now) {
-                $results['coming'][] = $trip;
-            } elseif ($trip->getEndDate() < $now) {
-                $results['past'][] = $trip;
-            } else {
-                $results['ongoing'][] = $trip;
-            }
-        }
-
-        usort($results['past'], function ($a, $b) {
-            return $b->getEndDate() <=> $a->getEndDate();
-        });
-
-        return $results;
     }
 
     /**

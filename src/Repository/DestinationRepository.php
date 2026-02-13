@@ -114,12 +114,16 @@ class DestinationRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int[] $tripsIds
+     * @param int[]|Trip[] $tripsIds
      *
      * @return array<int, string[]>
      */
     public function findDestinationCountriesByTrips(array $tripsIds): array
     {
+        if (empty($tripsIds)) {
+            return [];
+        }
+
         $result = $this->createQueryBuilder('d')
             ->select('IDENTITY(d.trip) AS trip_id, p.country')
             ->where('d.trip in (:trips)')

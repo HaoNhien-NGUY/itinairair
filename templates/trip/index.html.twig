@@ -3,57 +3,6 @@
 {% block title %}{{ 'trip.my_trips'|trans }}{% endblock %}
 {% block body_style %}min-h-screen flex flex-col{% endblock %}
 
-{% macro trip_card(trip, today, countriesByTrip, status = null) %}
-    {% set class = {
-        ongoing: 'bg-green-300/10 text-green-600 border-green-300',
-        coming: 'text-indigo-400 bg-indigo-200/20 border-indigo-200',
-    } %}
-    <div class="rounded-xl bg-slate-100 p-1.5 pb-0">
-        <div class="rounded-xl relative hover:shadow-md btn-animate transition-[box-shadow] shadow-sm bg-white p-4">
-
-            {% if status %}
-                {% set isOngoing = status == 'ongoing' %}
-                <div class="inline-flex items-center mb-2 gap-2 font-semibold text-xs border {{ class[status]|default }} border-gray-200 rounded-xl px-2 py-1">
-                    {% if isOngoing %}
-                    <div class="relative flex size-3.5 items-center justify-center">
-                        <span class="relative inline-flex size-2 animate-pulse rounded-full bg-green-600"></span>
-                    </div>
-                    {% endif %}
-                    {% set dateDelta = isOngoing ? trip.endDate : trip.startDate %}
-                    <span class="">{{ ('trip.status.days_message.' ~ status)|trans({days: dateDelta.diff(today).days}) }}</span>
-                </div>
-            {% endif %}
-            <a href="{{ path('app_trip_show', {id: trip.id}) }}" class="text-lg block after:absolute after:z-1 after:top-0 after:left-0 after:w-full after:h-full">
-                {{ trip.name }}
-            </a>
-            <div class="flex items-center">
-                <span class="text-gray-500 text-sm">{{ trip.startDate|date_xs }} {{ trip.startDate|date('Y')}} - {{ trip.endDate|date_xs }}
-                    <span class="mx-1">•</span> {{ 'common.x_days'|trans({days: trip.durationInDays}) }}
-                </span>
-            </div>
-
-            <div class="flex space-x-1 mt-4">
-                {% for membership in trip.tripMemberships %}
-                    <div class="flex items-center">
-                        <twig:UserAvatar user="{{ membership.member }}" imgClass="size-6"/>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="py-2 px-4">
-            <div class="flex flex-wrap items-center text-sm text-gray-500">
-                <twig:ux:icon name="bxs:map" class="size-4.5 mr-1" />
-                {% for country in countriesByTrip[trip.id]|default([]) %}
-                    {% if not loop.first %}<span class="inline-block mr-1">,</span>{% endif %}
-                    <span class="">{{ country }}</span>
-                {% else %}
-                    <span class="">-</span>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-{% endmacro %}
-
 {% block body %}
     <div class="container max-w-3xl mx-auto mt-10 space-y-6">
         <div class="">
@@ -70,34 +19,11 @@
             </div>
 
             <div class="mt-10">
-                <div class="grid grid-cols-3 divide-x divide-slate-200 gap-1.5 md:gap-4 text-sm md:text-base">
-                    <div class="rounded-xlbg-indigo-25z border-2border-slate-200/80 flex items-center px-1.5 md:px-3 col-span-1">
-                        <twig:ux:icon name="iconoir:map" class="size-6 text-slate-400 mr-3"/>
-                        <div class="">
-                            <span class="">{{ memberships|length }}</span>
-                            <span class="block -mt-1 text-sm text-gray-500">{{ 'common.trips'|trans({count:memberships|length})|lower }}</span>
-                        </div>
-                    </div>
-                    <div class="rounded-xlbg-indigo-25z border-2border-slate-200/80 flex items-center px-1.5 md:px-3 col-span-1">
-                        <twig:ux:icon name="bi:passport" class="size-6 text-slate-400 mr-3"/>
-                        <div class="">
-                            <span class="">{{ statistics.countries|length }}</span>
-                            <span class="block -mt-1 text-sm text-gray-500">{{ 'common.countries'|trans({count: statistics.countries|length})|lower }}</span>
-                        </div>
-                    </div>
-                    <div class="rounded-xlbg-indigo-25z border-2border-slate-200/80 flex items-center px-1.5 md:px-3 col-span-1">
-                        <twig:ux:icon name="iconoir:city" class="size-6 text-slate-400 mr-3"/>
-                        <div class="">
-                            <span class="">{{ statistics.cities|length }}</span>
-                            <span class="block -mt-1 text-sm text-gray-500">{{ 'common.cities'|trans({count: statistics.cities|length})|lower }}</span>
-                        </div>
-                    </div>
-                </div>
+                <twig:Trip:Dashboard:Statistics :user="app.user" />
             </div>
         </div>
     </div>
     <div class="border-t-2 py-6 mt-4 border-indigo-50 bg-indigo-10 grow">
-        {% set today = date('today') %}
 
         <div class="container max-w-3xl mx-auto">
             {% if app.user.expiresAt %}
@@ -110,57 +36,8 @@
                     </div>
                 </div>
             {% endif %}
-            <div class="mb-6 flex">
-                {% if trips.count > 0 %}
-                    <a href="{{ path('app_trip_create') }}"
-                       data-turbo-frame="modal"
-                       class="bg-indigo-500 hover:bg-indigo-400 transition-colors text-indigo-50 text-sm font-medium py-1 px-4 flex items-center rounded-2xl">
-                        <twig:ux:icon name="ic:round-plus" class="size-4.5 mr-2"/>
-                        {{ 'trip.new_trip'|trans }}
-                    </a>
-                {% else %}
-                    <div></div>
-                {% endif %}
-            </div>
 
-
-            {% if trips.count == 0 %}
-                <div class="flex flex-col items-center">
-                    <img src="{{ asset('images/icons/Destination-pana.svg') }}" class="mx-auto w-[32rem] mt-0"  alt="no-trips"/>
-                    <a href="{{ path('app_trip_create') }}"
-                       data-turbo-frame="modal"
-                       class="bg-indigo-500 mt-6 hover:bg-indigo-400 transition-colors text-white font-medium py-3 px-8 flex items-center rounded-4xl">
-                        {{ 'landing.cta'|trans }}
-                    </a>
-                </div>
-            {% endif %}
-
-            <div class="space-y-5">
-                {% if trips.ongoing %}
-                    <div class="space-y-5">
-                        {% for trip in trips.ongoing %}
-                            {{ _self.trip_card(trip, today, countriesByTrip, 'ongoing') }}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
-                {% if trips.coming %}
-                    <div class="space-y-5">
-                        {% for trip in trips.coming %}
-                            {{ _self.trip_card(trip, today, countriesByTrip, 'coming') }}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
-                {% if trips.past %}
-                    <div class="space-y-5">
-                        {% for trip in trips.past %}
-                            {{ _self.trip_card(trip, today, countriesByTrip) }}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-
+            <twig:Trip:Dashboard:UserTrips :user="app.user" />
         </div>
     </div>
 {% endblock %}

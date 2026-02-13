@@ -5,9 +5,9 @@ namespace App\Tests\Factory;
 use App\Entity\Day;
 use App\Entity\Destination;
 use App\Entity\Trip;
-use App\Factory\DayFactory;
-use App\Factory\TripFactory;
-use App\Model\DayView;
+use App\Model\Trip\DayViewModel;
+use App\Presenter\DayPresenter;
+use App\Presenter\TripPresenter;
 use App\Repository\DestinationRepository;
 use App\Repository\FlightRepository;
 use App\Repository\TravelItemRepository;
@@ -16,28 +16,33 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Clock\MockClock;
 
 class TripFactoryTest extends TestCase
 {
     private DestinationRepository&MockObject $destinationRepo;
     private FlightRepository&MockObject $flightRepo;
-    private DayFactory&MockObject $dayFactory;
-    private TripFactory $tripFactory;
+    private DayPresenter&MockObject $dayFactory;
+    private TripPresenter $tripFactory;
+
+    private MockClock $clock;
 
     protected function setUp(): void
     {
         $itemRepo = $this->createMock(TravelItemRepository::class);
-        $this->dayFactory = $this->createMock(DayFactory::class);
+        $this->dayFactory = $this->createMock(DayPresenter::class);
         $this->destinationRepo = $this->createMock(DestinationRepository::class);
         $this->flightRepo = $this->createMock(FlightRepository::class);
+        $this->clock = new MockClock();
 
         $itemRepo->method('findItemDayPairsForTrip')->willReturn([]);
 
-        $this->tripFactory = new TripFactory(
+        $this->tripFactory = new TripPresenter(
             $itemRepo,
             $this->dayFactory,
             $this->destinationRepo,
             $this->flightRepo,
+            $this->clock,
         );
     }
 
@@ -62,10 +67,10 @@ class TripFactoryTest extends TestCase
             ->willReturn($this->createGroupedDestinations($destinations));
 
         $this->dayFactory->expects($this->exactly($nbDays))
-            ->method('createDayView')
+            ->method('createDayViewModel')
             ->willReturnOnConsecutiveCalls(...$dayViews);
 
-        $view = $this->tripFactory->planningView($trip);
+        $view = $this->tripFactory->createPlanningViewModel($trip);
         $segments = $view->segments;
 
         $this->assertSame($trip, $view->trip);
@@ -135,7 +140,7 @@ class TripFactoryTest extends TestCase
     }
 
     /**
-     * @return array{ArrayCollection<int, Day>, array<int, DayView>}
+     * @return array{ArrayCollection<int, Day>, array<int, DayViewModel>}
      */
     private function createDays(int $count): array
     {
@@ -145,7 +150,7 @@ class TripFactoryTest extends TestCase
         for ($i = 1; $i <= $count; ++$i) {
             $day = $this->stubDay($i);
             $days[$i] = $day;
-            $dayView = $this->createStub(DayView::class);
+            $dayView = $this->createStub(DayViewModel::class);
             $dayView->day = $day;
             $dayViews[] = $dayView;
         }

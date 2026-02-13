@@ -2,14 +2,17 @@
 
 namespace App\Entity;
 
+use App\Enum\TripRole;
 use App\Exception\InvalidTripDatesException;
 use App\Repository\TripRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\String\ByteString;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TripRepository::class)]
@@ -46,7 +49,7 @@ class Trip
     /**
      * @var Collection<int, TripMembership>
      */
-    #[ORM\OneToMany(targetEntity: TripMembership::class, mappedBy: 'trip', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: TripMembership::class, mappedBy: 'trip', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $tripMemberships;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -61,11 +64,33 @@ class Trip
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isTemporary = false;
 
+    private ?int $daysDifferenceFromNow = null;
+
+    /** @var string[] */
+    private array $countryNames = [];
+
     public function __construct()
     {
         $this->days = new ArrayCollection();
         $this->tripMemberships = new ArrayCollection();
         $this->travelItems = new ArrayCollection();
+    }
+
+    public static function create(User $admin): self
+    {
+        $trip = (new self())->setIsTemporary($admin->isTemporary());
+        $trip->addMember($admin, TripRole::ADMIN);
+
+        return $trip;
+    }
+
+    public function addMember(User $user, TripRole $role = TripRole::EDITOR): TripMembership
+    {
+        $membership = new TripMembership($this, $user, $role);
+
+        $this->tripMemberships->add($membership);
+
+        return $membership;
     }
 
     public function getId(): ?int
@@ -213,6 +238,24 @@ class Trip
         return $this->tripMemberships->matching($criteria)->first() ?: null;
     }
 
+    public function getFirstDay(): ?Day
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('position', 1))
+            ->setMaxResults(1);
+
+        return $this->days->matching($criteria)->first() ?: null;
+    }
+
+    public function getLastDay(): ?Day
+    {
+        $criteria = Criteria::create()
+            ->orderBy(['position' => Order::Descending])
+            ->setMaxResults(1);
+
+        return $this->days->matching($criteria)->first() ?: null;
+    }
+
     public function getInviteToken(): ?string
     {
         return $this->inviteToken;
@@ -221,6 +264,13 @@ class Trip
     public function setInviteToken(?string $inviteToken): static
     {
         $this->inviteToken = $inviteToken;
+
+        return $this;
+    }
+
+    public function generateInviteToken(): static
+    {
+        $this->inviteToken = ByteString::fromRandom(32);
 
         return $this;
     }
@@ -263,6 +313,32 @@ class Trip
     public function setIsTemporary(bool $isTemporary): static
     {
         $this->isTemporary = $isTemporary;
+
+        return $this;
+    }
+
+    public function getDaysDifferenceFromNow(): ?int
+    {
+        return $this->daysDifferenceFromNow;
+    }
+
+    public function setDaysDifferenceFromNow(int $daysDifferenceFromNow): self
+    {
+        $this->daysDifferenceFromNow = $daysDifferenceFromNow;
+
+        return $this;
+    }
+
+    /** @return string[] */
+    public function getCountryNames(): array
+    {
+        return $this->countryNames;
+    }
+
+    /** @param string[] $countryNames */
+    public function setCountryNames(array $countryNames): self
+    {
+        $this->countryNames = $countryNames;
 
         return $this;
     }

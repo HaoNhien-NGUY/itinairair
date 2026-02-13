@@ -1,0 +1,23 @@
+<div{{ attributes.defaults({class: 'grid grid-cols-3 divide-x divide-slate-200 gap-1.5 md:gap-4 text-sm md:text-base'}) }}>
+    <div class="rounded-xlbg-indigo-25z border-2border-slate-200/80 flex items-center px-1.5 md:px-3 col-span-1">
+        <twig:ux:icon name="iconoir:map" class="size-6 text-slate-400 mr-3"/>
+        <div class="">
+            <span class="">{{ this.membershipsCount }}</span>
+            <span class="block -mt-1 text-sm text-gray-500">{{ 'common.trips'|trans({count:this.membershipsCount})|lower }}</span>
+        </div>
+    </div>
+    <div class="rounded-xlbg-indigo-25z border-2border-slate-200/80 flex items-center px-1.5 md:px-3 col-span-1">
+        <twig:ux:icon name="bi:passport" class="size-6 text-slate-400 mr-3"/>
+        <div class="">
+            <span class="">{{ this.stats.countries|length }}</span>
+            <span class="block -mt-1 text-sm text-gray-500">{{ 'common.countries'|trans({count: this.stats.countries|length})|lower }}</span>
+        </div>
+    </div>
+    <div class="rounded-xlbg-indigo-25z border-2border-slate-200/80 flex items-center px-1.5 md:px-3 col-span-1">
+        <twig:ux:icon name="iconoir:city" class="size-6 text-slate-400 mr-3"/>
+        <div class="">
+            <span class="">{{ this.stats.cities|length }}</span>
+            <span class="block -mt-1 text-sm text-gray-500">{{ 'common.cities'|trans({count: this.stats.cities|length})|lower }}</span>
+        </div>
+    </div>
+</div>

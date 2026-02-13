@@ -21,7 +21,9 @@ class AccommodationRepository extends ServiceEntityRepository
     public function findAccommodationsByTrip(Trip $trip): array
     {
         return $this->createQueryBuilder('a')
+            ->addSelect('p')
             ->leftJoin('a.startDay', 'sd')
+            ->leftJoin('a.place', 'p')
             ->where('sd.trip = :trip')
             ->setParameter('trip', $trip)
             ->orderBy('sd.position', 'ASC')

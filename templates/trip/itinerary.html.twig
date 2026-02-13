@@ -1,6 +1,7 @@
-{% extends 'trip/show.html.twig' %}
+{% set enableMorph = true %}
 
+{% extends 'trip/layout.html.twig' %}
 
 {% block content %}
-    {% include 'travel_item/destination/show.frame.html.twig' %}
+    <twig:Trip:Itinerary:Timeline :trip="trip" />
 {% endblock %}

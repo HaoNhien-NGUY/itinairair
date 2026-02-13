@@ -37,9 +37,8 @@ final class DestinationController extends AbstractController
             }
         }
 
-        return $this->render('travel_item/destination/show.frame.html.twig', [
+        return $this->render('travel_item/destination/_timeline.frame.html.twig', [
             'trip' => $trip,
-            'destinations' => $tripService->getTripItinerary($trip),
         ]);
     }
 }

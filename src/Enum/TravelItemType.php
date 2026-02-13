@@ -33,6 +33,7 @@ enum TravelItemType: string
         };
     }
 
+    /** @return class-string<TravelItem> */
     public function getClass(): string
     {
         return match($this) {

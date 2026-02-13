@@ -1,122 +1,57 @@
 {% set enableMorph = true %}
 
-{% extends 'base_with_navbar.html.twig' %}
+{% extends 'trip/layout.html.twig' %}
 
-{% block title %}{{ trip.name }}{% endblock %}
-{% block body_style %}min-h-screen flex flex-col{% endblock %}
-
-{% block additional_javascript %}
-    <script>
-        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-            key: "{{ get_env('GOOGLE_API_KEY') }}",
-            v: "weekly",
-        });
-        google.maps.importLibrary("places");
-    </script>
+{% block sticky_nav %}
+    <div class="bg-indigo-50/90 md:bg-white md:border-b border-indigo-100">
+        <div class="relative flex overflow-hidden">
+            <div {{ stimulus_controller('scrollspy-nav')}}
+                data-hs-scrollspy="#scrollspy-days"
+                class="hs-scroll-nav-body scroll-p-4 [--scrollspy-offset:200px] flex space-x-1.5 snap-x snap-mandatory overflow-x-auto
+                [&::-webkit-scrollbar]:h-0
+                md:[&::-webkit-scrollbar]:h-1
+                [&::-webkit-scrollbar-track]:bg-transparent
+                [&::-webkit-scrollbar-thumb]:bg-indigo-200
+                [&::-webkit-scrollbar-thumb]:cursor-grabbing
+                [&::-webkit-scrollbar-thumb]:rounded-full">
+                {% for day in trip.days %}
+                    <a href="#scrollspy-day-{{ day.id }}"
+                       class="{{ loop.first ? 'active' }} snap-start hs-scrollspy-active:font-bold hs-scrollspy-active:text-slate-600
+                       first-of-type:ml-2 last-of-type:mr-2 hover:bg-slate-100 md:text-nowrap
+                       md:py-3 py-2.5 px-2.5 flex justify-center items-center text-sm text-center text-slate-400 font-medium hover:text-slate-600 focus:outline-hidden">
+                        {{ day.date|format_datetime(pattern='EEE')|capitalize }} {{ day.date|date('d/m') }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
-{% block body %}
-	{% set startDate = trip.startDate %}
-	{% set statusPlanned = enum('App\\Enum\\ItemStatus').PLANNED.value %}
-	{% set statusIdea = enum('App\\Enum\\ItemStatus').IDEA.value %}
-    {% set destinationEnum = enum("App\\Enum\\TravelItemType").DESTINATION.value %}
-    {% set noteEnum = enum("App\\Enum\\TravelItemType").NOTE.value %}
+{% block content %}
+    <div class="pt-2 md:py-6 pb-5 bg-indigo-50/90 md:bg-indigo-50/25">
+        <div id="drag-container" class="max-w-7xl container grid grid-cols-1 md:grid-cols-3">
+            <div class="md:col-span-2 -mx-4 md:mx-0">
+                <twig:PlanningDashboard trip="{{ trip }}" />
 
-    <div class="container max-w-7xl mx-auto">
-        <div class="pt-8">
-            <h3 id="trip-name" class="text-lg font-medium md:text-2xl mb-1">{{ trip.name }}</h3>
+                <div class="rounded-3xl md:border-2  border-0 border-indigo-200/70 overflow-hidden">
+                    {% for key, segment in planning.segments %}
+                        <div class="">
+                            <twig:Trip:Planning:DestinationHeader isFirstSegment="{{ key == 0 }}" :planning="planning" :destination="segment.destination" />
 
-            <div class="flex items-center md:text-sm gap-4 text-xs">
-                <a href="{{ path('app_trip_edit', {'trip': trip.id}) }}" data-turbo-frame="modal" class="text-gray-500 md:text-sm text-xs hover:text-gray-700">{{ trip.startDate|date_xs }} {{ trip.startDate|date('Y')}} - {{ trip.endDate|date_xs }}</a>
-                <twig:Trip:Countries :trip="trip" />
-            </div>
-            <div class="flex items-center md:text-sm text-xs justify-between md:gap-6 md:justify-start mt-4">
-                <div class="flex space-x-1 select-none">
-                    {% for membership in trip.tripMemberships %}
-                        <div class="flex items-center">
-                            <twig:UserAvatar user="{{ membership.member }}" imgClass="size-8"/>
-                        </div>
-                    {% endfor %}
-                    <a href="{{ path('app_trip_share_link', {trip: trip.id}) }}" data-turbo-frame="modal" class="flex items-center justify-center rounded-full bg-white hover:bg-gray-200 transition-colors size-8">
-                        <twig:ux:icon name="flowbite:user-add-solid" class="size-4 text-gray-600"/>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {% macro navTabBtn(title, active, path) %}
-        <a href="{{ path }}"
-           class="{{ active ? 'active' }} md:fond-medium max-md:flex-1 justify-center md:justify-start font-bold [&.active]:border-indigo-300 border-b-2 [&.active,&:hover]:text-indigo-400
-           py-2.5 px-2 inline-flex items-center gap-x-2 border-transparent text-sm md:text-sm whitespace-nowrap text-gray-400">
-            {{ title }}
-        </a>
-    {% endmacro %}
-    <div class="sticky select-none top-0 z-30 mt-6 bg-white">
-        {% set currentRoute = app.request.attributes.get('_route') %}
-
-        <div class="border-b border-indigo-100 bg-white overflow-hidden">
-            <nav class="container max-w-7xl flex gap-x-1 overflow-x-auto [&::-webkit-scrollbar]:h-0">
-                {{ _self.navTabBtn('trip.page.schedule'|trans, currentRoute == 'app_trip_show', path('app_trip_show', {'id': trip.id})) }}
-                {{ _self.navTabBtn('trip.page.itinerary'|trans, currentRoute == 'app_trip_itinerary', path('app_trip_itinerary', {'id': trip.id})) }}
-                {{ _self.navTabBtn('trip.page.reservation'|trans, currentRoute == 'app_trip_bookings', path('app_trip_bookings', {'id': trip.id})) }}
-            </nav>
-        </div>
-        {% if currentRoute == 'app_trip_show' %}
-            <div class="bg-indigo-50/90 md:bg-white md:border-b border-indigo-100">
-                <div class="relative flex overflow-hidden">
-                    <div {{ stimulus_controller('scrollspy-nav')}}
-                        data-hs-scrollspy="#scrollspy-days"
-                        class="hs-scroll-nav-body scroll-p-4 [--scrollspy-offset:200px] flex space-x-1.5 snap-x snap-mandatory overflow-x-auto
-                        [&::-webkit-scrollbar]:h-0
-                        md:[&::-webkit-scrollbar]:h-1
-                        [&::-webkit-scrollbar-track]:bg-transparent
-                        [&::-webkit-scrollbar-thumb]:bg-indigo-200
-                        [&::-webkit-scrollbar-thumb]:cursor-grabbing
-                        [&::-webkit-scrollbar-thumb]:rounded-full">
-                        {% for day in trip.days %}
-                            <a href="#scrollspy-day-{{ day.id }}"
-                               class="{{ loop.first ? 'active' }} snap-start hs-scrollspy-active:font-bold hs-scrollspy-active:text-slate-600
-                               first-of-type:ml-2 last-of-type:mr-2 hover:bg-slate-100 md:text-nowrap
-                               md:py-3 py-2.5 px-2.5 flex justify-center items-center text-sm text-center text-slate-400 font-medium hover:text-slate-600 focus:outline-hidden">
-                                {{ day.date|format_datetime(pattern='EEE')|capitalize }} {{ day.date|date('d/m') }}
-                            </a>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-    </div>
-
-    <main class="grow">
-        {% block content %}
-            <div class="pt-2 md:py-6 pb-5 bg-indigo-50/90 md:bg-indigo-50/25">
-                <div id="drag-container" class="max-w-7xl container grid grid-cols-1 md:grid-cols-3">
-                    <div class="md:col-span-2 -mx-4 md:mx-0">
-                        <twig:PlanningDashboard trip="{{ trip }}" />
-
-                        <div class="rounded-3xl md:border-2  border-0 border-indigo-200/70 overflow-hidden">
-                            {% for key, segment in planning.segments %}
-                                <div class="">
-                                    <twig:Trip:Planning:DestinationHeader isFirstSegment="{{ key == 0 }}" :planning="planning" :destination="segment.destination" />
-
-                                    {% for dayView in segment.days %}
-                                        <twig:Trip:Planning:Day :day="dayView.day" :dayView="dayView" :trip="trip" />
-                                    {% endfor %}
-                                </div>
+                            {% for dayView in segment.days %}
+                                <twig:Trip:Planning:Day :day="dayView.day" :dayView="dayView" :trip="trip" />
                             {% endfor %}
                         </div>
-                    </div>
-
-                    <div class="max-md:hidden">
-                        <div class="space-y-4 px-4 pb-20 sticky top-28 max-h-screen no-scrollbar overflow-y-auto">
-                            <twig:Trip:Planning:Stats :trip="trip" />
-                            <twig:Trip:Planning:IdeaList :trip="trip" />
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
-        {% endblock %}
-    </main>
 
+            <div class="max-md:hidden">
+                <div class="space-y-4 px-4 pb-20 sticky top-28 max-h-screen no-scrollbar overflow-y-auto">
+                    <twig:Trip:Planning:Stats :trip="trip" />
+                    <twig:Trip:Planning:IdeaList :trip="trip" />
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

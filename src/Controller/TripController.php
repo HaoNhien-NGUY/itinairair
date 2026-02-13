@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Trip;
-use App\Entity\TripMembership;
 use App\Entity\User;
 use App\Factory\TripFactory;
 use App\Form\TripType;
@@ -85,11 +84,9 @@ final class TripController extends AbstractController
     #[Route('/{id}/itinerary', name: 'app_trip_itinerary', methods: ['GET'])]
     public function itinerary(
         Trip $trip,
-        TripService $tripService,
     ): Response {
         return $this->render('trip/itinerary.html.twig', [
             'trip'  => $trip,
-            'destinations' => $tripService->getTripItinerary($trip),
         ]);
     }
 
@@ -150,7 +147,7 @@ final class TripController extends AbstractController
         $membership = $tripMembershipRepository->findOneBy(['trip' => $trip, 'member' => $user]);
 
         if (!$membership) {
-            $membership = new TripMembership($trip, $user);
+            $membership = $trip->addMember($user);
             $entityManager->persist($membership);
             $entityManager->flush();
         }

@@ -8,6 +8,7 @@ use App\Repository\TripRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -77,16 +78,19 @@ class Trip
 
     public static function create(User $admin): self
     {
-        return (new self())
-            ->setIsTemporary($admin->isTemporary())
-            ->addMember($admin, TripRole::ADMIN);
+        $trip = (new self())->setIsTemporary($admin->isTemporary());
+        $trip->addMember($admin, TripRole::ADMIN);
+
+        return $trip;
     }
 
-    public function addMember(User $user, TripRole $role = TripRole::EDITOR): static
+    public function addMember(User $user, TripRole $role = TripRole::EDITOR): TripMembership
     {
-        new TripMembership($this, $user, $role);
+        $membership = new TripMembership($this, $user, $role);
 
-        return $this;
+        $this->tripMemberships->add($membership);
+
+        return $membership;
     }
 
     public function getId(): ?int
@@ -232,6 +236,24 @@ class Trip
             ->setMaxResults(1);
 
         return $this->tripMemberships->matching($criteria)->first() ?: null;
+    }
+
+    public function getFirstDay(): ?Day
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('position', 1))
+            ->setMaxResults(1);
+
+        return $this->days->matching($criteria)->first() ?: null;
+    }
+
+    public function getLastDay(): ?Day
+    {
+        $criteria = Criteria::create()
+            ->orderBy(['position' => Order::Descending])
+            ->setMaxResults(1);
+
+        return $this->days->matching($criteria)->first() ?: null;
     }
 
     public function getInviteToken(): ?string

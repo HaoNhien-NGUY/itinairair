@@ -1,0 +1,162 @@
+<div {{ attributes.defaults({class: ''}) }}>
+    <turbo-frame id="itinerary-timeline">
+
+        {% set itinerary = this.itinerary %}
+        {% set trip = itinerary.trip %}
+        <div class="bg-indigo-50/25 min-h-[65vh]">
+            <div class="container mx-auto max-w-2xl py-8 md:py-12">
+                <div class="flex items-center ml-4.5">
+                    <twig:ux:icon name="material-symbols:home-outline" class="size-10 text-indigo-400 mr-4 p-2 rounded-2xl bg-indigo-100"/>
+
+                    <div>
+                        <span class="text-gray-600 font-medium">{{ 'trip.start'|trans }}</span>
+                        <div class="text-sm text-gray-500 -mt-1">
+                            {{ trip.startDate|date_short|capitalize }}
+                            <span class="px-1">•</span>
+                            {{ 'common.x_days'|trans({days: trip.durationInDays}) }}
+                        </div>
+                    </div>
+                </div>
+
+
+                {% if itinerary.initialGap > 0 %}
+                    {{ _self.destinationSeparator(trip, itinerary.tripFirstDay, true, itinerary.initialGap) }}
+                {% else %}
+                    {{ _self.destinationSeparator(trip, null, true) }}
+                {% endif %}
+
+                {% for segment in itinerary.segments %}
+                    {% set destination = segment.item %}
+
+                    {% if destination.itemType == enum('App\\Enum\\TravelItemType').FLIGHT %}
+                        <div class="rounded-2xl border shadow border-gray-100 btn-animate text-sm overflow-hidden relative">
+                            <div class="px-4 py-0.5 bg-indigo-50 flex items-center font-bold text-gray-700">
+                                <twig:ux:icon name="entypo:aircraft-take-off" class="size-6 text-gray-600 mr-3"/>
+                                {{ destination.flightNumber ?? 'TBD' }}
+                            </div>
+
+                            <div class="px-4 py-2 bg-white">
+                                <div class="grid grid-cols-5 max-w-md">
+                                    <div class="col-span-2">
+                                        {{ destination.startDay.date|date_short }} -
+                                        {{ destination.startTime ? destination.startTime|date("H:i") : 'TBD' }}
+                                    </div>
+                                    <div class="col-span-2 col-start-4">
+                                        {{ destination.endDay.date|date_short }} -
+                                        {{ destination.endTime ? destination.endTime|date("H:i") : 'TBD' }}
+                                    </div>
+                                    <div class="col-span-2 row-start-2">
+                                        <span class="font-semibold">{{ destination.departureAirport.code ?? 'TBD' }}</span>
+                                        <span class="pl-1">{{ destination.departureAirport.terminal ?? '' }}</span>
+                                    </div>
+                                    <div class="col-span-1 row-start-2 flex items-center justify-center">
+                                        <twig:ux:icon name="bi:arrow-right" class="size-3 mr-5"/>
+                                    </div>
+                                    <div class="col-span-2 row-start-2">
+                                        <span class="font-semibold">{{ destination.arrivalAirport.code ?? 'TBD' }}</span>
+                                        <span class="pl-1">{{ destination.arrivalAirport.terminal ?? '' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <a href="{{ path('app_travelitem_edit', {'item': destination.id, 'trip': trip.id}) }}"
+                               data-turbo-frame="modal" class="cursor-pointer z-20 absolute w-full h-full top-0 left-0">
+                            </a>
+                        </div>
+                    {% else %}
+                        {% set formName = 'update-destination-' ~ destination.id %}
+                        <form id="{{ formName }}"
+                              action="{{ path('app_travelitem_destination_update_dates', {trip: trip.id, item: destination.id}) }}"
+                              method="POST" class="hidden">
+                            <input type="hidden" name="_token" value="{{ csrf_token('update' ~ destination.id) }}">
+                        </form>
+
+                        <div class="bg-white shadow border border-gray-100 flex flex-wrap justify-between rounded-2xl p-3 md:p-5">
+                            <a href="{{ path('app_travelitem_edit', {trip: trip.id, item: destination.id }) }}"
+                               class="hover:underline" data-turbo-frame="modal">
+                                <div>
+                                    <span class="text-gray-700 font-medium">{{ destination.place.city }}</span><span
+                                        class="text-sm text-gray-500">, {{ destination.place.country }}</span>
+                                </div>
+                                <div class="text-xs md:text-sm text-gray-500">
+                                    {{ destination.startDay.date|date_short }} - {{ destination.endDay.date|date_short }}
+                                </div>
+                            </a>
+                            <div class="flex items-center space-x-8">
+                                <div class="flex flex-col items-center text-sm text-gray-500">
+                                    <span class="font-medium">{{ destination.accommodationCount }}</span>
+                                    <twig:ux:icon name="material-symbols:hotel" class="size-4"/>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    <button type="submit" form="{{ formName }}" name="direction" value="down"
+                                            class="group" {{ segment.nights <= 1  ? 'disabled' }}>
+                                        <twig:ux:icon name="bx:minus" class="size-6 rounded-lg p-1 group-enabled:cursor-pointer group-enabled:hover:bg-gray-100 group-disabled:text-gray-300 text-slate-600"/>
+                                    </button>
+
+
+                                    <div class="flex flex-col items-center text-sm">
+                                        <span class="font-medium">{{ segment.nights }}</span>
+                                        <span class="text-gray-500 inline-block -mt-1">{{ 'common.nights'|trans({count: segment.nights})|lower }}</span>
+                                    </div>
+                                    <button type="submit" form="{{ formName }}" name="direction" value="up"
+                                            class="group" {{ segment.gapNextDay <= 0  ? 'disabled' }}>
+                                        <twig:ux:icon name="bx:plus" class="size-6 rounded-lg p-1 group-enabled:cursor-pointer group-enabled:hover:bg-gray-100 group-disabled:text-gray-300 text-slate-600"/>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {{ _self.destinationSeparator(trip, destination.endDay, loop.last, segment.gapNextDay) }}
+                {% endfor %}
+                <div class="flex items-center ml-4.5">
+                    <twig:ux:icon name="icons8:finish-flag" class="size-10 text-gray-400 mr-4 p-2.5 rounded-2xl bg-gray-200"/>
+                    <div>
+                        <div class="text-sm text-gray-400">
+                            {{ trip.endDate|date_short|capitalize }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </turbo-frame>
+</div>
+
+{% macro destinationSeparator(trip, day = null, isExtremy = false, gap = null) %}
+    <div class="flex items-center">
+        <div class="flex items-center group w-12 justify-end">
+            <div class="relative flex items-center {{ day and isExtremy ? 'h-22' : 'h-10' }}">
+                <div class=" before:absolute before:left-1/2 before:top-0 before:bottom-0 before:border-l-2 before:border-dashed before:border-indigo-200 before:-translate-x-1/2"></div>
+                {% if day and gap %}
+                    <div class="hs-dropdown flex [--placement:right] z-20">
+                        <button id="hs-dropdown-custom-icon-trigger" type="button" class="hs-dropdown-toggle cursor-pointer rounded-lg outline btn-animate outline-indigo-200 bg-white text-gray-800 shadow-2xs hover:bg-indigo-50 focus:bg-gray-50" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
+                            <twig:ux:icon name="bx:plus" class="size-5 text-gray-400"/>
+                        </button>
+
+                        <div class="hs-dropdown-menu transition-[opacity,margin] border border-slate-200 duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-60 bg-white shadow-md rounded-lg mt-2 " role="menu" aria-orientation="vertical" aria-labelledby="hs-dropdown-custom-icon-trigger">
+                            <div class="p-1 space-y-0.5">
+                                <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").DESTINATION.value, day: day.id }) }}"
+                                   class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
+                                   data-turbo-frame="modal">
+                                    {{ 'common.destination'|trans }}
+                                </a>
+                                <a href="{{ path('app_travelitem_create', {trip: trip.id, type: enum("App\\Enum\\TravelItemType").FLIGHT.value, day: day.id, overnight: true }) }}"
+                                   class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
+                                   data-turbo-frame="modal">
+                                    {{ 'common.overnight_flight'|trans }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="size-5"></div>
+                {% endif %}
+            </div>
+        </div>
+        {% if gap and gap > 0 %}
+            <div class="ml-3 text-xs font-medium text-gray-400">
+                {{ gap }} {{ 'common.nights'|trans({count: gap})|lower }}
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}

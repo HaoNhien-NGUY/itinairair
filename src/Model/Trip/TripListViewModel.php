@@ -4,7 +4,7 @@ namespace App\Model\Trip;
 
 use App\Entity\Trip;
 
-final class UserTripCollection
+final class TripListViewModel
 {
     /**
      * @param Trip[]               $ongoing

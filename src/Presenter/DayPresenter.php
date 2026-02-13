@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Factory;
+namespace App\Presenter;
 
 use App\Entity\Accommodation;
 use App\Entity\Day;
 use App\Entity\Destination;
 use App\Entity\Flight;
 use App\Entity\TravelItem;
-use App\Model\Trip\DayView;
+use App\Model\Trip\DayViewModel;
 use App\Repository\TravelItemRepository;
 
-readonly class DayFactory
+readonly class DayPresenter
 {
     public function __construct(
         private TravelItemRepository $travelItemRepository,
@@ -20,7 +20,7 @@ readonly class DayFactory
     /**
      * @param ?array<TravelItem> $travelItems
      */
-    public function createDayView(Day $day, ?array $travelItems = null): DayView
+    public function createDayViewModel(Day $day, ?array $travelItems = null): DayViewModel
     {
         if (null === $travelItems) {
             $travelItems = $this->travelItemRepository->findItemsForDay($day);
@@ -48,7 +48,7 @@ readonly class DayFactory
             }
         }
 
-        return new DayView(
+        return new DayViewModel(
             day: $day,
             accommodations: $accommodations ?? [],
             positionable: $positionable ?? [],

@@ -1,29 +1,29 @@
 <?php
 
-namespace App\Factory;
+namespace App\Presenter;
 
 use App\Entity\Destination;
 use App\Entity\Trip;
-use App\Model\Trip\PlanningSegmentView;
-use App\Model\Trip\PlanningView;
-use App\Model\Trip\UserTripCollection;
+use App\Model\Trip\PlanningSegmentViewModel;
+use App\Model\Trip\PlanningViewModel;
+use App\Model\Trip\TripListViewModel;
 use App\Repository\DestinationRepository;
 use App\Repository\FlightRepository;
 use App\Repository\TravelItemRepository;
 use Symfony\Component\Clock\ClockInterface;
 
-readonly class TripFactory
+readonly class TripPresenter
 {
     public function __construct(
         private TravelItemRepository $travelItemRepository,
-        private DayFactory $dayFactory,
+        private DayPresenter $dayFactory,
         private DestinationRepository $destinationRepository,
         private FlightRepository $flightRepository,
         private ClockInterface $clock,
     ) {
     }
 
-    public function createPlanningView(Trip $trip): PlanningView
+    public function createPlanningViewModel(Trip $trip): PlanningViewModel
     {
         $groupedDestinations = $this->destinationRepository->findDestinationsMappedByDayPosition($trip);
         $items = $this->travelItemRepository->findItemDayPairsForTrip($trip);
@@ -35,7 +35,7 @@ readonly class TripFactory
         $prevDestinationId = 'INIT';
         /** @var Destination|null $currentDestination */
         $currentDestination = null;
-        /** @var PlanningSegmentView|null $currentSegment */
+        /** @var PlanningSegmentViewModel|null $currentSegment */
         $currentSegment = null;
 
         foreach ($days as $day) {
@@ -48,7 +48,7 @@ readonly class TripFactory
             $currentDestId = $currentDestination?->getId();
 
             if ($prevDestinationId !== $currentDestId) {
-                $currentSegment =  new PlanningSegmentView(
+                $currentSegment =  new PlanningSegmentViewModel(
                     trip: $trip,
                     destination: $currentDestination,
                     days: [],
@@ -59,7 +59,7 @@ readonly class TripFactory
             }
 
             if ($currentSegment) {
-                $currentSegment->days[] = $this->dayFactory->createDayView(
+                $currentSegment->days[] = $this->dayFactory->createDayViewModel(
                     day: $day,
                     travelItems: $items[$day->getId()] ?? [],
                 );
@@ -73,7 +73,7 @@ readonly class TripFactory
             }
         }
 
-        return new PlanningView(
+        return new PlanningViewModel(
             trip: $trip,
             segments: $segments,
             hasDestinations: !empty($groupedDestinations['byStartDay']),
@@ -84,10 +84,10 @@ readonly class TripFactory
     /**
      * @param Trip[] $trips
      */
-    public function createUserTripCollection(array $trips): UserTripCollection
+    public function createTripListViewModel(array $trips): TripListViewModel
     {
         if (empty($trips)) {
-            return new UserTripCollection();
+            return new TripListViewModel();
         }
 
         $coming = [];
@@ -114,7 +114,7 @@ readonly class TripFactory
 
         usort($past, fn ($a, $b) => $b->getEndDate() <=> $a->getEndDate());
 
-        return new UserTripCollection(
+        return new TripListViewModel(
             ongoing: $ongoing,
             coming: $coming,
             past: $past,

@@ -4,8 +4,8 @@ namespace App\Twig\Components\Trip\Dashboard;
 
 use App\Entity\Trip;
 use App\Entity\User;
-use App\Factory\TripFactory;
-use App\Model\Trip\UserTripCollection;
+use App\Model\Trip\TripListViewModel;
+use App\Presenter\TripPresenter;
 use App\Repository\TripRepository;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
@@ -18,14 +18,14 @@ final class UserTrips
 
     public function __construct(
         private readonly TripRepository $tripRepository,
-        private readonly TripFactory $tripFactory,
+        private readonly TripPresenter $tripFactory,
     ) {
     }
 
-    public function getUserTripCollection(): UserTripCollection
+    public function getUserTripCollection(): TripListViewModel
     {
         $trips = $this->tripRepository->findByUser($this->user);
 
-        return $this->tripFactory->createUserTripCollection($trips);
+        return $this->tripFactory->createTripListViewModel($trips);
     }
 }

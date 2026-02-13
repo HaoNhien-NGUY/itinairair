@@ -8,7 +8,7 @@ use App\Entity\Destination;
 use App\Entity\Flight;
 use App\Entity\TravelItem;
 
-class DayView
+class DayViewModel
 {
     /**
      * @param Accommodation[] $accommodations

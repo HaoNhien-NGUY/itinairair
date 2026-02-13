@@ -114,10 +114,10 @@
             "@test:prepare:asset",
             "@php bin/phpunit"
         ],
-        "fix": [
+        "style-fix": [
             "php-cs-fixer fix"
         ],
-        "check-style": [
+        "style-check": [
             "php-cs-fixer fix --dry-run --diff"
         ],
         "stan": [

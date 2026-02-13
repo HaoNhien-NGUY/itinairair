@@ -5,11 +5,11 @@ namespace App\Model\Trip;
 use App\Entity\Destination;
 use App\Entity\Trip;
 
-class PlanningSegmentView
+class PlanningSegmentViewModel
 {
     /**
-     * @param array<DayView> $days
-     * @param bool           $isStartTravel Define if the trip starts with a multiday travel
+     * @param array<DayViewModel> $days
+     * @param bool                $isStartTravel Define if the trip starts with a multiday travel
      */
     public function __construct(
         public Trip $trip,

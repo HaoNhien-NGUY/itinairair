@@ -7,6 +7,7 @@ travel_items:
 form:
     trip:
         name: Nom du voyage
+        date_edit_warning: Si la durée du voyage est réduite, les derniers jours et leurs activités seront supprimés.
     user_account:
         bio: Bio
         bio_placeholder: Dites-nous en un peu plus sur vous...

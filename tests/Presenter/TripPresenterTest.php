@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Factory;
+namespace App\Tests\Presenter;
 
 use App\Entity\Day;
 use App\Entity\Destination;
@@ -18,7 +18,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\MockClock;
 
-class TripFactoryTest extends TestCase
+class TripPresenterTest extends TestCase
 {
     private DestinationRepository&MockObject $destinationRepo;
     private FlightRepository&MockObject $flightRepo;

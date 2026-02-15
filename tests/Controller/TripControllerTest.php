@@ -3,6 +3,7 @@
 namespace App\Tests\Controller;
 
 use App\Repository\TripRepository;
+use App\Tests\Enum\TestUserType;
 use App\Tests\FunctionalTestCase;
 
 class TripControllerTest extends FunctionalTestCase
@@ -29,6 +30,20 @@ class TripControllerTest extends FunctionalTestCase
         $this->assertResponseRedirects('/login');
         $client->followRedirect();
         $this->assertResponseIsSuccessful();
+    }
+
+    public function testNotTripMember(): void
+    {
+        $client = static::createClient();
+
+        $tripMember = $this->getUser(TestUserType::USER_2);
+        $trip = $this->createTrip($tripMember);
+
+        $this->createAuthenticatedClient($client);
+
+        $client->request('GET', sprintf('/trip/%s', $trip->getId()));
+
+        $this->assertResponseStatusCodeSame(403);
     }
 
     public function testCreateTrip(): void

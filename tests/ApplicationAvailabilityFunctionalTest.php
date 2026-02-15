@@ -8,7 +8,7 @@ use App\Repository\UserRepository;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class ApplicationAvailabilityFunctionalTest extends WebTestCase
+class ApplicationAvailabilityFunctionalTest extends FunctionalTestCase
 {
     #[DataProvider('publicUrlProvider')]
     public function testPublicPageIsSuccessful(string $url): void
@@ -32,13 +32,6 @@ class ApplicationAvailabilityFunctionalTest extends WebTestCase
         $client = static::createClient();
         $client->followRedirects();
         $container = static::getContainer();
-        $userRepository = $container->get(UserRepository::class);
-
-        $user = $userRepository->findOneBy(['email' => 'test@test.com']);
-
-        if (!$user) {
-            $this->markTestSkipped('No test user found.');
-        }
 
         if ($tripName) {
             $trip = $container->get(TripRepository::class)->findOneBy(['name' => $tripName]);
@@ -50,7 +43,7 @@ class ApplicationAvailabilityFunctionalTest extends WebTestCase
             $url = sprintf($url, $trip->getId());
         }
 
-        $client->loginUser($user);
+        $this->createAuthenticatedClient($client);
 
         $client->request('GET', $url);
         $this->assertResponseIsSuccessful();

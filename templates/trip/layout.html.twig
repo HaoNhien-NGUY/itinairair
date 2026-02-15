@@ -16,7 +16,7 @@
 {% block body %}
     <div class="container max-w-7xl mx-auto">
         <div class="pt-8">
-            <h3 id="trip-name" class="text-2xl font-medium md:text-3xl mb-1">{{ trip.name }}</h3>
+            <h1 id="trip-name" class="text-2xl font-medium md:text-3xl mb-1">{{ trip.name }}</h1>
 
             <div class="flex items-center md:text-sm gap-4 text-xs">
                 <a href="{{ path('app_trip_edit', {'trip': trip.id}) }}" data-turbo-frame="modal" class="text-gray-500 md:text-sm text-xs hover:text-gray-700">{{ trip.startDate|date_xs }} {{ trip.startDate|date('Y')}} - {{ trip.endDate|date_xs }}</a>

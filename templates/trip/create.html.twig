@@ -61,7 +61,7 @@
             <hr class="my-4 border-gray-200">
             <form action="{{ path('app_trip_delete', {'id': trip.id}) }}" method="post" class="" onsubmit="return confirm('Supprimer ?');">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trip.id) }}">
-                <button type="submit" class="cursor-pointer w-full p-2 rounded-xl hover:bg-red-50 font-medium text-red-300 text-center text-sm transition-colors">
+                <button id="trip-delete" type="submit" class="cursor-pointer w-full p-2 rounded-xl hover:bg-red-50 font-medium text-red-300 text-center text-sm transition-colors">
                     {{ 'common.delete'|trans }}
                 </button>
             </form>

@@ -55,6 +55,7 @@ class PlaceType extends AbstractType
             try {
                 $response = $this->httpClient->request('GET', $data['photoURI'], [
                     'max_redirects' => 0,
+                    'headers' => ['Referer' => 'https://itinairair.com'],
                 ]);
                 $headers = $response->getHeaders(false);
 

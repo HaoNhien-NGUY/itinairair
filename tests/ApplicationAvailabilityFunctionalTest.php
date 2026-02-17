@@ -4,9 +4,7 @@ namespace App\Tests;
 
 use App\DataFixtures\TripFixtures;
 use App\Repository\TripRepository;
-use App\Repository\UserRepository;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ApplicationAvailabilityFunctionalTest extends FunctionalTestCase
 {

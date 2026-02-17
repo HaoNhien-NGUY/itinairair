@@ -2,7 +2,6 @@
 
 namespace App\Tests\Service;
 
-use App\Entity\Destination;
 use App\Entity\Trip;
 use App\Repository\DestinationRepository;
 use App\Repository\FlightRepository;

@@ -29,10 +29,11 @@ final class TravelItemController extends AbstractController
             $itemId = $request->request->get('item');
             $item = $itemRepository->findOneBy(['id' => $itemId]);
 
-            $entityManager->remove($item);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Item deleted successfully.');
+            if ($item) {
+                $entityManager->remove($item);
+                $entityManager->flush();
+                $this->addFlash('success', 'Item deleted successfully.');
+            }
         }
 
         return $this->redirect($request->headers->get('referer'));

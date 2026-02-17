@@ -48,6 +48,7 @@ final class TripController extends AbstractController
         ]);
     }
 
+    #[IsGranted('TRIP_EDIT', 'trip')]
     #[Route('/edit/{trip}', name: 'app_trip_edit', methods: ['POST', 'GET'])]
     public function edit(Request $request, EntityManagerInterface $entityManager, Trip $trip): Response
     {

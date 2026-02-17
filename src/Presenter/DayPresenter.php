@@ -9,11 +9,13 @@ use App\Entity\Flight;
 use App\Entity\TravelItem;
 use App\Model\Trip\DayViewModel;
 use App\Repository\TravelItemRepository;
+use Symfony\Component\Clock\ClockInterface;
 
 readonly class DayPresenter
 {
     public function __construct(
         private TravelItemRepository $travelItemRepository,
+        private ClockInterface $clock,
     ) {
     }
 
@@ -57,7 +59,7 @@ readonly class DayPresenter
             flightSameDay: $flightSameDay ?? [],
             destinations: $destinations ?? [],
             isTripStart: $isTripStart ?? false,
-            isToday: $day->getDate()->format('Y-m-d') === date('Y-m-d'),
+            isToday: $day->getDate()->format('Y-m-d') === $this->clock->now()->format('Y-m-d'),
         );
     }
 }

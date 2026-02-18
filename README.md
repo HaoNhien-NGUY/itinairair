@@ -1,43 +1,51 @@
 # Itinairair - Projet Fullstack Symfony
+[![Symfony](https://img.shields.io/badge/Symfony-7.3-blue?logo=symfony)](https://symfony.com)
+[![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php&logoColor=white)](https://php.net)
+[![PHPStan](https://img.shields.io/badge/PHPStan-Level%206-brightgreen)](https://phpstan.org)
+[![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)](https://github.com/features/actions)
 
 ItinairAir est une application SaaS collaborative de gestion de voyage, elle offre une interface fluide pour construire des itinéraires jour par jour et gérer des réservations.
 
 > [https://itinairair.com](https://itinairair.com) - Démo avec compte temporaire d'une heure **sans inscription** nécessaire.
 
-## 🎯 Objectifs du projet
-J'ai créé ce projet pour maîtriser le cycle de vie d'un SaaS, de la conception et de l'architecture jusqu'au déploiement en production sur un VPS.
+## Fonctionnalités
+### 🗓️ Planification jour par jour
+Organisez chaque journée avec des activités, notes, hébergements et vols. Réorganisez les éléments par **glisser-déposer** et ajoutez des lieux depuis la **Boîte à idées**.
 
-L'objectif principal était d'utiliser l'écosystème Symfony en minimisant la dépendance au JavaScript, le tout en gardant une interface fluide et responsive **SPA-like** grâce à l'utilisation de Symfony UX / Turbo / Stimulus.
+### 🗺️ Vue itinéraire
+Visualisez votre voyage dans son ensemble : vols, destinations, durées de séjour et transitions entre les villes.
 
-## 🛠️ Stack Technique
+### 📋 Gestion des réservations
+Centralisez vos informations de vols (numéros, terminaux, horaires) et hébergements (adresses, dates).
+
+### 👥 Planification collaborative
+Invitez des amis via un **lien de partage**.
+
+
+## Stack Technique
 
 ### Backend
-- **Framework** : Symfony 7.3 (PHP 8.3+)
+- **Framework** : Symfony 7.3 (PHP 8.2+)
 - **Base de données** : PostgreSQL
-- **Authentification** : OAuth2 (Discord/Google) via `knpuniversity/oauth2-client-bundle`
+- **Authentification** : OAuth2 (Discord / Google)
 - **Uploads** : `vich/uploader-bundle` & Flysystem
 - **Mailing** : Symfony Mailer (intégration API Brevo)
+- **Symfony Scheduler**: Nettoyage automatique des comptes démo
 
 ### Frontend
-- **Interactivité** : Symfony UX Turbo, Stimulus, Live Components.
+- **Interactivité** : Symfony UX Turbo, Stimulus, Live Components. Google Place API
 - **Styling** : Tailwind CSS 4
 - **Gestion des Assets** : Symfony AssetMapper.
 - **Responsive** : Interface responsive et optimisée pour mobile.
 
+### Tests & Qualité
+- **PHPStan niveau 6**
+- **PHPUnit**
+- **PHP-CS-Fixer**
+
 ### DevOps & Infrastructure
 * **Hébergement** : VPS hébergé chez OVH sous Ubuntu.
-* **Provisioning :** Configuration manuelle (Nginx, ufw, SSH, PHP-FPM, Supervisor, SSL) dans le but d'apprentissage.
+* **Provisioning :** Configuration manuelle (Nginx, ufw, SSH, PHP-FPM, Supervisor, SSL).
 * **CI/CD** : GitHub Actions pour les **workflows** de build et déploiement.
 * **Déploiement** : **Deployer PHP** configuré pour des déploiements atomiques.
 
-
-[//]: # (## ✨ Fonctionnalités Clés)
-
-[//]: # ()
-[//]: # (- **Itinéraire Interactif** : Planification par glisser-déposer pour les activités quotidiennes, vols et hébergements.)
-
-[//]: # (- **Planification Collaborative** : Invitez des amis à rejoindre votre voyage &#40;Système de Membres de Voyage&#41;.)
-
-[//]: # (- **Connexion Sociale** : Authentification transparente via Google et Discord.)
-
-[//]: # (- **Destinations Intelligentes** : Logique de gestion des chevauchements de destinations et continuité du voyage.)

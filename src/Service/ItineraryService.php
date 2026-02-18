@@ -35,6 +35,7 @@ readonly class ItineraryService
 
     /**
      * @param array<int, string> $orderedItems
+     *
      * @return Day[]
      */
     public function reorderDayItems(Day $day, array $orderedItems): array

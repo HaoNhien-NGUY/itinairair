@@ -2,18 +2,18 @@
 
 namespace App\Tests\Service;
 
+use App\Entity\Destination;
+use App\Entity\Flight;
 use App\Entity\Trip;
 use App\Repository\DestinationRepository;
 use App\Repository\FlightRepository;
 use App\Service\TripService;
-use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class TripServiceTest extends TestCase
 {
-    private EntityManagerInterface&MockObject $entityManager;
     private DestinationRepository&MockObject $destinationRepository;
     private FlightRepository&MockObject $flightRepository;
     private TripService $tripService;
@@ -25,7 +25,6 @@ class TripServiceTest extends TestCase
     {
         $this->destinationRepository = $this->createMock(DestinationRepository::class);
         $this->flightRepository = $this->createMock(FlightRepository::class);
-        $this->entityManager = $this->createMock(EntityManagerInterface::class);
 
         $this->startDate = new \DateTime('2024-01-01');
         $this->endDate = new \DateTime('2024-01-05');
@@ -34,24 +33,7 @@ class TripServiceTest extends TestCase
         $this->tripService = new TripService(
             $this->destinationRepository,
             $this->flightRepository,
-            $this->entityManager,
         );
-    }
-
-    public function testCreatePersistsAndFlushes(): void
-    {
-        $trip = new Trip();
-
-        $this->entityManager->expects($this->once())
-            ->method('persist')
-            ->with($trip);
-
-        $this->entityManager->expects($this->once())
-            ->method('flush');
-
-        $result = $this->tripService->create($trip);
-
-        $this->assertSame($trip, $result);
     }
 
     #[DataProvider('datesProvider')]
@@ -142,6 +124,59 @@ class TripServiceTest extends TestCase
         yield '0 country and 0 cities' => [
             'countries' => [],
             'cities' => [],
+        ];
+    }
+
+    /**
+     * @param array<int[]> $flightsSetup
+     * @param array<int[]> $destinationsSetup
+     * @param int[]        $expectedPosition
+     */
+    #[DataProvider('tripItineraryProvider')]
+    public function testTripItineraryReturnsAllFlightsAndDestinations(array $flightsSetup, array $destinationsSetup, array $expectedPosition): void
+    {
+        $trip = new Trip();
+
+        $trip->setStartDate($this->startDate);
+        $trip->setEndDate($this->endDate);
+
+        $tripDurationInDays = $trip->getDurationInDays();
+        $this->tripService->addOrRemoveTripDays($trip, $tripDurationInDays);
+        $days = $trip->getDays();
+
+        $flights = [];
+        $destinations = [];
+
+        foreach ($flightsSetup as [$startDay, $endDay]) {
+            $flights[] = (new Flight($trip, $days[$startDay]))
+                ->setEndDay($days[$endDay]);
+        }
+
+        foreach ($destinationsSetup as [$startDay, $endDay]) {
+            $flights[] = (new Destination($trip, $days[$startDay]))
+                ->setEndDay($days[$endDay]);
+        }
+
+        $this->flightRepository->method('findOverNightFlightsByTrip')->willReturn($flights);
+        $this->destinationRepository->method('findDestinationByTrip')->willReturn($destinations);
+        $itinerary = $this->tripService->getTripItinerary($trip);
+
+        foreach ($expectedPosition as $i => $position) {
+            $this->assertEquals($position, $itinerary[$i]->getStartDay()->getPosition());
+        }
+    }
+
+    public static function tripItineraryProvider(): \Generator
+    {
+        yield '2 flights and 1 destination in mixed order' => [
+            'flightsSetup' => [[2, 4], [0, 1]],
+            'destinationsSetup' => [[1, 2]],
+            'expectedPosition' => [1, 2, 3],
+        ];
+        yield '2 flights in order' => [
+            'flightsSetup' => [[0, 1], [2, 4]],
+            'destinationsSetup' => [],
+            'expectedPosition' => [1, 3],
         ];
     }
 }

@@ -9,23 +9,13 @@ use App\Entity\TravelItem;
 use App\Entity\Trip;
 use App\Repository\DestinationRepository;
 use App\Repository\FlightRepository;
-use Doctrine\ORM\EntityManagerInterface;
 
 readonly class TripService
 {
     public function __construct(
         private DestinationRepository $destinationRepository,
         private FlightRepository $flightRepository,
-        private EntityManagerInterface $entityManager,
     ) {
-    }
-
-    public function create(Trip $trip): Trip
-    {
-        $this->entityManager->persist($trip);
-        $this->entityManager->flush();
-
-        return $trip;
     }
 
     /**

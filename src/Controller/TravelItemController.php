@@ -32,7 +32,6 @@ final class TravelItemController extends AbstractController
             if ($item) {
                 $entityManager->remove($item);
                 $entityManager->flush();
-                $this->addFlash('success', 'Item deleted successfully.');
             }
         }
 
@@ -84,13 +83,12 @@ final class TravelItemController extends AbstractController
     #[Route('/travel-item/trip/{trip}/day/{day}/reorder', name: 'app_travelitem_reorder_day_item', methods: ['POST'])]
     public function reorderDayItem(
         Request $request,
-        TravelItemRepository $itemRepository,
+        ItineraryService $itineraryService,
         EntityManagerInterface $entityManager,
         Trip $trip,
         Day $day,
     ): Response {
-        if (
-            $day->getTrip() !== $trip
+        if ($day->getTrip() !== $trip
             || !$this->isCsrfTokenValid('itinerary_reorder', $request->request->get('_token'))
         ) {
             throw $this->createAccessDeniedException();
@@ -98,44 +96,8 @@ final class TravelItemController extends AbstractController
 
         $orderedItemsJson = $request->request->get('ordered_items');
         $orderedItems = json_decode($orderedItemsJson) ?? [];
-        $daysToUpdate = [$day];
 
-        $items = $itemRepository->findBy(
-            [
-                'id' => $orderedItems,
-                'startDay' => $day,
-                'status' => ItemStatus::committed(),
-            ],
-        );
-        $itemsById = [];
-        foreach ($items as $item) {
-            $itemsById[$item->getId()] = $item;
-        }
-
-        foreach ($orderedItems as $position => $id) {
-            if (isset($itemsById[$id])) {
-                $itemsById[$id]->setPosition($position);
-
-                continue;
-            }
-
-            $newItem = $itemRepository->findOneBy(['id' => $id, 'trip' => $trip]);
-
-            if (!$newItem) {
-                continue;
-            }
-
-            if ($dayToUpdate = $newItem->getStartDay()) {
-                $daysToUpdate[] = $dayToUpdate;
-            }
-
-            $newItem->setPosition($position)
-                ->setStartDay($day);
-
-            if (in_array($newItem->getStatus(), ItemStatus::draft())) {
-                $newItem->setStatus(ItemStatus::PLANNED);
-            }
-        }
+        $daysToUpdate = $itineraryService->reorderDayItems($day, $orderedItems);
 
         $entityManager->flush();
 

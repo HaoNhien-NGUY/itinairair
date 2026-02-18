@@ -10,12 +10,12 @@ use App\Entity\Flight;
 use App\Entity\Note;
 use App\Entity\TravelItem;
 use App\Entity\Trip;
-use App\Entity\TripMembership;
 use App\Entity\User;
 use App\Enum\ItemStatus;
-use App\Enum\TripRole;
+use App\Event\DemoCreatedEvent;
 use App\Repository\PlaceRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 readonly class DemoGeneratorService
@@ -24,20 +24,42 @@ readonly class DemoGeneratorService
         private EntityManagerInterface $entityManager,
         private PlaceRepository $placeRepository,
         private TranslatorInterface $translator,
+        private EventDispatcherInterface $eventDispatcher,
     ) {
+    }
+
+    public function generateDemo(): User
+    {
+        $user = $this->generateDemoUser();
+        $this->generateDemoTrip($user);
+
+        $this->entityManager->flush();
+
+        $this->eventDispatcher->dispatch(new DemoCreatedEvent($user));
+
+        return $user;
+    }
+
+    public function generateDemoUser(): User
+    {
+        $user = (new User())
+            ->setExpiresAt(new \DateTimeImmutable('+1 hour'))
+            ->setEmail('demo_'.uniqid().'@temp')
+            ->setUsername($this->translator->trans('trip.demo.username'));
+
+        $this->entityManager->persist($user);
+
+        return $user;
     }
 
     public function generateDemoTrip(User $user): Trip
     {
-        $trip = (new Trip())
+        $trip = Trip::create($user)
             ->setName($this->translator->trans('trip.demo.name'))
-            ->setIsTemporary(true)
             ->setStartDate(new \DateTime('-4 days'))
             ->setEndDate(new \DateTime('+12 days'));
-        $tripMembership = (new TripMembership($trip, $user, TripRole::ADMIN));
 
         $this->entityManager->persist($trip);
-        $this->entityManager->persist($tripMembership);
 
         $requiredDays = $trip->getStartDate()->diff($trip->getEndDate())->days + 1;
         $itineraryData = $this->getItineraryData($trip);

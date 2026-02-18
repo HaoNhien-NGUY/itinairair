@@ -6,8 +6,13 @@ use App\Repository\UserRepository;
 
 readonly class DiscriminatorGenerator
 {
-    public function __construct(private UserRepository $userRepository)
-    {
+    private \Closure $randomFn;
+
+    public function __construct(
+        private UserRepository $userRepository,
+        ?\Closure $randomGenerator = null,
+    ) {
+        $this->randomFn = $randomGenerator ?? fn (int $min, int $max) => mt_rand($min, $max);
     }
 
     public function generateDiscriminator(string $username): string
@@ -16,7 +21,7 @@ readonly class DiscriminatorGenerator
 
         $attempts = 0;
         do {
-            $rand = str_pad((string) mt_rand(1, 9999), 5, '0', STR_PAD_LEFT);
+            $rand = str_pad((string) ($this->randomFn)(1, 9999), 5, '0', STR_PAD_LEFT);
             ++$attempts;
 
             if ($attempts > 100) {

@@ -8,7 +8,6 @@ use App\Form\TripType;
 use App\Repository\AccommodationRepository;
 use App\Repository\FlightRepository;
 use App\Repository\TripMembershipRepository;
-use App\Service\TripService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +28,7 @@ final class TripController extends AbstractController
     #[Route('/create', name: 'app_trip_create', methods: ['POST', 'GET'])]
     public function create(
         Request $request,
-        TripService $tripService,
+        EntityManagerInterface $entityManager,
         #[CurrentUser] User $user,
     ): Response {
         $trip = Trip::create($user);
@@ -37,7 +36,8 @@ final class TripController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $tripService->create($trip);
+            $entityManager->persist($trip);
+            $entityManager->flush();
 
             return $this->redirectToRoute('app_trip_show', ['id' => $trip->getId()]);
         }

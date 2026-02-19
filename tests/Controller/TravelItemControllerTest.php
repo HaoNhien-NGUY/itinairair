@@ -44,7 +44,6 @@ class TravelItemControllerTest extends FunctionalTestCase
             }
         }
 
-        dump($formData);
         $client->submitForm('travelItem[save]', $formData);
 
         $this->assertResponseIsSuccessful();

@@ -56,43 +56,50 @@
                     placeholder="{{ 'common.search_by_name_address'|trans }}"
                     {{ stimulus_target('google-place-widget', 'placeInput') }}>
                 </gmp-place-autocomplete>
-            {% endif %}
-            <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="-mt-2 relative mb-32 -mx-5 {{ not place ? 'hidden' }}">
-                <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-56 shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
-                <div class="mx-5 shadow bg-white rounded-xl border border-gray-200 p-4 absolute left-0 right-0 -bottom-25">
-                    {% if place %}
-                        <div {{ stimulus_target('calendar', 'calendar') }} class="select-none text-sm flex -mx-4.5 px-4.5 items-center justify-between cursor-pointer">
-                            <div class="flex justify-center items-center text-gray-600">
-                                <twig:ux:icon name="mage:calendar-2" class="size-6 mr-2" />
-                                Dates
-                            </div>
-                            <div class="flex items-center text-blue-500 font-medium">
-                                <div>
-                                    <div {{ stimulus_target('calendar', 'startDayDisplay') }}>
-                                        <span class="text-gray-400">{{ 'common.arrival'|trans }}</span>
-                                    </div>
-                                </div>
-                                <div class="mx-2">
-                                    -
-                                </div>
-                                <div>
-                                    <div {{ stimulus_target('calendar', 'endDayDisplay') }}>
-                                        <span class="text-gray-400">{{ 'common.departure'|trans }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
+                <div {{ stimulus_target('google-place-widget', 'placeInfo') }} class="-mt-2 relative mb-18 -mx-5 {{ not place ? 'hidden' }}">
+                    <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-60 shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
+                    <div class="mx-5 shadow bg-white rounded-xl border border-gray-200 p-4 absolute left-0 right-0 -bottom-11">
+                        <div class="font-medium text-base/5 mb-2 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}>{{ place ? place.name }}</div>
+                        <a {{ stimulus_target('google-place-widget', 'addressDisplay addressLinkDisplay') }}
+                            href="{{ place ? place.googleMapsURI }}"
+                            target="_blank"
+                            class="text-xs/snug text-slate-400 hover:text-blue-400 block">{{ place ? place.address }}</a>
                     </div>
-                    <hr class="my-4 -mx-4 border-slate-200" />
-
-                    <div class="font-medium text-base/5 mb-2 line-clamp-2" {{ stimulus_target('google-place-widget', 'nameDisplay') }}>{{ place ? place.name }}</div>
-                    <a {{ stimulus_target('google-place-widget', 'addressDisplay addressLinkDisplay') }}
-                        href="{{ place ? place.googleMapsURI }}"
-                        target="_blank"
-                        class="text-xs/snug text-slate-400 hover:text-blue-400 block">{{ place ? place.address }}</a>
-
                 </div>
-            </div>
+            {% else %}
+                <div class="-mt-2 relative mb-32 -mx-5">
+                    <img {{ stimulus_target('google-place-widget', 'photoDisplay') }} class="w-full h-56 shrink-0 object-cover" src="{{ item.place.photoUri ?? ('https://placehold.co/300?text=' ~ item.name) }}" alt="{{ item.name }}-photo" />
+                    <div class="mx-5 shadow bg-white rounded-xl border border-gray-200 p-4 absolute left-0 right-0 -bottom-25">
+                        {% if place %}
+                            <div {{ stimulus_target('calendar', 'calendar') }} class="select-none text-sm flex -mx-4.5 px-4.5 items-center justify-between cursor-pointer">
+                                <div class="flex justify-center items-center text-gray-600">
+                                    <twig:ux:icon name="mage:calendar-2" class="size-6 mr-2" />
+                                    Dates
+                                </div>
+                                <div class="flex items-center text-blue-500 font-medium">
+                                    <div>
+                                        <div {{ stimulus_target('calendar', 'startDayDisplay') }}>
+                                            <span class="text-gray-400">{{ 'common.arrival'|trans }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="mx-2">
+                                        -
+                                    </div>
+                                    <div>
+                                        <div {{ stimulus_target('calendar', 'endDayDisplay') }}>
+                                            <span class="text-gray-400">{{ 'common.departure'|trans }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <hr class="my-4 -mx-4 border-slate-200" />
+
+                        <div class="font-medium text-base/5 mb-2 line-clamp-2">{{ place.name }}</div>
+                        <a href="{{ place.googleMapsURI }}" target="_blank" class="text-xs/snug text-slate-400 hover:text-blue-400 block">{{ place.address }}</a>
+                    </div>
+                </div>
+            {% endif %}
 
             <div class="space-y-5 mb-10">
                 {{ form_widget(form.notes) }}

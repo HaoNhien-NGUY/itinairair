@@ -8,20 +8,13 @@ ItinairAir est une application SaaS collaborative de gestion de voyage, elle off
 
 > [https://itinairair.com](https://itinairair.com) - Démo avec compte temporaire d'une heure **sans inscription** nécessaire.
 
-## Fonctionnalités
+---
+
 ### 🗓️ Planification jour par jour
-Organisez chaque journée avec des activités, notes, hébergements et vols. Réorganisez les éléments par **glisser-déposer** et ajoutez des lieux depuis la **Boîte à idées**.
 ![Planning view](https://github.com/user-attachments/assets/34f68add-3bf0-4f7b-adf7-524ed4dcd4fb)
 
 ### 🗺️ Vue itinéraire
-Visualisez votre voyage dans son ensemble : vols, destinations, durées de séjour et transitions entre les villes.
 ![Itinerary view](https://github.com/user-attachments/assets/40f04d48-8c02-4084-b0af-dfb3318a4fd3)
-
-### 📋 Gestion des réservations
-Centralisez vos informations de vols (numéros, terminaux, horaires) et hébergements (adresses, dates).
-
-### 👥 Planification collaborative
-Invitez des amis via un **lien de partage**.
 
 
 ## Stack Technique

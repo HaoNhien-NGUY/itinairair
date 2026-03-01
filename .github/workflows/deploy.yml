@@ -21,6 +21,12 @@ jobs:
           extensions: pdo_sqlite
           coverage: none
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
       - name: Cache Composer packages
         uses: actions/cache@v3
         with:
@@ -31,6 +37,12 @@ jobs:
 
       - name: Install Dependencies
         run: composer install -q --prefer-dist --no-progress --no-interaction --no-scripts --no-ansi
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Install Importmap
+        run: php bin/console importmap:install
 
       - name: Build Tailwind
         run: php bin/console tailwind:build
@@ -116,12 +128,15 @@ jobs:
 
       - name: Install Node.js
         uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
 
       - name: Install PHP dependencies
         run: composer install --prefer-dist --no-progress --no-interaction --no-scripts
 
       - name: Install Node dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Assets
         env:

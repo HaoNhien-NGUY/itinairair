@@ -113,7 +113,7 @@ final class TravelItemController extends AbstractController
     #[Route('/travel-item/trip/{trip}/to-idea', name: 'app_travelitem_item_to_idea', methods: ['POST'])]
     public function itemToIdea(
         Request $request,
-        TravelItemRepository $itemRepository,
+        ItineraryService $itineraryService,
         EntityManagerInterface $entityManager,
         Trip $trip,
     ): Response {
@@ -122,16 +122,8 @@ final class TravelItemController extends AbstractController
         }
 
         $itemId = $request->request->get('item');
-        $item = $itemRepository->findOneBy(['id' => $itemId, 'trip' => $trip, 'status' => ItemStatus::committed()]);
-        $daysToUpdate = [];
 
-        if ($item) {
-            $daysToUpdate[] = $item->getStartDay();
-
-            $item->setPosition(null)
-                ->setStatus(ItemStatus::IDEA)
-                ->setStartDay(null);
-        }
+        $daysToUpdate = $itineraryService->itemToIdea($trip, $itemId);
 
         $entityManager->flush();
 

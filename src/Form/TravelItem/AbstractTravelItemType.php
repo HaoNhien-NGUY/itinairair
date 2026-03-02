@@ -33,26 +33,7 @@ class AbstractTravelItemType extends AbstractType
                 'constraints' => [
                     new Assert\Length(max: 1000, maxMessage: 'La description ne peut pas dépasser {{ limit }} caractères'),
                 ],
-            ])
-            ->add('status', EnumType::class, [
-                'class' => ItemStatus::class,
-                'required' => false,
-                'placeholder' => null,
-                'label' => 'form.label.status',
-                'attr' => ['icon' => 'mdi:list-status'],
             ]);
-
-
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            /** @var TravelItem $entity */
-            $entity = $event->getData();
-            $form = $event->getForm();
-
-            // when created
-            if (null === $entity->getId() && ItemStatus::IDEA === $entity->getStatus()) {
-                $form->remove('status');
-            }
-        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void

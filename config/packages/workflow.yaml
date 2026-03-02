@@ -1,0 +1,32 @@
+framework:
+    workflows:
+        travel_item_status:
+            type: 'state_machine'
+            audit_trail:
+                enabled: true
+            marking_store:
+                type: 'method'
+                property: 'status'
+            supports:
+                - App\Entity\TravelItem
+            places: !php/enum App\Enum\ItemStatus
+            transitions:
+                plan:
+                    from: !php/enum App\Enum\ItemStatus::IDEA
+                    to: !php/enum App\Enum\ItemStatus::PLANNED
+                require_booking:
+                    from:
+                        - !php/enum App\Enum\ItemStatus::IDEA
+                        - !php/enum App\Enum\ItemStatus::PLANNED
+                    to: !php/enum App\Enum\ItemStatus::BOOKING_NEEDED
+                book:
+                    from:
+                        - !php/enum App\Enum\ItemStatus::BOOKING_NEEDED
+                        - !php/enum App\Enum\ItemStatus::PLANNED
+                    to: !php/enum App\Enum\ItemStatus::BOOKED
+                to_idea:
+                    from:
+                        - !php/enum App\Enum\ItemStatus::BOOKED
+                        - !php/enum App\Enum\ItemStatus::BOOKING_NEEDED
+                        - !php/enum App\Enum\ItemStatus::PLANNED
+                    to: !php/enum App\Enum\ItemStatus::IDEA
